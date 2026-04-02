@@ -254,7 +254,8 @@ textarea.input {
   cursor: pointer;
 }
 
-.checkbox-row input[type="checkbox"] {
+.checkbox-row input[type="checkbox"],
+.checkbox-row input[type="radio"] {
   accent-color: var(--accent);
 }
 

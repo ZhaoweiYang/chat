@@ -80,6 +80,17 @@
       <div class="card">
         <h3 class="card-title" data-pt="submit_title"></h3>
         <div class="form-group">
+          <label data-pt="lbl_platform"></label>
+          <div class="checkbox-row" id="platformChecks">
+            <label><input type="radio" name="platform" value="Android"> Android</label>
+            <label><input type="radio" name="platform" value="iOS"> iOS</label>
+            <label><input type="radio" name="platform" value="PWA"> PWA</label>
+            <label><input type="radio" name="platform" value="macOS"> macOS</label>
+            <label><input type="radio" name="platform" value="Windows"> Windows</label>
+            <label><input type="radio" name="platform" value="Linux"> Linux</label>
+          </div>
+        </div>
+        <div class="form-group">
           <label data-pt="lbl_name"></label>
           <input type="text" id="tplName" class="input" data-pt-ph="ph_name">
         </div>
@@ -109,17 +120,6 @@
         <div class="form-group">
           <label data-pt="lbl_price"></label>
           <input type="number" id="tplPrice" class="input" min="0" step="0.5" value="0">
-        </div>
-        <div class="form-group">
-          <label data-pt="lbl_platforms"></label>
-          <div class="checkbox-row" id="platformChecks">
-            <label><input type="checkbox" value="Android"> Android</label>
-            <label><input type="checkbox" value="iOS"> iOS</label>
-            <label><input type="checkbox" value="PWA"> PWA</label>
-            <label><input type="checkbox" value="macOS"> macOS</label>
-            <label><input type="checkbox" value="Windows"> Windows</label>
-            <label><input type="checkbox" value="Linux"> Linux</label>
-          </div>
         </div>
         <button class="btn-primary" onclick="submitTpl()" data-pt="btn_submit"></button>
         <p class="save-msg" id="tplMsg"></p>
@@ -278,16 +278,16 @@
       const name = document.getElementById("tplName").value.trim();
       const desc = document.getElementById("tplDesc").value.trim();
       const price = document.getElementById("tplPrice").value;
-      const checks = document.querySelectorAll("#platformChecks input:checked");
-      const platforms = Array.from(checks).map(c => c.value);
+      const selected = document.querySelector('#platformChecks input[name="platform"]:checked');
+      const platform = selected ? selected.value : "";
       const msg = document.getElementById("tplMsg");
 
+      if (!platform) { msg.textContent = pt("err_platform"); msg.style.color = "#ef4444"; return; }
       if (!name) { msg.textContent = pt("err_name"); msg.style.color = "#ef4444"; return; }
       if (!desc) { msg.textContent = pt("err_desc"); msg.style.color = "#ef4444"; return; }
       if (!uploadedFileContent) { msg.textContent = pt("err_file"); msg.style.color = "#ef4444"; return; }
-      if (platforms.length === 0) { msg.textContent = pt("err_platform"); msg.style.color = "#ef4444"; return; }
 
-      submitTemplate({ devId: dev.id, name, description: desc, images: [...uploadedImages], price, platforms, fileContent: uploadedFileContent });
+      submitTemplate({ devId: dev.id, name, description: desc, images: [...uploadedImages], price, platforms: [platform], fileContent: uploadedFileContent });
       document.getElementById("tplName").value = "";
       document.getElementById("tplDesc").value = "";
       document.getElementById("tplPrice").value = "0";
@@ -296,7 +296,7 @@
       uploadedFileContent = "";
       uploadedImages = [];
       renderImgGrid();
-      checks.forEach(c => c.checked = false);
+      if (selected) selected.checked = false;
       msg.textContent = pt("submit_ok"); msg.style.color = "var(--green)";
       setTimeout(() => msg.textContent = "", 3000);
       renderMyTemplates();
