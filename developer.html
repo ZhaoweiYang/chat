@@ -88,8 +88,15 @@
           <textarea id="tplDesc" class="input" rows="3" data-pt-ph="ph_desc"></textarea>
         </div>
         <div class="form-group">
-          <label data-pt="lbl_preview"></label>
-          <input type="text" id="tplPreview" class="input" data-pt-ph="ph_preview">
+          <label data-pt="lbl_preview_img"></label>
+          <div class="img-upload-area">
+            <div class="img-grid" id="imgGrid"></div>
+            <label class="img-add-btn" id="imgAddBtn">
+              <input type="file" accept="image/*" multiple onchange="handleImgUpload(this)">
+              <span>+</span>
+            </label>
+          </div>
+          <p class="file-name" id="imgCount"></p>
         </div>
         <div class="form-group">
           <label data-pt="lbl_file"></label>
@@ -142,6 +149,47 @@
       document.documentElement.setAttribute("data-theme", t);
       document.getElementById("themeIcon").innerHTML = t === "dark" ? "&#9788;" : "&#9790;";
     })();
+
+    // Image upload (max 9)
+    let uploadedImages = [];
+    const MAX_IMAGES = 9;
+
+    function handleImgUpload(input) {
+      const files = Array.from(input.files);
+      const remaining = MAX_IMAGES - uploadedImages.length;
+      const toProcess = files.slice(0, remaining);
+
+      toProcess.forEach(file => {
+        if (!file.type.startsWith("image/")) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          if (uploadedImages.length >= MAX_IMAGES) return;
+          uploadedImages.push(e.target.result);
+          renderImgGrid();
+        };
+        reader.readAsDataURL(file);
+      });
+      input.value = "";
+    }
+
+    function removeImg(idx) {
+      uploadedImages.splice(idx, 1);
+      renderImgGrid();
+    }
+
+    function renderImgGrid() {
+      const grid = document.getElementById("imgGrid");
+      const addBtn = document.getElementById("imgAddBtn");
+      const count = document.getElementById("imgCount");
+
+      grid.innerHTML = uploadedImages.map((src, i) =>
+        `<div class="img-thumb"><img src="${src}"><button class="img-remove" onclick="removeImg(${i})">&times;</button></div>`
+      ).join("");
+
+      addBtn.style.display = uploadedImages.length >= MAX_IMAGES ? "none" : "flex";
+      count.textContent = uploadedImages.length + " / " + MAX_IMAGES;
+      count.style.color = "var(--text-muted)";
+    }
 
     // File upload
     let uploadedFileContent = "";
@@ -229,7 +277,6 @@
       if (!dev) return;
       const name = document.getElementById("tplName").value.trim();
       const desc = document.getElementById("tplDesc").value.trim();
-      const preview = document.getElementById("tplPreview").value.trim();
       const price = document.getElementById("tplPrice").value;
       const checks = document.querySelectorAll("#platformChecks input:checked");
       const platforms = Array.from(checks).map(c => c.value);
@@ -240,14 +287,15 @@
       if (!uploadedFileContent) { msg.textContent = pt("err_file"); msg.style.color = "#ef4444"; return; }
       if (platforms.length === 0) { msg.textContent = pt("err_platform"); msg.style.color = "#ef4444"; return; }
 
-      submitTemplate({ devId: dev.id, name, description: desc, preview, price, platforms, fileContent: uploadedFileContent });
+      submitTemplate({ devId: dev.id, name, description: desc, images: [...uploadedImages], price, platforms, fileContent: uploadedFileContent });
       document.getElementById("tplName").value = "";
       document.getElementById("tplDesc").value = "";
-      document.getElementById("tplPreview").value = "";
       document.getElementById("tplPrice").value = "0";
       document.getElementById("tplFile").value = "";
       document.getElementById("fileName").textContent = "";
       uploadedFileContent = "";
+      uploadedImages = [];
+      renderImgGrid();
       checks.forEach(c => c.checked = false);
       msg.textContent = pt("submit_ok"); msg.style.color = "var(--green)";
       setTimeout(() => msg.textContent = "", 3000);

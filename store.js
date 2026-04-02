@@ -177,7 +177,7 @@ function submitTemplate(data) {
     description: data.description,
     price: parseFloat(data.price) || 0,
     platforms: data.platforms || [],
-    preview: data.preview || "",
+    images: data.images || [],
     fileContent: data.fileContent || "",
     status: "pending",
     createdAt: new Date().toISOString(),
