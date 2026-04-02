@@ -3,7 +3,17 @@ function goTo(pageId) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(pageId).classList.add("active");
   window.scrollTo(0, 0);
+  if (pageId !== "page3") history.replaceState(null, "", location.pathname);
 }
+
+// Handle URL hash for template detail (e.g. #tpl_xxx)
+async function handleHash() {
+  const hash = location.hash.replace("#", "");
+  if (hash.startsWith("tpl_")) {
+    await showTemplateDetail(hash);
+  }
+}
+window.addEventListener("hashchange", handleHash);
 
 // Platform tabs
 document.querySelectorAll(".platform-tabs .tab").forEach(tab => {
@@ -40,15 +50,17 @@ async function renderTemplateMarket() {
     }
 
     empty.style.display = "none";
+    const viewLabel = translations[currentLang]?.tpl_view || "View";
     list.innerHTML = approved.map(t => {
-      const btnLabel = t.price > 0 ? `$${t.price}` : (translations[currentLang]?.tpl_use || "Use");
+      const priceTag = t.price > 0 ? `<span class="tpl-price">$${t.price}</span>` : `<span class="tpl-free">${translations[currentLang]?.tpl_free_tag || "Free"}</span>`;
       return `
         <div class="template-card">
           <div class="template-info">
             <h3>${escHtml(t.name)}</h3>
             <p>${escHtml(t.description)}</p>
+            <div class="tpl-tags">${priceTag}<span class="tpl-platform">${t.platforms.join(", ")}</span></div>
           </div>
-          <button class="btn-outline" onclick="onDownload('${t.id}', '${escHtml(t.name)}', ${t.price})">${btnLabel}</button>
+          <button class="btn-outline" onclick="location.hash='${t.id}'">${viewLabel}</button>
         </div>`;
     }).join("");
   } catch(e) {
@@ -146,9 +158,52 @@ function getTimestamp() {
 // =============================================
 let pendingDownload = null;
 
-function onDownload(tplId, tplName, price) {
-  const platform = document.querySelector(".platform-tabs .tab.active").textContent;
-  pendingDownload = { tplId, tplName, price, platform };
+// =============================================
+// Template Detail Page
+// =============================================
+async function showTemplateDetail(tplId) {
+  const container = document.getElementById("tplDetail");
+  if (!container) return;
+
+  container.innerHTML = `<p style="text-align:center;color:var(--text-muted);">Loading...</p>`;
+  goTo("page3");
+
+  try {
+    const t = await getTemplateById(tplId);
+    const lang = currentLang;
+    const btnLabel = t.price > 0
+      ? `${translations[lang]?.tpl_buy || "Buy"} - $${t.price}`
+      : (translations[lang]?.tpl_download || "Download");
+
+    const imagesHtml = t.images && t.images.length
+      ? `<div class="detail-images">${t.images.map(s => `<img src="${s}" class="detail-img" onclick="openImg(this.src)">`).join("")}</div>`
+      : "";
+
+    container.innerHTML = `
+      <h2 class="detail-title">${escHtml(t.name)}</h2>
+      <div class="detail-meta">
+        <span class="tpl-platform">${t.platforms.join(", ")}</span>
+        ${t.price > 0 ? `<span class="tpl-price">$${t.price}</span>` : `<span class="tpl-free">${translations[lang]?.tpl_free_tag || "Free"}</span>`}
+      </div>
+      ${imagesHtml}
+      <div class="detail-desc">${escHtml(t.description)}</div>
+      <button class="btn-primary detail-btn" onclick="onDownload('${t.id}', '${escHtml(t.name)}', ${t.price}, '${t.platforms[0] || ""}')">${btnLabel}</button>
+    `;
+  } catch(e) {
+    container.innerHTML = `<p style="text-align:center;color:#ef4444;">${e.message}</p>`;
+  }
+}
+
+function openImg(src) {
+  const overlay = document.createElement("div");
+  overlay.className = "img-overlay";
+  overlay.innerHTML = `<img src="${src}"><button onclick="this.parentElement.remove()">&times;</button>`;
+  overlay.addEventListener("click", e => { if (e.target === overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
+}
+
+function onDownload(tplId, tplName, price, platform) {
+  pendingDownload = { tplId, tplName, price, platform: platform || "Unknown" };
   showCaptcha();
 }
 
@@ -501,3 +556,4 @@ function initTheme() {
 initTheme();
 initLang();
 renderTemplateMarket();
+handleHash();
