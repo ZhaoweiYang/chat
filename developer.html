@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DAO MESSAGE - Developer Portal</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="portal.css">
+</head>
+<body>
+  <div class="lang-bar">
+    <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme"><span id="themeIcon">&#9788;</span></button>
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="admin.html" class="nav-link">Admin</a>
+  </div>
+
+  <!-- Auth Screen -->
+  <section id="authScreen" class="page active">
+    <div class="page-inner auth-container">
+      <h1 class="portal-title">Developer Portal</h1>
+      <p class="portal-sub">DAO MESSAGE</p>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="showAuthTab('register')">Register</button>
+        <button class="auth-tab" onclick="showAuthTab('login')">Login</button>
+      </div>
+
+      <!-- Register -->
+      <div id="registerPanel" class="auth-panel">
+        <p class="auth-hint">Your identity is created from a 12-word mnemonic phrase. Save it securely — it is your only way to access your account.</p>
+        <div class="mnemonic-box" id="mnemonicBox"></div>
+        <button class="btn-ghost" onclick="genNewMnemonic()">Generate New Phrase</button>
+        <button class="btn-primary" onclick="doRegister()">Create Account</button>
+      </div>
+
+      <!-- Login -->
+      <div id="loginPanel" class="auth-panel" style="display:none;">
+        <p class="auth-hint">Enter your 12-word mnemonic phrase to access your developer account.</p>
+        <textarea id="loginMnemonic" class="mnemonic-input" rows="3" placeholder="word1 word2 word3 ..."></textarea>
+        <button class="btn-primary" onclick="doLogin()">Login</button>
+        <p class="auth-error" id="loginError"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <section id="dashScreen" class="page">
+    <div class="page-inner">
+      <div class="dash-header">
+        <div>
+          <h2 class="portal-title-sm">Developer Dashboard</h2>
+          <p class="dev-id" id="devIdDisplay"></p>
+        </div>
+        <button class="btn-ghost btn-sm" onclick="doLogout()">Logout</button>
+      </div>
+
+      <!-- Settings -->
+      <div class="card">
+        <h3 class="card-title">USDT Settlement Address</h3>
+        <div class="input-row">
+          <input type="text" id="usdtAddrInput" class="input" placeholder="TRC-20 USDT Address">
+          <button class="btn-primary btn-sm" onclick="saveUsdtAddr()">Save</button>
+        </div>
+        <p class="save-msg" id="usdtMsg"></p>
+      </div>
+
+      <!-- Submit Template -->
+      <div class="card">
+        <h3 class="card-title">Submit New Template</h3>
+        <div class="form-group">
+          <label>Template Name</label>
+          <input type="text" id="tplName" class="input" placeholder="e.g. SecureChat Pro">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="tplDesc" class="input" rows="3" placeholder="What does this template do?"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Preview URL (screenshot or demo link)</label>
+          <input type="text" id="tplPreview" class="input" placeholder="https://...">
+        </div>
+        <div class="form-group">
+          <label>Price (USD, 0 = free)</label>
+          <input type="number" id="tplPrice" class="input" min="0" step="0.5" value="0">
+        </div>
+        <div class="form-group">
+          <label>Platforms</label>
+          <div class="checkbox-row" id="platformChecks">
+            <label><input type="checkbox" value="Android"> Android</label>
+            <label><input type="checkbox" value="iOS"> iOS</label>
+            <label><input type="checkbox" value="PWA"> PWA</label>
+            <label><input type="checkbox" value="macOS"> macOS</label>
+            <label><input type="checkbox" value="Windows"> Windows</label>
+            <label><input type="checkbox" value="Linux"> Linux</label>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="submitTpl()">Submit for Review</button>
+        <p class="save-msg" id="tplMsg"></p>
+      </div>
+
+      <!-- My Templates -->
+      <div class="card">
+        <h3 class="card-title">My Templates</h3>
+        <div id="myTemplatesList" class="template-review-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <script src="store.js"></script>
+  <script>
+    // ---- Theme ----
+    function toggleTheme() {
+      const html = document.documentElement;
+      const cur = html.getAttribute("data-theme") || "dark";
+      const next = cur === "dark" ? "light" : "dark";
+      html.setAttribute("data-theme", next);
+      localStorage.setItem("dao_theme", next);
+      document.getElementById("themeIcon").innerHTML = next === "dark" ? "&#9788;" : "&#9790;";
+    }
+    (function initTheme() {
+      const t = localStorage.getItem("dao_theme") || "dark";
+      document.documentElement.setAttribute("data-theme", t);
+      document.getElementById("themeIcon").innerHTML = t === "dark" ? "&#9788;" : "&#9790;";
+    })();
+
+    // ---- Auth ----
+    let currentMnemonic = "";
+
+    function showAuthTab(tab) {
+      document.querySelectorAll(".auth-tab").forEach(t => t.classList.remove("active"));
+      document.getElementById("registerPanel").style.display = tab === "register" ? "block" : "none";
+      document.getElementById("loginPanel").style.display = tab === "login" ? "block" : "none";
+      event.target.classList.add("active");
+    }
+
+    function genNewMnemonic() {
+      currentMnemonic = generateMnemonic();
+      document.getElementById("mnemonicBox").textContent = currentMnemonic;
+    }
+
+    function doRegister() {
+      if (!currentMnemonic) { genNewMnemonic(); return; }
+      registerDeveloper(currentMnemonic);
+      loginDeveloper(currentMnemonic);
+      showDashboard();
+    }
+
+    function doLogin() {
+      const m = document.getElementById("loginMnemonic").value.trim().toLowerCase();
+      if (!m) return;
+      // Try to register (idempotent) then login
+      registerDeveloper(m);
+      const dev = loginDeveloper(m);
+      if (dev) {
+        showDashboard();
+      } else {
+        document.getElementById("loginError").textContent = "Invalid mnemonic.";
+      }
+    }
+
+    function doLogout() {
+      logoutDev();
+      showAuth();
+    }
+
+    function showAuth() {
+      document.getElementById("authScreen").classList.add("active");
+      document.getElementById("dashScreen").classList.remove("active");
+    }
+
+    function showDashboard() {
+      document.getElementById("authScreen").classList.remove("active");
+      document.getElementById("dashScreen").classList.add("active");
+      const dev = getCurrentDev();
+      if (!dev) { showAuth(); return; }
+      document.getElementById("devIdDisplay").textContent = "ID: " + dev.id;
+      document.getElementById("usdtAddrInput").value = dev.usdtAddress || "";
+      renderMyTemplates();
+    }
+
+    // ---- USDT Address ----
+    function saveUsdtAddr() {
+      const dev = getCurrentDev();
+      if (!dev) return;
+      const addr = document.getElementById("usdtAddrInput").value.trim();
+      updateDevUsdtAddress(dev.id, addr);
+      const msg = document.getElementById("usdtMsg");
+      msg.textContent = "Saved!";
+      msg.style.color = "var(--green)";
+      setTimeout(() => msg.textContent = "", 2000);
+    }
+
+    // ---- Template Submission ----
+    function submitTpl() {
+      const dev = getCurrentDev();
+      if (!dev) return;
+      const name = document.getElementById("tplName").value.trim();
+      const desc = document.getElementById("tplDesc").value.trim();
+      const preview = document.getElementById("tplPreview").value.trim();
+      const price = document.getElementById("tplPrice").value;
+      const checks = document.querySelectorAll("#platformChecks input:checked");
+      const platforms = Array.from(checks).map(c => c.value);
+      const msg = document.getElementById("tplMsg");
+
+      if (!name) { msg.textContent = "Please enter a template name."; msg.style.color = "#ef4444"; return; }
+      if (!desc) { msg.textContent = "Please enter a description."; msg.style.color = "#ef4444"; return; }
+      if (platforms.length === 0) { msg.textContent = "Please select at least one platform."; msg.style.color = "#ef4444"; return; }
+
+      submitTemplate({ devId: dev.id, name, description: desc, preview, price, platforms });
+
+      // Reset form
+      document.getElementById("tplName").value = "";
+      document.getElementById("tplDesc").value = "";
+      document.getElementById("tplPreview").value = "";
+      document.getElementById("tplPrice").value = "0";
+      checks.forEach(c => c.checked = false);
+
+      msg.textContent = "Template submitted for review!";
+      msg.style.color = "var(--green)";
+      setTimeout(() => msg.textContent = "", 3000);
+      renderMyTemplates();
+    }
+
+    // ---- My Templates ----
+    function renderMyTemplates() {
+      const dev = getCurrentDev();
+      if (!dev) return;
+      const list = document.getElementById("myTemplatesList");
+      const tpls = getDevTemplates(dev.id);
+
+      if (tpls.length === 0) {
+        list.innerHTML = '<p class="empty-msg">No templates submitted yet.</p>';
+        return;
+      }
+
+      list.innerHTML = tpls.map(t => {
+        const statusClass = t.status === "approved" ? "status-approved" : t.status === "rejected" ? "status-rejected" : "status-pending";
+        const statusLabel = t.status === "approved" ? "Approved" : t.status === "rejected" ? "Rejected" : "Pending Review";
+        return `
+          <div class="review-card">
+            <div class="review-info">
+              <h4>${esc(t.name)}</h4>
+              <p>${esc(t.description)}</p>
+              <div class="review-meta">
+                <span class="badge ${statusClass}">${statusLabel}</span>
+                <span>${t.platforms.join(", ")}</span>
+                <span>${t.price > 0 ? "$" + t.price : "Free"}</span>
+              </div>
+            </div>
+            <button class="btn-ghost btn-sm btn-danger" onclick="deleteTpl('${t.id}')">Delete</button>
+          </div>`;
+      }).join("");
+    }
+
+    function deleteTpl(id) {
+      deleteTemplate(id);
+      renderMyTemplates();
+    }
+
+    function esc(s) {
+      const d = document.createElement("div");
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    // ---- Init ----
+    genNewMnemonic();
+    const dev = getCurrentDev();
+    if (dev) showDashboard();
+  </script>
+</body>
+</html>

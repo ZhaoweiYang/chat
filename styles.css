@@ -129,6 +129,22 @@ body::after {
   box-shadow: 0 0 12px var(--accent-glow);
 }
 
+.nav-link-main {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Space Grotesk', sans-serif;
+  transition: all 0.2s;
+}
+
+.nav-link-main:hover {
+  color: var(--accent-bright);
+  border-color: var(--accent);
+}
+
 .lang-bar select {
   padding: 8px 14px;
   border: 1px solid var(--border);

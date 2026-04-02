@@ -10,8 +10,46 @@ document.querySelectorAll(".platform-tabs .tab").forEach(tab => {
   tab.addEventListener("click", () => {
     document.querySelectorAll(".platform-tabs .tab").forEach(t => t.classList.remove("active"));
     tab.classList.add("active");
+    renderTemplateMarket();
   });
 });
+
+// =============================================
+// Dynamic Template Market
+// =============================================
+function escHtml(s) {
+  const d = document.createElement("div");
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function renderTemplateMarket() {
+  const list = document.getElementById("templateList");
+  const empty = document.getElementById("emptyMarket");
+  if (!list) return;
+
+  const platform = document.querySelector(".platform-tabs .tab.active").textContent;
+  const approved = getApprovedTemplates().filter(t => t.platforms.includes(platform));
+
+  if (approved.length === 0) {
+    list.innerHTML = "";
+    empty.style.display = "block";
+    return;
+  }
+
+  empty.style.display = "none";
+  list.innerHTML = approved.map(t => {
+    const btnLabel = t.price > 0 ? `$${t.price}` : (translations[currentLang]?.tpl_use || "Use");
+    return `
+      <div class="template-card">
+        <div class="template-info">
+          <h3>${escHtml(t.name)}</h3>
+          <p>${escHtml(t.description)}</p>
+        </div>
+        <button class="btn-outline" onclick="onDownload('${escHtml(t.name)}', ${t.price})">${btnLabel}</button>
+      </div>`;
+  }).join("");
+}
 
 // =============================================
 // USDT Address Pool
@@ -458,3 +496,4 @@ function initTheme() {
 // Init
 initTheme();
 initLang();
+renderTemplateMarket();
