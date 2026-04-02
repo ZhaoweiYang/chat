@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHAT - Decentralized Communication</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Language Selector -->
+  <div class="lang-bar">
+    <select id="langSelect" onchange="switchLang(this.value)">
+      <option value="zh">中文</option>
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+      <option value="ru">Русский</option>
+      <option value="pt">Português</option>
+      <option value="es">Español</option>
+    </select>
+  </div>
+
+  <!-- Page 1: Landing -->
+  <section id="page1" class="page active">
+    <div class="page-inner">
+      <h1 class="logo">CHAT</h1>
+      <p class="subtitle" data-i18n="subtitle"></p>
+
+      <div class="features">
+        <div class="feature">
+          <h3 data-i18n="feature1_title"></h3>
+          <p data-i18n="feature1_desc"></p>
+        </div>
+        <div class="feature">
+          <h3 data-i18n="feature2_title"></h3>
+          <p data-i18n="feature2_desc"></p>
+        </div>
+        <div class="feature">
+          <h3 data-i18n="feature3_title"></h3>
+          <p data-i18n="feature3_desc"></p>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="goTo('page2')" data-i18n="join_btn"></button>
+    </div>
+  </section>
+
+  <!-- Page 2: How to get client -->
+  <section id="page2" class="page">
+    <div class="page-inner">
+      <button class="btn-back" onclick="goTo('page1')">&larr;</button>
+      <h2 data-i18n="how_title"></h2>
+
+      <div class="method">
+        <h3 data-i18n="method1_title"></h3>
+        <a href="https://doc.chat.com" target="_blank" rel="noopener">doc.chat.com &#8599;</a>
+      </div>
+
+      <div class="method">
+        <h3 data-i18n="method2_title"></h3>
+        <a href="https://doc.chat.com/templates" target="_blank" rel="noopener" data-i18n="method2_link"></a>
+      </div>
+
+      <button class="btn-secondary" onclick="goTo('page3')" data-i18n="next_btn"></button>
+    </div>
+  </section>
+
+  <!-- Page 3: Templates -->
+  <section id="page3" class="page">
+    <div class="page-inner">
+      <button class="btn-back" onclick="goTo('page2')">&larr;</button>
+      <p class="tip" data-i18n="tip_ai"></p>
+
+      <div class="platform-tabs">
+        <span class="tab active">Android</span>
+        <span class="tab">iOS</span>
+        <span class="tab">PWA</span>
+        <span class="tab">macOS</span>
+        <span class="tab">Windows</span>
+        <span class="tab">Linux</span>
+      </div>
+
+      <div class="template-list">
+        <div class="template-card">
+          <div class="template-info">
+            <h3 data-i18n="tpl_a_title"></h3>
+            <p data-i18n="tpl_a_desc"></p>
+          </div>
+          <button class="btn-outline" data-i18n="tpl_use"></button>
+        </div>
+
+        <div class="template-card">
+          <div class="template-info">
+            <h3 data-i18n="tpl_b_title"></h3>
+            <p data-i18n="tpl_b_desc"></p>
+          </div>
+          <button class="btn-outline" onclick="goTo('page4')">$1</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Page 4: Payment -->
+  <section id="page4" class="page">
+    <div class="page-inner">
+      <button class="btn-back" onclick="goTo('page3')">&larr;</button>
+
+      <h3 data-i18n="pay_doc_title"></h3>
+      <p class="address">doc.chat.com/222/usisis</p>
+
+      <p class="pay-hint" data-i18n="pay_hint"></p>
+
+      <div class="pay-methods">
+        <button class="btn-pay" onclick="alert('USDT')">USDT</button>
+      </div>
+    </div>
+  </section>
+
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
