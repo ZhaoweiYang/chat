@@ -7,4 +7,4 @@ ADMIN_PASS = "daomessage2026"
 
 [[kv_namespaces]]
 binding = "DB"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "613cda69ad4e4cb0845a320e574f75a9"
