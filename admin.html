@@ -123,10 +123,18 @@
         const pending = await getAdminTemplates("pending");
         if (pending.length === 0) { list.innerHTML = `<p class="empty-msg">${pt("no_pending")}</p>`; return; }
         list.innerHTML = pending.map(t => `
-          <div class="review-card"><div class="review-info"><h4>${esc(t.name)}</h4><p>${esc(t.description)}</p>
-          ${t.images && t.images.length ? `<div class="review-imgs">${t.images.map(s => `<img src="${s}" class="review-thumb">`).join("")}</div>` : ""}
-          <div class="review-meta"><span>${t.platforms.join(", ")}</span><span>${t.price > 0 ? "$" + t.price : pt("free")}</span><span>Dev: ${t.devId}</span><span>${new Date(t.createdAt).toLocaleDateString()}</span></div></div>
-          <div class="review-actions"><button class="btn-approve" onclick="doApprove('${t.id}')">${pt("btn_approve")}</button><button class="btn-reject" onclick="doReject('${t.id}')">${pt("btn_reject")}</button></div></div>`).join("");
+          <div class="review-card review-card-vertical">
+            <div class="review-info">
+              <h4>${esc(t.name)}</h4>
+              <p>${esc(t.description)}</p>
+              ${t.images && t.images.length ? `<div class="review-imgs">${t.images.map(s => `<img src="${s}" class="review-thumb">`).join("")}</div>` : ""}
+              <div class="review-meta"><span>${t.platforms.join(", ")}</span><span>${t.price > 0 ? "$" + t.price : pt("free")}</span><span>Dev: ${t.devId}</span><span>${new Date(t.createdAt).toLocaleDateString()}</span></div>
+            </div>
+            <div class="review-actions-row">
+              <button class="btn-approve" onclick="doApprove('${t.id}')">${pt("btn_approve")}</button>
+              <button class="btn-reject" onclick="doReject('${t.id}')">${pt("btn_reject")}</button>
+            </div>
+          </div>`).join("");
       } catch(e) { list.innerHTML = `<p class="empty-msg">${e.message}</p>`; }
     }
 
