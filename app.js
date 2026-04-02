@@ -7,10 +7,10 @@ function goTo(pageId) {
 
 // Platform tabs
 document.querySelectorAll(".platform-tabs .tab").forEach(tab => {
-  tab.addEventListener("click", () => {
+  tab.addEventListener("click", async () => {
     document.querySelectorAll(".platform-tabs .tab").forEach(t => t.classList.remove("active"));
     tab.classList.add("active");
-    renderTemplateMarket();
+    await renderTemplateMarket();
   });
 });
 
@@ -23,32 +23,38 @@ function escHtml(s) {
   return d.innerHTML;
 }
 
-function renderTemplateMarket() {
+async function renderTemplateMarket() {
   const list = document.getElementById("templateList");
   const empty = document.getElementById("emptyMarket");
   if (!list) return;
 
   const platform = document.querySelector(".platform-tabs .tab.active").textContent;
-  const approved = getApprovedTemplates().filter(t => t.platforms.includes(platform));
 
-  if (approved.length === 0) {
+  try {
+    const approved = await getApprovedTemplates(platform);
+
+    if (approved.length === 0) {
+      list.innerHTML = "";
+      empty.style.display = "block";
+      return;
+    }
+
+    empty.style.display = "none";
+    list.innerHTML = approved.map(t => {
+      const btnLabel = t.price > 0 ? `$${t.price}` : (translations[currentLang]?.tpl_use || "Use");
+      return `
+        <div class="template-card">
+          <div class="template-info">
+            <h3>${escHtml(t.name)}</h3>
+            <p>${escHtml(t.description)}</p>
+          </div>
+          <button class="btn-outline" onclick="onDownload('${t.id}', '${escHtml(t.name)}', ${t.price})">${btnLabel}</button>
+        </div>`;
+    }).join("");
+  } catch(e) {
     list.innerHTML = "";
     empty.style.display = "block";
-    return;
   }
-
-  empty.style.display = "none";
-  list.innerHTML = approved.map(t => {
-    const btnLabel = t.price > 0 ? `$${t.price}` : (translations[currentLang]?.tpl_use || "Use");
-    return `
-      <div class="template-card">
-        <div class="template-info">
-          <h3>${escHtml(t.name)}</h3>
-          <p>${escHtml(t.description)}</p>
-        </div>
-        <button class="btn-outline" onclick="onDownload('${t.id}', '${escHtml(t.name)}', ${t.price})">${btnLabel}</button>
-      </div>`;
-  }).join("");
 }
 
 // =============================================
@@ -390,19 +396,20 @@ function getTxt(key) {
   return s[key] || (txtStrings.en[key] || "");
 }
 
-function doDownload() {
+async function doDownload() {
   if (!pendingDownload) return;
 
   const { tplId, tplName, price, platform } = pendingDownload;
   const uid = generateUID();
   const ts = getTimestamp();
 
-  // Get the developer's uploaded file content
+  // Fetch the developer's uploaded file content from API
   let devFileContent = "";
   if (tplId) {
-    const tpls = getTemplates();
-    const tpl = tpls.find(t => t.id === tplId);
-    if (tpl && tpl.fileContent) devFileContent = tpl.fileContent;
+    try {
+      const tpl = await getTemplateById(tplId);
+      if (tpl && tpl.fileContent) devFileContent = tpl.fileContent;
+    } catch(e) { console.error(e); }
   }
 
   let content;

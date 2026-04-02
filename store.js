@@ -1,28 +1,29 @@
 // =============================================
-// Shared Data Store (localStorage)
+// DAO MESSAGE - API Client
+// All data stored server-side via Cloudflare Worker + KV
 // =============================================
 
-const STORE_KEYS = {
-  developers: "dao_developers",
-  templates: "dao_templates",
-  adminPass: "dao_admin_pass",
-  currentDev: "dao_current_dev",
-  usdtBindings: "dao_usdt_bindings"
-};
+const API_BASE = "https://api.daomessage.com";
 
-// Default admin password (sha256 hash of "daomessage2026")
-const DEFAULT_ADMIN_HASH = "daomessage2026";
+async function api(path, opts = {}) {
+  const headers = { "Content-Type": "application/json", ...(opts.headers || {}) };
+  const devId = localStorage.getItem("dao_dev_id");
+  const adminToken = localStorage.getItem("dao_admin_token");
+  if (devId) headers["X-Dev-Id"] = devId;
+  if (adminToken) headers["X-Admin-Token"] = adminToken;
 
-// ---- Generic helpers ----
-function storeGet(key) {
-  try { return JSON.parse(localStorage.getItem(key)) || []; }
-  catch { return []; }
+  const res = await fetch(API_BASE + path, {
+    method: opts.method || "GET",
+    headers,
+    body: opts.body ? JSON.stringify(opts.body) : undefined
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Request failed");
+  return data;
 }
-function storeSet(key, data) {
-  localStorage.setItem(key, JSON.stringify(data));
-}
 
-// ---- BIP39-style Mnemonic ----
+// ---- BIP39-style Mnemonic (client-side only) ----
 const WORDLIST = [
   "abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse",
   "access","accident","account","accuse","achieve","acid","acoustic","acquire","across","act",
@@ -89,122 +90,81 @@ function generateMnemonic() {
   return words.join(" ");
 }
 
-function mnemonicToId(mnemonic) {
-  // Simple hash from mnemonic to create a deterministic ID
-  let hash = 0;
-  for (let i = 0; i < mnemonic.length; i++) {
-    const c = mnemonic.charCodeAt(i);
-    hash = ((hash << 5) - hash) + c;
-    hash |= 0;
-  }
-  return "dev_" + Math.abs(hash).toString(16).padStart(8, "0");
+// ---- Developer API ----
+async function registerDeveloper(mnemonic) {
+  const data = await api("/dev/register", { method: "POST", body: { mnemonic } });
+  localStorage.setItem("dao_dev_id", data.devId);
+  return data;
 }
 
-// ---- Developers ----
-function getDevelopers() { return storeGet(STORE_KEYS.developers); }
-
-function getDeveloper(devId) {
-  return getDevelopers().find(d => d.id === devId) || null;
+async function loginDeveloper(mnemonic) {
+  const data = await api("/dev/login", { method: "POST", body: { mnemonic } });
+  localStorage.setItem("dao_dev_id", data.devId);
+  return data;
 }
 
-function registerDeveloper(mnemonic) {
-  const devId = mnemonicToId(mnemonic);
-  const devs = getDevelopers();
-  let dev = devs.find(d => d.id === devId);
-  if (!dev) {
-    dev = {
-      id: devId,
-      mnemonicHash: mnemonicToId(mnemonic),
-      usdtAddress: "",
-      createdAt: new Date().toISOString()
-    };
-    devs.push(dev);
-    storeSet(STORE_KEYS.developers, devs);
-  }
-  return dev;
-}
-
-function loginDeveloper(mnemonic) {
-  const devId = mnemonicToId(mnemonic);
-  const dev = getDeveloper(devId);
-  if (dev) {
-    localStorage.setItem(STORE_KEYS.currentDev, devId);
-    return dev;
-  }
-  return null;
-}
-
-function getCurrentDev() {
-  const devId = localStorage.getItem(STORE_KEYS.currentDev);
-  return devId ? getDeveloper(devId) : null;
+function getCurrentDevId() {
+  return localStorage.getItem("dao_dev_id");
 }
 
 function logoutDev() {
-  localStorage.removeItem(STORE_KEYS.currentDev);
+  localStorage.removeItem("dao_dev_id");
 }
 
-function updateDevUsdtAddress(devId, address) {
-  const devs = getDevelopers();
-  const dev = devs.find(d => d.id === devId);
-  if (dev) {
-    dev.usdtAddress = address;
-    storeSet(STORE_KEYS.developers, devs);
-  }
+async function getDevProfile() {
+  return api("/dev/profile");
 }
 
-// ---- Templates ----
-// Status: pending | approved | rejected
-function getTemplates() { return storeGet(STORE_KEYS.templates); }
-
-function getApprovedTemplates() {
-  return getTemplates().filter(t => t.status === "approved");
+async function updateDevUsdtAddress(address) {
+  return api("/dev/usdt", { method: "PUT", body: { address } });
 }
 
-function getPendingTemplates() {
-  return getTemplates().filter(t => t.status === "pending");
+// ---- Template API ----
+async function submitTemplate(data) {
+  return api("/tpl/submit", { method: "POST", body: data });
 }
 
-function getDevTemplates(devId) {
-  return getTemplates().filter(t => t.devId === devId);
+async function getMyTemplates() {
+  return api("/tpl/my");
 }
 
-function submitTemplate(data) {
-  const templates = getTemplates();
-  const tpl = {
-    id: "tpl_" + Date.now().toString(36) + Math.random().toString(36).substr(2, 6),
-    devId: data.devId,
-    name: data.name,
-    description: data.description,
-    price: parseFloat(data.price) || 0,
-    platforms: data.platforms || [],
-    images: data.images || [],
-    fileContent: data.fileContent || "",
-    status: "pending",
-    createdAt: new Date().toISOString(),
-    reviewedAt: null
-  };
-  templates.push(tpl);
-  storeSet(STORE_KEYS.templates, templates);
-  return tpl;
+async function deleteTemplate(id) {
+  return api(`/tpl/${id}`, { method: "DELETE" });
 }
 
-function reviewTemplate(tplId, approved) {
-  const templates = getTemplates();
-  const tpl = templates.find(t => t.id === tplId);
-  if (tpl) {
-    tpl.status = approved ? "approved" : "rejected";
-    tpl.reviewedAt = new Date().toISOString();
-    storeSet(STORE_KEYS.templates, templates);
-  }
-  return tpl;
+async function getApprovedTemplates(platform) {
+  const q = platform ? `?platform=${encodeURIComponent(platform)}` : "";
+  return api(`/tpl/approved${q}`);
 }
 
-function deleteTemplate(tplId) {
-  const templates = getTemplates().filter(t => t.id !== tplId);
-  storeSet(STORE_KEYS.templates, templates);
+async function getTemplateById(id) {
+  return api(`/tpl/${id}`);
 }
 
-// ---- Admin ----
-function verifyAdmin(password) {
-  return password === DEFAULT_ADMIN_HASH;
+// ---- Admin API ----
+async function adminLogin(password) {
+  const data = await api("/admin/login", { method: "POST", body: { password } });
+  localStorage.setItem("dao_admin_token", data.token);
+  return data;
+}
+
+function adminLogout() {
+  localStorage.removeItem("dao_admin_token");
+}
+
+function isAdminLoggedIn() {
+  return !!localStorage.getItem("dao_admin_token");
+}
+
+async function getAdminStats() {
+  return api("/admin/stats");
+}
+
+async function getAdminTemplates(status) {
+  const q = status ? `?status=${status}` : "";
+  return api(`/admin/templates${q}`);
+}
+
+async function reviewTemplate(id, approved) {
+  return api(`/admin/review/${id}`, { method: "PUT", body: { approved } });
 }

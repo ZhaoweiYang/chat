@@ -221,21 +221,21 @@
       document.getElementById("mnemonicBox").textContent = currentMnemonic;
     }
 
-    function doRegister() {
+    async function doRegister() {
       if (!currentMnemonic) { genNewMnemonic(); return; }
-      registerDeveloper(currentMnemonic);
-      loginDeveloper(currentMnemonic);
-      showDashboard();
+      try {
+        await registerDeveloper(currentMnemonic);
+        await showDashboard();
+      } catch(e) { alert(e.message); }
     }
 
-    function doLogin() {
+    async function doLogin() {
       const m = document.getElementById("loginMnemonic").value.trim().toLowerCase();
       if (!m) return;
-      registerDeveloper(m);
-      const dev = loginDeveloper(m);
-      if (dev) {
-        showDashboard();
-      } else {
+      try {
+        await loginDeveloper(m);
+        await showDashboard();
+      } catch(e) {
         document.getElementById("loginError").textContent = pt("invalid_mnemonic");
       }
     }
@@ -247,28 +247,29 @@
       document.getElementById("dashScreen").classList.remove("active");
     }
 
-    function showDashboard() {
+    async function showDashboard() {
+      const devId = getCurrentDevId();
+      if (!devId) { showAuth(); return; }
       document.getElementById("authScreen").classList.remove("active");
       document.getElementById("dashScreen").classList.add("active");
-      const dev = getCurrentDev();
-      if (!dev) { showAuth(); return; }
-      document.getElementById("devIdDisplay").textContent = "ID: " + dev.id;
-      document.getElementById("usdtAddrInput").value = dev.usdtAddress || "";
-      renderMyTemplates();
+      try {
+        const dev = await getDevProfile();
+        document.getElementById("devIdDisplay").textContent = "ID: " + dev.id;
+        document.getElementById("usdtAddrInput").value = dev.usdtAddress || "";
+      } catch(e) { logoutDev(); showAuth(); return; }
+      await renderMyTemplates();
     }
 
-    function saveUsdtAddr() {
-      const dev = getCurrentDev();
-      if (!dev) return;
-      updateDevUsdtAddress(dev.id, document.getElementById("usdtAddrInput").value.trim());
-      const msg = document.getElementById("usdtMsg");
-      msg.textContent = pt("saved"); msg.style.color = "var(--green)";
-      setTimeout(() => msg.textContent = "", 2000);
+    async function saveUsdtAddr() {
+      try {
+        await updateDevUsdtAddress(document.getElementById("usdtAddrInput").value.trim());
+        const msg = document.getElementById("usdtMsg");
+        msg.textContent = pt("saved"); msg.style.color = "var(--green)";
+        setTimeout(() => msg.textContent = "", 2000);
+      } catch(e) { alert(e.message); }
     }
 
-    function submitTpl() {
-      const dev = getCurrentDev();
-      if (!dev) return;
+    async function submitTpl() {
       const name = document.getElementById("tplName").value.trim();
       const desc = document.getElementById("tplDesc").value.trim();
       const price = document.getElementById("tplPrice").value;
@@ -281,42 +282,43 @@
       if (!desc) { msg.textContent = pt("err_desc"); msg.style.color = "#ef4444"; return; }
       if (!uploadedFileContent) { msg.textContent = pt("err_file"); msg.style.color = "#ef4444"; return; }
 
-      submitTemplate({ devId: dev.id, name, description: desc, images: [...uploadedImages], price, platforms: [platform], fileContent: uploadedFileContent });
-      document.getElementById("tplName").value = "";
-      document.getElementById("tplDesc").value = "";
-      document.getElementById("tplPrice").value = "0";
-      document.getElementById("tplFile").value = "";
-      document.getElementById("fileName").textContent = "";
-      uploadedFileContent = "";
-      uploadedImages = [];
-      renderImgGrid();
-      if (selected) selected.checked = false;
-      msg.textContent = pt("submit_ok"); msg.style.color = "var(--green)";
-      setTimeout(() => msg.textContent = "", 3000);
-      renderMyTemplates();
+      try {
+        await submitTemplate({ name, description: desc, images: [...uploadedImages], price, platforms: [platform], fileContent: uploadedFileContent });
+        document.getElementById("tplName").value = "";
+        document.getElementById("tplDesc").value = "";
+        document.getElementById("tplPrice").value = "0";
+        document.getElementById("tplFile").value = "";
+        document.getElementById("fileName").textContent = "";
+        uploadedFileContent = "";
+        uploadedImages = [];
+        renderImgGrid();
+        if (selected) selected.checked = false;
+        msg.textContent = pt("submit_ok"); msg.style.color = "var(--green)";
+        setTimeout(() => msg.textContent = "", 3000);
+        await renderMyTemplates();
+      } catch(e) { msg.textContent = e.message; msg.style.color = "#ef4444"; }
     }
 
-    function renderMyTemplates() {
-      const dev = getCurrentDev();
-      if (!dev) return;
+    async function renderMyTemplates() {
       const list = document.getElementById("myTemplatesList");
-      const tpls = getDevTemplates(dev.id);
-      if (tpls.length === 0) { list.innerHTML = `<p class="empty-msg">${pt("no_tpl")}</p>`; return; }
-      list.innerHTML = tpls.map(t => {
-        const sc = t.status === "approved" ? "status-approved" : t.status === "rejected" ? "status-rejected" : "status-pending";
-        const sl = pt("status_" + (t.status === "approved" ? "approved" : t.status === "rejected" ? "rejected" : "pending"));
-        return `<div class="review-card"><div class="review-info"><h4>${esc(t.name)}</h4><p>${esc(t.description)}</p><div class="review-meta"><span class="badge ${sc}">${sl}</span><span>${t.platforms.join(", ")}</span><span>${t.price > 0 ? "$" + t.price : pt("free")}</span></div></div><button class="btn-ghost btn-sm btn-danger" onclick="deleteTpl('${t.id}')">${pt("btn_delete")}</button></div>`;
-      }).join("");
+      try {
+        const tpls = await getMyTemplates();
+        if (tpls.length === 0) { list.innerHTML = `<p class="empty-msg">${pt("no_tpl")}</p>`; return; }
+        list.innerHTML = tpls.map(t => {
+          const sc = t.status === "approved" ? "status-approved" : t.status === "rejected" ? "status-rejected" : "status-pending";
+          const sl = pt("status_" + t.status);
+          return `<div class="review-card"><div class="review-info"><h4>${esc(t.name)}</h4><p>${esc(t.description)}</p><div class="review-meta"><span class="badge ${sc}">${sl}</span><span>${t.platforms.join(", ")}</span><span>${t.price > 0 ? "$" + t.price : pt("free")}</span></div></div><button class="btn-ghost btn-sm btn-danger" onclick="doDeleteTpl('${t.id}')">${pt("btn_delete")}</button></div>`;
+        }).join("");
+      } catch(e) { list.innerHTML = `<p class="empty-msg">${e.message}</p>`; }
     }
 
-    function deleteTpl(id) { deleteTemplate(id); renderMyTemplates(); }
+    async function doDeleteTpl(id) { await deleteTemplate(id); await renderMyTemplates(); }
     function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 
     // Init
     genNewMnemonic();
     initPortalLang();
-    const dev = getCurrentDev();
-    if (dev) showDashboard();
+    if (getCurrentDevId()) showDashboard();
   </script>
 </body>
 </html>
