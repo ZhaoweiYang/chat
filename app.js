@@ -102,16 +102,11 @@ function getTimestamp() {
 // =============================================
 let pendingDownload = null;
 
-document.querySelectorAll(".btn-download").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const card = btn.closest(".template-card");
-    const tplName = card.dataset.tpl;
-    const price = parseInt(card.dataset.price);
-    const platform = document.querySelector(".platform-tabs .tab.active").textContent;
-    pendingDownload = { tplName, price, platform };
-    showCaptcha();
-  });
-});
+function onDownload(tplName, price) {
+  const platform = document.querySelector(".platform-tabs .tab.active").textContent;
+  pendingDownload = { tplName, price, platform };
+  showCaptcha();
+}
 
 // =============================================
 // Captcha
