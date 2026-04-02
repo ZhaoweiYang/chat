@@ -13,6 +13,39 @@ document.querySelectorAll(".platform-tabs .tab").forEach(tab => {
   });
 });
 
+// Generate unique ID (timestamp + random hex)
+function generateUID() {
+  const ts = Date.now().toString(36);
+  const rnd = Math.random().toString(36).substring(2, 10);
+  return ts + rnd;
+}
+
+// Format timestamp for filename
+function getTimestamp() {
+  const d = new Date();
+  return d.getFullYear().toString() +
+    String(d.getMonth() + 1).padStart(2, "0") +
+    String(d.getDate()).padStart(2, "0") +
+    String(d.getHours()).padStart(2, "0") +
+    String(d.getMinutes()).padStart(2, "0") +
+    String(d.getSeconds()).padStart(2, "0");
+}
+
+// Current pending download info
+let pendingDownload = null;
+
+// Template download buttons
+document.querySelectorAll(".btn-download").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const card = btn.closest(".template-card");
+    const tplName = card.dataset.tpl;
+    const price = parseInt(card.dataset.price);
+    const platform = document.querySelector(".platform-tabs .tab.active").textContent;
+    pendingDownload = { tplName, price, platform };
+    showCaptcha();
+  });
+});
+
 // Captcha
 const modal = document.getElementById("captchaModal");
 const captchaCanvas = document.getElementById("captchaCanvas");
@@ -37,7 +70,6 @@ function generateCaptcha() {
   const w = captchaCanvas.width;
   const h = captchaCanvas.height;
 
-  // Random math: a OP b = ?
   const ops = ["+", "-", "×"];
   const op = ops[Math.floor(Math.random() * ops.length)];
   let a, b, result;
@@ -59,11 +91,9 @@ function generateCaptcha() {
   captchaAnswer = String(result);
   const text = `${a} ${op} ${b} = ?`;
 
-  // Background
   ctx.fillStyle = "#f5f5f5";
   ctx.fillRect(0, 0, w, h);
 
-  // Noise dots
   for (let i = 0; i < 80; i++) {
     ctx.fillStyle = `rgba(${rand(0,255)},${rand(0,255)},${rand(0,255)},0.4)`;
     ctx.beginPath();
@@ -71,7 +101,6 @@ function generateCaptcha() {
     ctx.fill();
   }
 
-  // Interference lines
   for (let i = 0; i < 5; i++) {
     ctx.strokeStyle = `rgba(${rand(0,200)},${rand(0,200)},${rand(0,200)},0.4)`;
     ctx.lineWidth = rand(1, 2);
@@ -81,7 +110,6 @@ function generateCaptcha() {
     ctx.stroke();
   }
 
-  // Draw each character with random rotation/color
   const chars = text.split("");
   const startX = 15;
   const charWidth = (w - 30) / chars.length;
@@ -125,44 +153,78 @@ function verifyCaptcha() {
   }
 }
 
-// Enter key to submit
-document.getElementById("captchaInput").addEventListener("keydown", (e) => {
+captchaInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") verifyCaptcha();
 });
 
-// Close modal on overlay click
 modal.addEventListener("click", (e) => {
   if (e.target === modal) closeCaptcha();
 });
 
-// Click canvas to refresh
 captchaCanvas.addEventListener("click", generateCaptcha);
 
-// Trigger captcha before download
-function downloadTxt() {
-  showCaptcha();
-}
-
+// Download after captcha verified
 function doDownload() {
-  const content = `DAO MESSAGE - Document & Payment Info
-================================
+  if (!pendingDownload) return;
 
-Document Address:
-doc.daomessage.com/222/usisis
+  const { tplName, price, platform } = pendingDownload;
+  const uid = generateUID();
+  const ts = getTimestamp();
+  const docUrl = `doc.daomessage.com/${platform.toLowerCase()}/${tplName.toLowerCase()}/${uid}`;
+
+  let content;
+
+  if (price > 0) {
+    // Paid template: unique doc URL + unique USDT payment address + reference
+    const payRef = uid.toUpperCase();
+    content = `DAO MESSAGE - ${tplName} (${platform})
+================================================================
+
+Document Address (not yet activated):
+${docUrl}
+
+----------------------------------------------------------------
+PAYMENT REQUIRED: $${price} USDT (TRC-20)
+----------------------------------------------------------------
 
 USDT Payment Address:
 TYDzsYUEpvnYmQk4zGP9sWWcTEd2MiAtW7
 
-Pay $1 USDT to activate.
-================================`;
+Payment Reference (MUST include in memo/note):
+${payRef}
+
+Instructions:
+1. Send exactly $${price} USDT (TRC-20) to the address above
+2. Include the Payment Reference "${payRef}" in the transaction memo
+3. Your document address will be activated within minutes after payment confirmation
+4. Each document address is uniquely paired with this payment reference
+
+================================================================
+Generated: ${new Date().toISOString()}
+This document URL is unique and single-use.`;
+  } else {
+    // Free template: unique doc URL, no payment needed
+    content = `DAO MESSAGE - ${tplName} (${platform})
+================================================================
+
+Document Address:
+${docUrl}
+
+This address is activated and ready to use.
+
+================================================================
+Generated: ${new Date().toISOString()}
+This document URL is unique and single-use.`;
+  }
 
   const blob = new Blob([content], { type: "text/plain" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "DAO-MESSAGE-info.txt";
+  a.download = `DAO-MESSAGE-${tplName}-${platform}-${ts}.txt`;
   a.click();
   URL.revokeObjectURL(url);
+  pendingDownload = null;
 }
 
 // Init

@@ -78,38 +78,45 @@
       </div>
 
       <div class="template-list">
-        <div class="template-card">
+        <div class="template-card" data-tpl="Template-A" data-price="0">
           <div class="template-info">
             <h3 data-i18n="tpl_a_title"></h3>
             <p data-i18n="tpl_a_desc"></p>
           </div>
-          <button class="btn-outline" onclick="downloadTxt()" data-i18n="tpl_use"></button>
+          <button class="btn-outline btn-download" data-i18n="tpl_use"></button>
         </div>
 
-        <div class="template-card">
+        <div class="template-card" data-tpl="Template-B" data-price="1">
           <div class="template-info">
             <h3 data-i18n="tpl_b_title"></h3>
             <p data-i18n="tpl_b_desc"></p>
           </div>
-          <button class="btn-outline" onclick="downloadTxt()">$1</button>
+          <button class="btn-outline btn-download">$1</button>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Page 4: Payment -->
-  <section id="page4" class="page">
-    <div class="page-inner">
-      <button class="btn-back" onclick="goTo('page3')">&larr;</button>
+        <div class="template-card" data-tpl="Template-C" data-price="0">
+          <div class="template-info">
+            <h3 data-i18n="tpl_c_title"></h3>
+            <p data-i18n="tpl_c_desc"></p>
+          </div>
+          <button class="btn-outline btn-download" data-i18n="tpl_use"></button>
+        </div>
 
-      <h3 data-i18n="pay_doc_title"></h3>
-      <p class="address">doc.daomessage.com</p>
+        <div class="template-card" data-tpl="Template-D" data-price="2">
+          <div class="template-info">
+            <h3 data-i18n="tpl_d_title"></h3>
+            <p data-i18n="tpl_d_desc"></p>
+          </div>
+          <button class="btn-outline btn-download">$2</button>
+        </div>
 
-      <p class="pay-hint" data-i18n="pay_hint"></p>
-
-      <div class="pay-methods">
-        <button class="btn-pay" onclick="alert('USDT')">USDT</button>
-        <button class="btn-pay" onclick="alert('Visa/Mastercard')">Visa / Mastercard</button>
+        <div class="template-card" data-tpl="Template-E" data-price="1">
+          <div class="template-info">
+            <h3 data-i18n="tpl_e_title"></h3>
+            <p data-i18n="tpl_e_desc"></p>
+          </div>
+          <button class="btn-outline btn-download">$1</button>
+        </div>
       </div>
     </div>
   </section>
