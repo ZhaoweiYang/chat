@@ -13,14 +13,80 @@ document.querySelectorAll(".platform-tabs .tab").forEach(tab => {
   });
 });
 
-// Generate unique ID (timestamp + random hex)
+// =============================================
+// USDT Address Pool
+// =============================================
+const USDT_POOL = [
+  "TYDzsYUEpvnYmQk4zGP9sWWcTEd2MiAtW7",
+  "TJDENsfBJs4RFETt1X1W8wMDc8M5z7ms8m",
+  "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+  "TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9",
+  "TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7",
+  "TVj7RNVHy6thbM7BWdSTe9jKCMx6GE2wKn",
+  "TPYmHEhy5n8TCEfYGqW2rPxsghSfzghPDn",
+  "TKzxdSv2FZKQrEqkKVgp5DcwEXBEKMg2Ax",
+  "TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE",
+  "TX2RuZry9X3EpKHRMGRWDpvLCkpP9LM2nW"
+];
+
+const BIND_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
+const STORAGE_KEY = "dao_usdt_bindings";
+
+// Load bindings from localStorage
+function loadBindings() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+
+// Save bindings to localStorage
+function saveBindings(bindings) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(bindings));
+}
+
+// Clean up expired bindings
+function cleanExpiredBindings() {
+  const now = Date.now();
+  const bindings = loadBindings().filter(b => b.expiresAt > now);
+  saveBindings(bindings);
+  return bindings;
+}
+
+// Allocate an available USDT address
+function allocateAddress() {
+  const bindings = cleanExpiredBindings();
+  const usedAddresses = new Set(bindings.map(b => b.address));
+  const available = USDT_POOL.filter(addr => !usedAddresses.has(addr));
+
+  if (available.length === 0) return null;
+
+  const address = available[Math.floor(Math.random() * available.length)];
+  const expiresAt = Date.now() + BIND_TIMEOUT_MS;
+
+  bindings.push({ address, expiresAt });
+  saveBindings(bindings);
+
+  return { address, expiresAt };
+}
+
+// Format deadline for display
+function formatDeadline(timestamp) {
+  const d = new Date(timestamp);
+  const pad = n => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())} (UTC${d.getTimezoneOffset() > 0 ? "-" : "+"}${pad(Math.abs(Math.floor(d.getTimezoneOffset()/60)))})`;
+}
+
+// =============================================
+// Unique ID & Timestamp
+// =============================================
 function generateUID() {
   const ts = Date.now().toString(36);
   const rnd = Math.random().toString(36).substring(2, 10);
   return ts + rnd;
 }
 
-// Format timestamp for filename
 function getTimestamp() {
   const d = new Date();
   return d.getFullYear().toString() +
@@ -31,10 +97,11 @@ function getTimestamp() {
     String(d.getSeconds()).padStart(2, "0");
 }
 
-// Current pending download info
+// =============================================
+// Download flow
+// =============================================
 let pendingDownload = null;
 
-// Template download buttons
 document.querySelectorAll(".btn-download").forEach(btn => {
   btn.addEventListener("click", () => {
     const card = btn.closest(".template-card");
@@ -46,7 +113,9 @@ document.querySelectorAll(".btn-download").forEach(btn => {
   });
 });
 
+// =============================================
 // Captcha
+// =============================================
 const modal = document.getElementById("captchaModal");
 const captchaCanvas = document.getElementById("captchaCanvas");
 const captchaInput = document.getElementById("captchaInput");
@@ -163,7 +232,9 @@ modal.addEventListener("click", (e) => {
 
 captchaCanvas.addEventListener("click", generateCaptcha);
 
-// Download after captcha verified
+// =============================================
+// Download logic
+// =============================================
 function doDownload() {
   if (!pendingDownload) return;
 
@@ -175,35 +246,59 @@ function doDownload() {
   let content;
 
   if (price > 0) {
-    // Paid template: unique doc URL + unique USDT payment address + reference
-    const payRef = uid.toUpperCase();
+    // Allocate a USDT address from the pool
+    const allocation = allocateAddress();
+
+    if (!allocation) {
+      // All addresses are occupied
+      const msgs = {
+        zh: "当前支付通道繁忙，请30分钟后再试。",
+        en: "Payment channels are busy. Please try again in 30 minutes.",
+        fr: "Les canaux de paiement sont occupés. Réessayez dans 30 minutes.",
+        ru: "Платёжные каналы заняты. Попробуйте через 30 минут.",
+        pt: "Canais de pagamento ocupados. Tente novamente em 30 minutos.",
+        es: "Canales de pago ocupados. Intente de nuevo en 30 minutos."
+      };
+      alert(msgs[currentLang] || msgs.en);
+      pendingDownload = null;
+      return;
+    }
+
+    const deadline = formatDeadline(allocation.expiresAt);
+
     content = `DAO MESSAGE - ${tplName} (${platform})
 ================================================================
 
 Document Address (not yet activated):
 ${docUrl}
 
-----------------------------------------------------------------
+================================================================
 PAYMENT REQUIRED: $${price} USDT (TRC-20)
-----------------------------------------------------------------
+================================================================
 
 USDT Payment Address:
-TYDzsYUEpvnYmQk4zGP9sWWcTEd2MiAtW7
+${allocation.address}
 
-Payment Reference (MUST include in memo/note):
-${payRef}
+Payment Deadline:
+${deadline}
 
-Instructions:
-1. Send exactly $${price} USDT (TRC-20) to the address above
-2. Include the Payment Reference "${payRef}" in the transaction memo
-3. Your document address will be activated within minutes after payment confirmation
-4. Each document address is uniquely paired with this payment reference
+IMPORTANT:
+- Please complete payment BEFORE the deadline shown above.
+- After 30 minutes, this payment address will expire and
+  become invalid. You will need to download a new file
+  to get a new payment address.
+- Send EXACTLY $${price} USDT (TRC-20) to the address above.
+- Once payment is confirmed on-chain, your document address
+  will be activated automatically.
+- This USDT address is exclusively assigned to you for 30
+  minutes. Each address serves only one transaction at a time.
 
 ================================================================
 Generated: ${new Date().toISOString()}
-This document URL is unique and single-use.`;
+Order ID: ${uid.toUpperCase()}
+This document URL and payment address are unique to this order.`;
   } else {
-    // Free template: unique doc URL, no payment needed
+    // Free template
     content = `DAO MESSAGE - ${tplName} (${platform})
 ================================================================
 
