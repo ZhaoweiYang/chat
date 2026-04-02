@@ -15,11 +15,11 @@ document.querySelectorAll(".platform-tabs .tab").forEach(tab => {
 
 // Download txt file
 function downloadTxt() {
-  const content = `CHAT - Document & Payment Info
+  const content = `DAO MESSAGE - Document & Payment Info
 ================================
 
 Document Address:
-doc.chat.com/222/usisis
+doc.daomessage.com/222/usisis
 
 USDT Payment Address:
 TYDzsYUEpvnYmQk4zGP9sWWcTEd2MiAtW7
@@ -31,7 +31,7 @@ Pay $1 USDT to activate.
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "CHAT-info.txt";
+  a.download = "DAO-MESSAGE-info.txt";
   a.click();
   URL.revokeObjectURL(url);
 }
