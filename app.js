@@ -46,7 +46,7 @@ function renderTemplateMarket() {
           <h3>${escHtml(t.name)}</h3>
           <p>${escHtml(t.description)}</p>
         </div>
-        <button class="btn-outline" onclick="onDownload('${escHtml(t.name)}', ${t.price})">${btnLabel}</button>
+        <button class="btn-outline" onclick="onDownload('${t.id}', '${escHtml(t.name)}', ${t.price})">${btnLabel}</button>
       </div>`;
   }).join("");
 }
@@ -140,9 +140,9 @@ function getTimestamp() {
 // =============================================
 let pendingDownload = null;
 
-function onDownload(tplName, price) {
+function onDownload(tplId, tplName, price) {
   const platform = document.querySelector(".platform-tabs .tab.active").textContent;
-  pendingDownload = { tplName, price, platform };
+  pendingDownload = { tplId, tplName, price, platform };
   showCaptcha();
 }
 
@@ -393,10 +393,17 @@ function getTxt(key) {
 function doDownload() {
   if (!pendingDownload) return;
 
-  const { tplName, price, platform } = pendingDownload;
+  const { tplId, tplName, price, platform } = pendingDownload;
   const uid = generateUID();
   const ts = getTimestamp();
-  const docUrl = `doc.daomessage.com/${platform.toLowerCase()}/${tplName.toLowerCase()}/${uid}`;
+
+  // Get the developer's uploaded file content
+  let devFileContent = "";
+  if (tplId) {
+    const tpls = getTemplates();
+    const tpl = tpls.find(t => t.id === tplId);
+    if (tpl && tpl.fileContent) devFileContent = tpl.fileContent;
+  }
 
   let content;
 
@@ -421,9 +428,7 @@ function doDownload() {
 
     content = `DAO MESSAGE - ${tplName} (${platform})
 ================================================================
-
-${getTxt("docAddrLabel")}
-${docUrl}
+${devFileContent ? "\n" + devFileContent + "\n\n================================================================" : ""}
 
 ================================================================
 ${getTxt("payRequired")} $${price} USDT (TRC-20)
@@ -447,17 +452,9 @@ ${getTxt("generated")} ${new Date().toISOString()}
 ${getTxt("orderId")} ${uid.toUpperCase()}
 ${getTxt("uniquePaid")}`;
   } else {
-    content = `DAO MESSAGE - ${tplName} (${platform})
-================================================================
-
-${getTxt("docAddrLabelFree")}
-${docUrl}
-
-${getTxt("freeReady")}
-
-================================================================
-${getTxt("generated")} ${new Date().toISOString()}
-${getTxt("uniqueFree")}`;
+    content = devFileContent
+      ? `DAO MESSAGE - ${tplName} (${platform})\n================================================================\n\n${devFileContent}\n\n================================================================\n${getTxt("generated")} ${new Date().toISOString()}\n${getTxt("uniqueFree")}`
+      : `DAO MESSAGE - ${tplName} (${platform})\n================================================================\n\n${getTxt("freeReady")}\n\n================================================================\n${getTxt("generated")} ${new Date().toISOString()}\n${getTxt("uniqueFree")}`;
   }
 
   const blob = new Blob([content], { type: "text/plain" });

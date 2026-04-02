@@ -258,6 +258,45 @@ textarea.input {
   accent-color: var(--accent);
 }
 
+/* File Upload */
+.file-upload {
+  position: relative;
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.file-upload:hover {
+  border-color: var(--accent);
+  background: var(--bg-card);
+}
+
+.file-upload input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.file-upload-label {
+  color: var(--text-muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.file-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  margin-top: 6px;
+  min-height: 16px;
+}
+
 /* Template Review List */
 .template-review-list {
   display: flex;

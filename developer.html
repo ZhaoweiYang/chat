@@ -9,6 +9,12 @@
   <link rel="stylesheet" href="portal.css">
 </head>
 <body>
+  <script>
+    // Only allow access via developer.daomessage.com subdomain
+    if (location.hostname === "daomessage.com" || location.hostname === "www.daomessage.com") {
+      location.replace("https://developer.daomessage.com/");
+    }
+  </script>
   <div class="lang-bar">
     <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme"><span id="themeIcon">&#9788;</span></button>
     <a href="/" class="nav-link" data-pt="nav_home"></a>
@@ -86,6 +92,14 @@
           <input type="text" id="tplPreview" class="input" data-pt-ph="ph_preview">
         </div>
         <div class="form-group">
+          <label data-pt="lbl_file"></label>
+          <div class="file-upload" id="fileUploadArea">
+            <input type="file" id="tplFile" accept=".txt" onchange="handleFileSelect(this)">
+            <div class="file-upload-label" id="fileLabel" data-pt="ph_file"></div>
+          </div>
+          <p class="file-name" id="fileName"></p>
+        </div>
+        <div class="form-group">
           <label data-pt="lbl_price"></label>
           <input type="number" id="tplPrice" class="input" min="0" step="0.5" value="0">
         </div>
@@ -128,6 +142,27 @@
       document.documentElement.setAttribute("data-theme", t);
       document.getElementById("themeIcon").innerHTML = t === "dark" ? "&#9788;" : "&#9790;";
     })();
+
+    // File upload
+    let uploadedFileContent = "";
+
+    function handleFileSelect(input) {
+      const file = input.files[0];
+      if (!file) return;
+      if (!file.name.endsWith(".txt")) {
+        document.getElementById("fileName").textContent = pt("err_file_type");
+        document.getElementById("fileName").style.color = "#ef4444";
+        uploadedFileContent = "";
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        uploadedFileContent = e.target.result;
+        document.getElementById("fileName").textContent = file.name + " (" + (file.size / 1024).toFixed(1) + " KB)";
+        document.getElementById("fileName").style.color = "var(--green)";
+      };
+      reader.readAsText(file);
+    }
 
     // Auth
     let currentMnemonic = "";
@@ -202,13 +237,17 @@
 
       if (!name) { msg.textContent = pt("err_name"); msg.style.color = "#ef4444"; return; }
       if (!desc) { msg.textContent = pt("err_desc"); msg.style.color = "#ef4444"; return; }
+      if (!uploadedFileContent) { msg.textContent = pt("err_file"); msg.style.color = "#ef4444"; return; }
       if (platforms.length === 0) { msg.textContent = pt("err_platform"); msg.style.color = "#ef4444"; return; }
 
-      submitTemplate({ devId: dev.id, name, description: desc, preview, price, platforms });
+      submitTemplate({ devId: dev.id, name, description: desc, preview, price, platforms, fileContent: uploadedFileContent });
       document.getElementById("tplName").value = "";
       document.getElementById("tplDesc").value = "";
       document.getElementById("tplPreview").value = "";
       document.getElementById("tplPrice").value = "0";
+      document.getElementById("tplFile").value = "";
+      document.getElementById("fileName").textContent = "";
+      uploadedFileContent = "";
       checks.forEach(c => c.checked = false);
       msg.textContent = pt("submit_ok"); msg.style.color = "var(--green)";
       setTimeout(() => msg.textContent = "", 3000);
