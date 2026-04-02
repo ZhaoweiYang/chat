@@ -9,22 +9,22 @@
   <link rel="stylesheet" href="portal.css">
 </head>
 <body>
-  <div class="lang-bar">
-    <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme"><span id="themeIcon">&#9788;</span></button>
-    <a href="index.html" class="nav-link" data-pt="nav_home"></a>
-    <select id="portalLangSelect" onchange="switchPortalLang(this.value)">
-      <option value="zh">中文</option>
-      <option value="en">English</option>
-      <option value="fr">Français</option>
-      <option value="ru">Русский</option>
-      <option value="pt">Português</option>
-      <option value="es">Español</option>
-    </select>
-  </div>
 
   <!-- Auth Screen -->
-  <section id="authScreen" class="page active">
-    <div class="page-inner auth-container">
+  <section id="authScreen" class="auth-page active">
+    <div class="auth-container">
+      <div class="lang-bar">
+        <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme"><span id="themeIconAuth">&#9788;</span></button>
+        <a href="index.html" class="nav-link" data-pt="nav_home"></a>
+        <select id="portalLangSelect" onchange="switchPortalLang(this.value)">
+          <option value="zh">中文</option>
+          <option value="en">English</option>
+          <option value="fr">Français</option>
+          <option value="ru">Русский</option>
+          <option value="pt">Português</option>
+          <option value="es">Español</option>
+        </select>
+      </div>
       <h1 class="portal-title" data-pt="dev_title"></h1>
       <p class="portal-sub">DAO MESSAGE</p>
 
@@ -51,80 +51,144 @@
     </div>
   </section>
 
-  <!-- Dashboard -->
-  <section id="dashScreen" class="page">
-    <div class="page-inner">
-      <div class="dash-header">
-        <div>
-          <h2 class="portal-title-sm" data-pt="dash_title"></h2>
-          <p class="dev-id" id="devIdDisplay"></p>
-        </div>
-        <button class="btn-ghost btn-sm" onclick="doLogout()" data-pt="btn_logout"></button>
+  <!-- Sidebar Layout -->
+  <button class="sidebar-toggle" onclick="toggleSidebar()">&#9776;</button>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+  <div id="portalLayout" class="portal-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">DAO MESSAGE</div>
+        <div class="sidebar-title" data-pt="dev_title"></div>
       </div>
 
-      <div class="card">
-        <h3 class="card-title" data-pt="usdt_title"></h3>
-        <div class="input-row">
-          <input type="text" id="usdtAddrInput" class="input" data-pt-ph="usdt_placeholder">
-          <button class="btn-primary btn-sm" onclick="saveUsdtAddr()" data-pt="btn_save"></button>
+      <nav class="sidebar-nav">
+        <button class="sidebar-item active" onclick="showPanel('dashboard')" data-panel="dashboard">
+          <span class="sb-icon">&#9635;</span>
+          <span data-pt="nav_dashboard">Dashboard</span>
+        </button>
+        <button class="sidebar-item" onclick="showPanel('submit')" data-panel="submit">
+          <span class="sb-icon">&#10010;</span>
+          <span data-pt="nav_submit">Submit Template</span>
+        </button>
+        <button class="sidebar-item" onclick="showPanel('templates')" data-panel="templates">
+          <span class="sb-icon">&#9776;</span>
+          <span data-pt="nav_my_tpl">My Templates</span>
+        </button>
+        <button class="sidebar-item" onclick="showPanel('usdt')" data-panel="usdt">
+          <span class="sb-icon">&#36;</span>
+          <span data-pt="nav_usdt">USDT Settings</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-utils">
+          <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme"><span id="themeIcon">&#9788;</span></button>
+          <a href="index.html" class="nav-link" data-pt="nav_home"></a>
+          <select id="portalLangSelectSidebar" onchange="switchPortalLang(this.value)">
+            <option value="zh">中文</option>
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+            <option value="ru">Русский</option>
+            <option value="pt">Português</option>
+            <option value="es">Español</option>
+          </select>
         </div>
-        <p class="save-msg" id="usdtMsg"></p>
+        <button class="sidebar-item" onclick="doLogout()">
+          <span class="sb-icon">&#10140;</span>
+          <span data-pt="btn_logout">Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Dashboard Panel -->
+      <div id="panelDashboard" class="panel-view active">
+        <div class="content-header">
+          <h2 data-pt="dash_title"></h2>
+          <p id="devIdDisplay"></p>
+        </div>
+        <div class="dash-summary" id="dashSummary"></div>
       </div>
 
-      <div class="card">
-        <h3 class="card-title" data-pt="submit_title"></h3>
-        <div class="form-group">
-          <label data-pt="lbl_platform"></label>
-          <div class="checkbox-row" id="platformChecks">
-            <label><input type="radio" name="platform" value="Android"> Android</label>
-            <label><input type="radio" name="platform" value="iOS"> iOS</label>
-            <label><input type="radio" name="platform" value="PWA"> PWA</label>
-            <label><input type="radio" name="platform" value="macOS"> macOS</label>
-            <label><input type="radio" name="platform" value="Windows"> Windows</label>
-            <label><input type="radio" name="platform" value="Linux"> Linux</label>
+      <!-- Submit Template Panel -->
+      <div id="panelSubmit" class="panel-view">
+        <div class="content-header">
+          <h2 data-pt="submit_title"></h2>
+        </div>
+        <div class="card">
+          <div class="form-group">
+            <label data-pt="lbl_platform"></label>
+            <div class="checkbox-row" id="platformChecks">
+              <label><input type="radio" name="platform" value="Android"> Android</label>
+              <label><input type="radio" name="platform" value="iOS"> iOS</label>
+              <label><input type="radio" name="platform" value="PWA"> PWA</label>
+              <label><input type="radio" name="platform" value="macOS"> macOS</label>
+              <label><input type="radio" name="platform" value="Windows"> Windows</label>
+              <label><input type="radio" name="platform" value="Linux"> Linux</label>
+            </div>
           </div>
-        </div>
-        <div class="form-group">
-          <label data-pt="lbl_name"></label>
-          <input type="text" id="tplName" class="input" data-pt-ph="ph_name">
-        </div>
-        <div class="form-group">
-          <label data-pt="lbl_desc"></label>
-          <textarea id="tplDesc" class="input" rows="3" data-pt-ph="ph_desc"></textarea>
-        </div>
-        <div class="form-group">
-          <label data-pt="lbl_preview_img"></label>
-          <div class="img-upload-area">
-            <div class="img-grid" id="imgGrid"></div>
-            <label class="img-add-btn" id="imgAddBtn">
-              <input type="file" accept="image/*" multiple onchange="handleImgUpload(this)">
-              <span>+</span>
-            </label>
+          <div class="form-group">
+            <label data-pt="lbl_name"></label>
+            <input type="text" id="tplName" class="input" data-pt-ph="ph_name">
           </div>
-          <p class="file-name" id="imgCount"></p>
-        </div>
-        <div class="form-group">
-          <label data-pt="lbl_file"></label>
-          <div class="file-upload" id="fileUploadArea">
-            <input type="file" id="tplFile" accept=".txt" onchange="handleFileSelect(this)">
-            <div class="file-upload-label" id="fileLabel" data-pt="ph_file"></div>
+          <div class="form-group">
+            <label data-pt="lbl_desc"></label>
+            <textarea id="tplDesc" class="input" rows="3" data-pt-ph="ph_desc"></textarea>
           </div>
-          <p class="file-name" id="fileName"></p>
+          <div class="form-group">
+            <label data-pt="lbl_preview_img"></label>
+            <div class="img-upload-area">
+              <div class="img-grid" id="imgGrid"></div>
+              <label class="img-add-btn" id="imgAddBtn">
+                <input type="file" accept="image/*" multiple onchange="handleImgUpload(this)">
+                <span>+</span>
+              </label>
+            </div>
+            <p class="file-name" id="imgCount"></p>
+          </div>
+          <div class="form-group">
+            <label data-pt="lbl_file"></label>
+            <div class="file-upload" id="fileUploadArea">
+              <input type="file" id="tplFile" accept=".txt" onchange="handleFileSelect(this)">
+              <div class="file-upload-label" id="fileLabel" data-pt="ph_file"></div>
+            </div>
+            <p class="file-name" id="fileName"></p>
+          </div>
+          <div class="form-group">
+            <label data-pt="lbl_price"></label>
+            <input type="number" id="tplPrice" class="input" min="0" step="0.5" value="0">
+          </div>
+          <button class="btn-primary" onclick="submitTpl()" data-pt="btn_submit"></button>
+          <p class="save-msg" id="tplMsg"></p>
         </div>
-        <div class="form-group">
-          <label data-pt="lbl_price"></label>
-          <input type="number" id="tplPrice" class="input" min="0" step="0.5" value="0">
-        </div>
-        <button class="btn-primary" onclick="submitTpl()" data-pt="btn_submit"></button>
-        <p class="save-msg" id="tplMsg"></p>
       </div>
 
-      <div class="card">
-        <h3 class="card-title" data-pt="my_tpl_title"></h3>
+      <!-- My Templates Panel -->
+      <div id="panelTemplates" class="panel-view">
+        <div class="content-header">
+          <h2 data-pt="my_tpl_title"></h2>
+        </div>
         <div id="myTemplatesList" class="template-review-list"></div>
       </div>
-    </div>
-  </section>
+
+      <!-- USDT Settings Panel -->
+      <div id="panelUsdt" class="panel-view">
+        <div class="content-header">
+          <h2 data-pt="usdt_title"></h2>
+        </div>
+        <div class="card">
+          <div class="input-row">
+            <input type="text" id="usdtAddrInput" class="input" data-pt-ph="usdt_placeholder">
+            <button class="btn-primary btn-sm" onclick="saveUsdtAddr()" data-pt="btn_save"></button>
+          </div>
+          <p class="save-msg" id="usdtMsg"></p>
+        </div>
+      </div>
+    </main>
+  </div>
 
   <script src="store.js?v=8"></script>
   <script src="portal-i18n.js?v=8"></script>
@@ -136,13 +200,39 @@
       const next = cur === "dark" ? "light" : "dark";
       html.setAttribute("data-theme", next);
       localStorage.setItem("dao_theme", next);
-      document.getElementById("themeIcon").innerHTML = next === "dark" ? "&#9788;" : "&#9790;";
+      const icon = next === "dark" ? "&#9788;" : "&#9790;";
+      document.getElementById("themeIcon").innerHTML = icon;
+      document.getElementById("themeIconAuth").innerHTML = icon;
     }
     (function initTheme() {
       const t = localStorage.getItem("dao_theme") || "dark";
       document.documentElement.setAttribute("data-theme", t);
-      document.getElementById("themeIcon").innerHTML = t === "dark" ? "&#9788;" : "&#9790;";
+      const icon = t === "dark" ? "&#9788;" : "&#9790;";
+      document.getElementById("themeIcon").innerHTML = icon;
+      document.getElementById("themeIconAuth").innerHTML = icon;
     })();
+
+    // Sidebar navigation
+    function showPanel(name) {
+      document.querySelectorAll(".panel-view").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".sidebar-item[data-panel]").forEach(b => b.classList.remove("active"));
+      const panelId = "panel" + name.charAt(0).toUpperCase() + name.slice(1);
+      const panel = document.getElementById(panelId);
+      if (panel) panel.classList.add("active");
+      const btn = document.querySelector(`.sidebar-item[data-panel="${name}"]`);
+      if (btn) btn.classList.add("active");
+      // Close mobile sidebar
+      document.getElementById("sidebar").classList.remove("open");
+      document.getElementById("sidebarOverlay").classList.remove("active");
+      // Refresh data for panels
+      if (name === "dashboard") refreshDashboard();
+      if (name === "templates") renderMyTemplates();
+    }
+
+    function toggleSidebar() {
+      document.getElementById("sidebar").classList.toggle("open");
+      document.getElementById("sidebarOverlay").classList.toggle("active");
+    }
 
     // Image upload (max 9)
     let uploadedImages = [];
@@ -244,20 +334,55 @@
 
     function showAuth() {
       document.getElementById("authScreen").classList.add("active");
-      document.getElementById("dashScreen").classList.remove("active");
+      document.getElementById("portalLayout").classList.remove("active");
     }
 
     async function showDashboard() {
       const devId = getCurrentDevId();
       if (!devId) { showAuth(); return; }
       document.getElementById("authScreen").classList.remove("active");
-      document.getElementById("dashScreen").classList.add("active");
+      document.getElementById("portalLayout").classList.add("active");
       try {
         const dev = await getDevProfile();
         document.getElementById("devIdDisplay").textContent = "ID: " + dev.id;
         document.getElementById("usdtAddrInput").value = dev.usdtAddress || "";
       } catch(e) { logoutDev(); showAuth(); return; }
-      await renderMyTemplates();
+      await refreshDashboard();
+    }
+
+    async function refreshDashboard() {
+      const summary = document.getElementById("dashSummary");
+      try {
+        const dev = await getDevProfile();
+        const tpls = await getMyTemplates();
+        const pending = tpls.filter(t => t.status === "pending").length;
+        const approved = tpls.filter(t => t.status === "approved").length;
+        const rejected = tpls.filter(t => t.status === "rejected").length;
+        summary.innerHTML = `
+          <div class="dash-summary-card">
+            <div class="summary-label">DEV ID</div>
+            <div class="summary-value mono">${esc(dev.id)}</div>
+          </div>
+          <div class="dash-summary-card">
+            <div class="summary-label">${pt("stat_total_tpl") || "TOTAL"}</div>
+            <div class="summary-value">${tpls.length}</div>
+          </div>
+          <div class="dash-summary-card">
+            <div class="summary-label">${pt("stat_approved") || "APPROVED"}</div>
+            <div class="summary-value" style="color:var(--green)">${approved}</div>
+          </div>
+          <div class="dash-summary-card">
+            <div class="summary-label">${pt("stat_pending") || "PENDING"}</div>
+            <div class="summary-value" style="color:#facc15">${pending}</div>
+          </div>
+          <div class="dash-summary-card">
+            <div class="summary-label">${pt("stat_rejected") || "REJECTED"}</div>
+            <div class="summary-value" style="color:#ef4444">${rejected}</div>
+          </div>
+        `;
+      } catch(e) {
+        summary.innerHTML = `<p class="empty-msg">${e.message}</p>`;
+      }
     }
 
     async function saveUsdtAddr() {
@@ -295,7 +420,6 @@
         if (selected) selected.checked = false;
         msg.textContent = pt("submit_ok"); msg.style.color = "var(--green)";
         setTimeout(() => msg.textContent = "", 3000);
-        await renderMyTemplates();
       } catch(e) { msg.textContent = e.message; msg.style.color = "#ef4444"; }
     }
 
@@ -315,9 +439,21 @@
     async function doDeleteTpl(id) { await deleteTemplate(id); await renderMyTemplates(); }
     function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 
+    // Sync lang selects
+    function syncLangSelects() {
+      const val = document.getElementById("portalLangSelect").value;
+      const sidebar = document.getElementById("portalLangSelectSidebar");
+      if (sidebar) sidebar.value = val;
+    }
+
+    // Override switchPortalLang to sync both selects
+    const _origSwitchLang = typeof switchPortalLang === "function" ? switchPortalLang : null;
+    // We'll handle sync after initPortalLang
+
     // Init
     genNewMnemonic();
     initPortalLang();
+    syncLangSelects();
     if (getCurrentDevId()) showDashboard();
   </script>
 </body>

@@ -574,6 +574,7 @@ textarea.input {
   display: flex;
   gap: 6px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
 .filter-btn {
@@ -801,7 +802,12 @@ textarea.input {
 
 .panel-view.active {
   display: block;
-  animation: fadeIn 0.3s ease;
+  animation: panelFadeIn 0.3s ease;
+}
+
+@keyframes panelFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Mobile hamburger */
@@ -871,6 +877,29 @@ textarea.input {
   word-break: break-all;
 }
 
+/* Auth page when using sidebar layout - center it */
+.auth-page {
+  display: none;
+  min-height: 100vh;
+  padding: 80px 20px 40px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.auth-page.active {
+  display: flex;
+  animation: panelFadeIn 0.4s ease;
+}
+
+/* Hide sidebar layout when auth is showing */
+.portal-layout {
+  display: none;
+}
+
+.portal-layout.active {
+  display: flex;
+}
+
 /* Responsive */
 @media (min-width: 768px) {
   .stats-row {
@@ -906,8 +935,11 @@ textarea.input {
     padding: 60px 16px 32px;
   }
 
-  /* Auth screen override for mobile */
-  .page.auth-page {
+  .auth-page {
     padding: 60px 16px 32px;
+  }
+
+  .dash-summary {
+    grid-template-columns: 1fr;
   }
 }
