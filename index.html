@@ -8,20 +8,12 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <script>
-    // Subdomain routing
-    (function() {
-      var h = location.hostname;
-      if (h.indexOf("admin.") === 0 && !location.pathname.match(/admin/)) { location.replace("/admin.html"); }
-      if (h.indexOf("developer.") === 0 && !location.pathname.match(/developer/)) { location.replace("/developer.html"); }
-    })();
-  </script>
   <!-- Language Selector -->
   <div class="lang-bar">
     <button id="themeToggle" onclick="toggleTheme()" class="theme-btn" title="Toggle theme">
       <span id="themeIcon">&#9788;</span>
     </button>
-    <a href="https://developer.daomessage.com" class="nav-link-main">Developer</a>
+    <a href="developer.html" class="nav-link-main">Developer</a>
     <select id="langSelect" onchange="switchLang(this.value)">
       <option value="zh">中文</option>
       <option value="en">English</option>

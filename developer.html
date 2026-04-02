@@ -9,15 +9,9 @@
   <link rel="stylesheet" href="portal.css">
 </head>
 <body>
-  <script>
-    // Only allow access via developer.daomessage.com subdomain
-    if (location.hostname === "daomessage.com" || location.hostname === "www.daomessage.com") {
-      location.replace("https://developer.daomessage.com/");
-    }
-  </script>
   <div class="lang-bar">
     <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme"><span id="themeIcon">&#9788;</span></button>
-    <a href="/" class="nav-link" data-pt="nav_home"></a>
+    <a href="index.html" class="nav-link" data-pt="nav_home"></a>
     <select id="portalLangSelect" onchange="switchPortalLang(this.value)">
       <option value="zh">中文</option>
       <option value="en">English</option>
