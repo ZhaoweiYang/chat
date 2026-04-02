@@ -50,19 +50,22 @@ async function renderTemplateMarket() {
     }
 
     empty.style.display = "none";
-    const viewLabel = translations[currentLang]?.tpl_view || "View";
-    list.innerHTML = approved.map(t => {
-      const priceTag = t.price > 0 ? `<span class="tpl-price">$${t.price}</span>` : `<span class="tpl-free">${translations[currentLang]?.tpl_free_tag || "Free"}</span>`;
+    const btnLabel = translations[currentLang]?.tpl_get || "Get";
+    list.innerHTML = `<div class="store-grid">${approved.map(t => {
+      const thumb = t.images && t.images.length ? t.images[0] : "";
+      const priceText = t.price > 0 ? `$${t.price}` : (translations[currentLang]?.tpl_free_tag || "Free");
       return `
-        <div class="template-card">
-          <div class="template-info">
-            <h3>${escHtml(t.name)}</h3>
-            <p>${escHtml(t.description)}</p>
-            <div class="tpl-tags">${priceTag}<span class="tpl-platform">${t.platforms.join(", ")}</span></div>
+        <a class="store-card" href="#${t.id}">
+          <div class="store-icon">${thumb ? `<img src="${thumb}" alt="">` : `<span class="store-icon-placeholder">${escHtml(t.name.charAt(0))}</span>`}</div>
+          <div class="store-card-body">
+            <div class="store-name">${escHtml(t.name)}</div>
+            <div class="store-desc">${escHtml(t.description)}</div>
+            <div class="store-meta">
+              <span class="store-price ${t.price > 0 ? '' : 'free'}">${priceText}</span>
+            </div>
           </div>
-          <button class="btn-outline" onclick="location.hash='${t.id}'">${viewLabel}</button>
-        </div>`;
-    }).join("");
+        </a>`;
+    }).join("")}</div>`;
   } catch(e) {
     list.innerHTML = "";
     empty.style.display = "block";
@@ -174,20 +177,36 @@ async function showTemplateDetail(tplId) {
     const btnLabel = t.price > 0
       ? `${translations[lang]?.tpl_buy || "Buy"} - $${t.price}`
       : (translations[lang]?.tpl_download || "Download");
+    const priceText = t.price > 0 ? `$${t.price}` : (translations[lang]?.tpl_free_tag || "Free");
+    const thumb = t.images && t.images.length ? t.images[0] : "";
 
-    const imagesHtml = t.images && t.images.length
-      ? `<div class="detail-images">${t.images.map(s => `<img src="${s}" class="detail-img" onclick="openImg(this.src)">`).join("")}</div>`
+    // Screenshot gallery
+    const screenshotsHtml = t.images && t.images.length
+      ? `<div class="app-screenshots"><div class="screenshots-scroll">${t.images.map(s => `<img src="${s}" class="screenshot" onclick="openImg(this.src)">`).join("")}</div></div>`
       : "";
 
     container.innerHTML = `
-      <h2 class="detail-title">${escHtml(t.name)}</h2>
-      <div class="detail-meta">
-        <span class="tpl-platform">${t.platforms.join(", ")}</span>
-        ${t.price > 0 ? `<span class="tpl-price">$${t.price}</span>` : `<span class="tpl-free">${translations[lang]?.tpl_free_tag || "Free"}</span>`}
+      <div class="app-header">
+        <div class="app-icon-lg">${thumb ? `<img src="${thumb}" alt="">` : `<span>${escHtml(t.name.charAt(0))}</span>`}</div>
+        <div class="app-header-info">
+          <h1 class="app-name">${escHtml(t.name)}</h1>
+          <div class="app-developer">Dev: ${t.devId}</div>
+          <div class="app-tags">
+            <span class="app-tag">${t.platforms.join(", ")}</span>
+            <span class="app-tag ${t.price > 0 ? 'price' : 'free'}">${priceText}</span>
+          </div>
+        </div>
       </div>
-      ${imagesHtml}
-      <div class="detail-desc">${escHtml(t.description)}</div>
-      <button class="btn-primary detail-btn" onclick="onDownload('${t.id}', '${escHtml(t.name)}', ${t.price}, '${t.platforms[0] || ""}')">${btnLabel}</button>
+      <button class="btn-primary app-install-btn" onclick="onDownload('${t.id}', '${escHtml(t.name)}', ${t.price}, '${t.platforms[0] || ""}')">${btnLabel}</button>
+      ${screenshotsHtml}
+      <div class="app-section">
+        <h3 class="app-section-title">${translations[lang]?.tpl_about || "About"}</h3>
+        <div class="app-description">${escHtml(t.description)}</div>
+      </div>
+      <div class="app-section app-info-grid">
+        <div class="app-info-item"><span class="info-label">${translations[lang]?.tpl_platform_label || "Platform"}</span><span class="info-value">${t.platforms.join(", ")}</span></div>
+        <div class="app-info-item"><span class="info-label">${translations[lang]?.tpl_price_label || "Price"}</span><span class="info-value">${priceText}</span></div>
+      </div>
     `;
   } catch(e) {
     container.innerHTML = `<p style="text-align:center;color:#ef4444;">${e.message}</p>`;
