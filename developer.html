@@ -429,14 +429,21 @@
         const tpls = await getMyTemplates();
         if (tpls.length === 0) { list.innerHTML = `<p class="empty-msg">${pt("no_tpl")}</p>`; return; }
         list.innerHTML = tpls.map(t => {
-          const sc = t.status === "approved" ? "status-approved" : t.status === "rejected" ? "status-rejected" : "status-pending";
+          const sc = t.status === "published" ? "status-published" : t.status === "approved" ? "status-approved" : t.status === "rejected" ? "status-rejected" : "status-pending";
           const sl = pt("status_" + t.status);
-          return `<div class="review-card"><div class="review-info"><h4>${esc(t.name)}</h4><p>${esc(t.description)}</p><div class="review-meta"><span class="badge ${sc}">${sl}</span><span>${t.platforms.join(", ")}</span><span>${t.price > 0 ? "$" + t.price : pt("free")}</span></div></div><button class="btn-ghost btn-sm btn-danger" onclick="doDeleteTpl('${t.id}')">${pt("btn_delete")}</button></div>`;
+          let actions = `<button class="btn-ghost btn-sm btn-danger" onclick="doDeleteTpl('${t.id}')">${pt("btn_delete")}</button>`;
+          if (t.status === "approved") {
+            actions = `<button class="btn-primary btn-sm" onclick="doPublish('${t.id}', true)">${pt("btn_publish")}</button>` + actions;
+          } else if (t.status === "published") {
+            actions = `<button class="btn-ghost btn-sm" onclick="doPublish('${t.id}', false)">${pt("btn_unpublish")}</button>` + actions;
+          }
+          return `<div class="review-card review-card-vertical"><div class="review-info"><h4>${esc(t.name)}</h4><p>${esc(t.description)}</p><div class="review-meta"><span class="badge ${sc}">${sl}</span><span>${t.platforms.join(", ")}</span><span>${t.price > 0 ? "$" + t.price : pt("free")}</span></div></div><div class="review-actions-row">${actions}</div></div>`;
         }).join("");
       } catch(e) { list.innerHTML = `<p class="empty-msg">${e.message}</p>`; }
     }
 
     async function doDeleteTpl(id) { await deleteTemplate(id); await renderMyTemplates(); }
+    async function doPublish(id, pub) { try { await publishTemplate(id, pub); await renderMyTemplates(); } catch(e) { alert(e.message); } }
     function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 
     // Sync lang selects

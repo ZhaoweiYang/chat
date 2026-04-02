@@ -7,7 +7,8 @@
 //   POST /tpl/submit       { ...template } (header: X-Dev-Id)
 //   GET  /tpl/my           (header: X-Dev-Id)
 //   DELETE /tpl/:id        (header: X-Dev-Id)
-//   GET  /tpl/approved     ?platform=Android
+//   PUT  /tpl/:id/publish   (header: X-Dev-Id) - developer publish/unpublish
+//   GET  /tpl/approved     ?platform=Android  (returns published templates)
 //   GET  /tpl/:id
 //   POST /admin/login      { password }
 //   GET  /admin/templates   ?status=pending (header: X-Admin-Token)
@@ -187,13 +188,33 @@ export default {
         return json({ ok: true });
       }
 
+      // Developer publish / unpublish (only for approved templates)
+      if (path.match(/^\/tpl\/[^/]+\/publish$/) && method === "PUT") {
+        const devId = request.headers.get("X-Dev-Id");
+        if (!devId) return err("Missing X-Dev-Id", 401);
+        const tplId = path.replace("/tpl/", "").replace("/publish", "");
+        const tpl = await kvGet(DB, `tpl:${tplId}`);
+        if (!tpl) return err("Not found", 404);
+        if (tpl.devId !== devId) return err("Forbidden", 403);
+        const { publish } = await request.json();
+        if (publish && tpl.status === "approved") {
+          tpl.status = "published";
+        } else if (!publish && tpl.status === "published") {
+          tpl.status = "approved";
+        } else {
+          return err("Cannot change status from " + tpl.status, 400);
+        }
+        await kvSet(DB, `tpl:${tplId}`, tpl);
+        return json({ ok: true, status: tpl.status });
+      }
+
       if (path === "/tpl/approved" && method === "GET") {
         const platform = url.searchParams.get("platform") || "";
         const allIds = await getList(DB, "tplList");
         const tpls = [];
         for (const id of allIds) {
           const tpl = await kvGet(DB, `tpl:${id}`);
-          if (tpl && tpl.status === "approved") {
+          if (tpl && tpl.status === "published") {
             if (!platform || tpl.platforms.includes(platform)) {
               tpls.push({ ...tpl, fileContent: undefined });
             }
@@ -231,16 +252,17 @@ export default {
       if (path === "/admin/stats" && method === "GET") {
         const allIds = await getList(DB, "tplList");
         const devList = await getList(DB, "devList");
-        let pending = 0, approved = 0, rejected = 0;
+        let pending = 0, approved = 0, rejected = 0, published = 0;
         for (const id of allIds) {
           const tpl = await kvGet(DB, `tpl:${id}`);
           if (tpl) {
             if (tpl.status === "pending") pending++;
             else if (tpl.status === "approved") approved++;
+            else if (tpl.status === "published") published++;
             else if (tpl.status === "rejected") rejected++;
           }
         }
-        return json({ pending, approved, rejected, developers: devList.length });
+        return json({ pending, approved, published, rejected, developers: devList.length });
       }
 
       if (path === "/admin/templates" && method === "GET") {
@@ -263,7 +285,12 @@ export default {
         const tpl = await kvGet(DB, `tpl:${tplId}`);
         if (!tpl) return err("Not found", 404);
         const { approved } = await request.json();
-        tpl.status = approved ? "approved" : "rejected";
+        // Admin can approve (pending→approved) or reject (any status→rejected)
+        if (approved) {
+          tpl.status = "approved";
+        } else {
+          tpl.status = "rejected"; // rejects published/approved/pending → all become rejected
+        }
         tpl.reviewedAt = new Date().toISOString();
         await kvSet(DB, `tpl:${tplId}`, tpl);
         return json({ ok: true, status: tpl.status });

@@ -457,6 +457,11 @@ textarea.input {
   color: #34d399;
 }
 
+.status-published {
+  background: rgba(34, 211, 238, 0.15);
+  color: #22d3ee;
+}
+
 .status-rejected {
   background: rgba(239, 68, 68, 0.15);
   color: #ef4444;

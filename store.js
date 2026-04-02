@@ -132,6 +132,10 @@ async function deleteTemplate(id) {
   return api(`/tpl/${id}`, { method: "DELETE" });
 }
 
+async function publishTemplate(id, publish) {
+  return api(`/tpl/${id}/publish`, { method: "PUT", body: { publish } });
+}
+
 async function getApprovedTemplates(platform) {
   const q = platform ? `?platform=${encodeURIComponent(platform)}` : "";
   return api(`/tpl/approved${q}`);

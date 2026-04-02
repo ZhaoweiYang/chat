@@ -85,6 +85,7 @@
         <div class="stats-row">
           <div class="stat-card"><span class="stat-num" id="statPending">0</span><span class="stat-label" data-pt="stat_pending"></span></div>
           <div class="stat-card"><span class="stat-num" id="statApproved">0</span><span class="stat-label" data-pt="stat_approved"></span></div>
+          <div class="stat-card"><span class="stat-num" id="statPublished">0</span><span class="stat-label" data-pt="stat_published"></span></div>
           <div class="stat-card"><span class="stat-num" id="statRejected">0</span><span class="stat-label" data-pt="stat_rejected"></span></div>
           <div class="stat-card"><span class="stat-num" id="statDevs">0</span><span class="stat-label" data-pt="stat_devs"></span></div>
         </div>
@@ -179,9 +180,10 @@
     function renderFilters() {
       document.getElementById("filterRow").innerHTML = [
         { key: "all", label: pt("filter_all") },
+        { key: "pending", label: pt("filter_pending") },
         { key: "approved", label: pt("filter_approved") },
-        { key: "rejected", label: pt("filter_rejected") },
-        { key: "pending", label: pt("filter_pending") }
+        { key: "published", label: pt("filter_published") },
+        { key: "rejected", label: pt("filter_rejected") }
       ].map(f => `<button class="filter-btn ${f.key === currentFilter ? 'active' : ''}" onclick="filterAll(this, '${f.key}')">${f.label}</button>`).join("");
     }
 
@@ -190,6 +192,7 @@
         const stats = await getAdminStats();
         document.getElementById("statPending").textContent = stats.pending;
         document.getElementById("statApproved").textContent = stats.approved;
+        document.getElementById("statPublished").textContent = stats.published;
         document.getElementById("statRejected").textContent = stats.rejected;
         document.getElementById("statDevs").textContent = stats.developers;
       } catch(e) { console.error(e); }
@@ -229,8 +232,10 @@
         const tpls = await getAdminTemplates(filter === "all" ? "" : filter);
         if (tpls.length === 0) { list.innerHTML = `<p class="empty-msg">${pt("no_tpl_found")}</p>`; return; }
         list.innerHTML = tpls.map(t => {
-          const sc = t.status === "approved" ? "status-approved" : t.status === "rejected" ? "status-rejected" : "status-pending";
-          return `<div class="review-card"><div class="review-info"><h4>${esc(t.name)}</h4><p>${esc(t.description)}</p><div class="review-meta"><span class="badge ${sc}">${pt("status_" + t.status)}</span><span>${t.platforms.join(", ")}</span><span>${t.price > 0 ? "$" + t.price : pt("free")}</span><span>Dev: ${t.devId}</span></div></div></div>`;
+          const sc = t.status === "published" ? "status-published" : t.status === "approved" ? "status-approved" : t.status === "rejected" ? "status-rejected" : "status-pending";
+          const canReject = t.status === "approved" || t.status === "published";
+          const rejectBtn = canReject ? `<div class="review-actions-row" style="margin-top:8px;"><button class="btn-reject" onclick="doReject('${t.id}')">${pt("btn_reject")}</button></div>` : "";
+          return `<div class="review-card review-card-vertical"><div class="review-info"><h4>${esc(t.name)}</h4><p>${esc(t.description)}</p><div class="review-meta"><span class="badge ${sc}">${pt("status_" + t.status)}</span><span>${t.platforms.join(", ")}</span><span>${t.price > 0 ? "$" + t.price : pt("free")}</span><span>Dev: ${t.devId}</span></div></div>${rejectBtn}</div>`;
         }).join("");
       } catch(e) { list.innerHTML = `<p class="empty-msg">${e.message}</p>`; }
     }
