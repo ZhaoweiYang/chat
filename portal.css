@@ -533,6 +533,45 @@ textarea.input {
   background: rgba(239, 68, 68, 0.25);
 }
 
+/* Update note in review */
+.update-note-box {
+  background: rgba(124, 111, 247, 0.08);
+  border: 1px solid rgba(124, 111, 247, 0.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+/* Version history items */
+.history-item {
+  border-left: 2px solid var(--accent);
+  padding: 10px 16px;
+  margin-bottom: 12px;
+}
+
+.history-ver {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-bright);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.history-note {
+  font-size: 13px;
+  color: var(--text-primary);
+  margin: 4px 0;
+  line-height: 1.5;
+}
+
+.history-time {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
 .empty-msg {
   color: var(--text-muted);
   font-size: 13px;

@@ -119,6 +119,14 @@ async function updateDevUsdtAddress(address) {
   return api("/dev/usdt", { method: "PUT", body: { address } });
 }
 
+async function updateDevSettings(settings) {
+  return api("/dev/settings", { method: "PUT", body: settings });
+}
+
+async function getDevPublicInfo(devId) {
+  return api(`/dev/public/${devId}`);
+}
+
 // ---- Template API ----
 async function submitTemplate(data) {
   return api("/tpl/submit", { method: "POST", body: data });
@@ -130,6 +138,10 @@ async function getMyTemplates() {
 
 async function deleteTemplate(id) {
   return api(`/tpl/${id}`, { method: "DELETE" });
+}
+
+async function updateTemplate(id, data) {
+  return api(`/tpl/${id}`, { method: "PUT", body: data });
 }
 
 async function publishTemplate(id, publish) {

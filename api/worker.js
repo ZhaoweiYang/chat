@@ -7,6 +7,7 @@
 //   POST /tpl/submit       { ...template } (header: X-Dev-Id)
 //   GET  /tpl/my           (header: X-Dev-Id)
 //   DELETE /tpl/:id        (header: X-Dev-Id)
+//   PUT  /tpl/:id          { ...fields, updateNote } (header: X-Dev-Id) - update template
 //   PUT  /tpl/:id/publish   (header: X-Dev-Id) - developer publish/unpublish
 //   GET  /tpl/approved     ?platform=Android  (returns published templates)
 //   GET  /tpl/:id
@@ -80,7 +81,7 @@ export default {
         const devId = mnemonicToId(mnemonic.trim().toLowerCase());
         let dev = await kvGet(DB, `dev:${devId}`);
         if (!dev) {
-          dev = { id: devId, usdtAddress: "", createdAt: new Date().toISOString() };
+          dev = { id: devId, usdtAddress: "", website: "", contact: "", showContact: false, createdAt: new Date().toISOString() };
           await kvSet(DB, `dev:${devId}`, dev);
           // Add to developer list
           const devList = await getList(DB, "devList");
@@ -108,6 +109,21 @@ export default {
         return json(dev);
       }
 
+      if (path === "/dev/settings" && method === "PUT") {
+        const devId = request.headers.get("X-Dev-Id");
+        if (!devId) return err("Missing X-Dev-Id", 401);
+        const dev = await kvGet(DB, `dev:${devId}`);
+        if (!dev) return err("Not found", 404);
+        const data = await request.json();
+        if (data.address !== undefined) dev.usdtAddress = data.address;
+        if (data.website !== undefined) dev.website = data.website;
+        if (data.contact !== undefined) dev.contact = data.contact;
+        if (data.showContact !== undefined) dev.showContact = !!data.showContact;
+        await kvSet(DB, `dev:${devId}`, dev);
+        return json({ ok: true });
+      }
+
+      // Legacy endpoint compatibility
       if (path === "/dev/usdt" && method === "PUT") {
         const devId = request.headers.get("X-Dev-Id");
         if (!devId) return err("Missing X-Dev-Id", 401);
@@ -117,6 +133,19 @@ export default {
         dev.usdtAddress = address || "";
         await kvSet(DB, `dev:${devId}`, dev);
         return json({ ok: true });
+      }
+
+      // Public developer info (for template detail page)
+      if (path.startsWith("/dev/public/") && method === "GET") {
+        const devId = path.replace("/dev/public/", "");
+        const dev = await kvGet(DB, `dev:${devId}`);
+        if (!dev) return err("Not found", 404);
+        const info = { id: dev.id };
+        if (dev.showContact) {
+          if (dev.website) info.website = dev.website;
+          if (dev.contact) info.contact = dev.contact;
+        }
+        return json(info);
       }
 
       // ==================== Templates ====================
@@ -139,7 +168,10 @@ export default {
           images: data.images || [],
           fileContent: data.fileContent || "",
           status: "pending",
+          version: 1,
+          updateHistory: [],
           createdAt: new Date().toISOString(),
+          updatedAt: null,
           reviewedAt: null
         };
 
@@ -186,6 +218,43 @@ export default {
         await kvSet(DB, `devTpls:${devId}`, devTpls);
 
         return json({ ok: true });
+      }
+
+      // Developer update template and resubmit for review
+      if (path.match(/^\/tpl\/[^/]+$/) && method === "PUT" && !path.includes("/publish")) {
+        const devId = request.headers.get("X-Dev-Id");
+        if (!devId) return err("Missing X-Dev-Id", 401);
+        const tplId = path.replace("/tpl/", "");
+        const tpl = await kvGet(DB, `tpl:${tplId}`);
+        if (!tpl) return err("Not found", 404);
+        if (tpl.devId !== devId) return err("Forbidden", 403);
+
+        const data = await request.json();
+        // Update fields if provided
+        if (data.name) tpl.name = data.name;
+        if (data.description) tpl.description = data.description;
+        if (data.price !== undefined) tpl.price = parseFloat(data.price) || 0;
+        if (data.platforms) tpl.platforms = data.platforms;
+        if (data.images) tpl.images = data.images;
+        if (data.fileContent) tpl.fileContent = data.fileContent;
+
+        // Increment version and add to history
+        const oldVersion = tpl.version || 1;
+        tpl.version = oldVersion + 1;
+        const note = data.updateNote || "";
+        if (!tpl.updateHistory) tpl.updateHistory = [];
+        tpl.updateHistory.push({
+          version: tpl.version,
+          note,
+          timestamp: new Date().toISOString(),
+          previousStatus: tpl.status
+        });
+
+        // Reset to pending for re-review
+        tpl.status = "pending";
+        tpl.updatedAt = new Date().toISOString();
+        await kvSet(DB, `tpl:${tplId}`, tpl);
+        return json({ ok: true, status: tpl.status });
       }
 
       // Developer publish / unpublish (only for approved templates)

@@ -177,17 +177,63 @@
       <!-- USDT Settings Panel -->
       <div id="panelUsdt" class="panel-view">
         <div class="content-header">
-          <h2 data-pt="usdt_title"></h2>
+          <h2 data-pt="settings_title"></h2>
         </div>
         <div class="card">
+          <h3 class="card-title" data-pt="usdt_title"></h3>
           <div class="input-row">
             <input type="text" id="usdtAddrInput" class="input" data-pt-ph="usdt_placeholder">
-            <button class="btn-primary btn-sm" onclick="saveUsdtAddr()" data-pt="btn_save"></button>
           </div>
-          <p class="save-msg" id="usdtMsg"></p>
         </div>
+        <div class="card">
+          <h3 class="card-title" data-pt="contact_title"></h3>
+          <div class="form-group">
+            <label data-pt="lbl_website"></label>
+            <input type="text" id="devWebsite" class="input" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label data-pt="lbl_contact"></label>
+            <input type="text" id="devContact" class="input" data-pt-ph="ph_contact">
+          </div>
+          <div class="form-group">
+            <label class="checkbox-row"><input type="checkbox" id="devShowContact"> <span data-pt="lbl_show_contact"></span></label>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="saveSettings()" data-pt="btn_save"></button>
+        <p class="save-msg" id="settingsMsg"></p>
       </div>
     </main>
+  </div>
+
+  <!-- Update Modal -->
+  <div id="updateModal" class="modal-overlay">
+    <div class="modal" style="max-width:500px;">
+      <button class="modal-close" onclick="closeUpdateModal()">&times;</button>
+      <h3 id="updateModalTitle" style="margin-bottom:16px;"></h3>
+      <div class="form-group">
+        <label id="updateNoteLabel"></label>
+        <textarea id="updateNoteInput" class="input" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label id="updateFileLabel" data-pt="lbl_file"></label>
+        <div class="file-upload">
+          <input type="file" id="updateFile" accept=".txt" onchange="handleUpdateFile(this)">
+          <div class="file-upload-label" data-pt="ph_file"></div>
+        </div>
+        <p class="file-name" id="updateFileName"></p>
+      </div>
+      <button class="btn-primary" onclick="submitUpdate()" id="updateSubmitBtn"></button>
+      <p class="save-msg" id="updateMsg"></p>
+    </div>
+  </div>
+
+  <!-- History Modal -->
+  <div id="historyModal" class="modal-overlay">
+    <div class="modal" style="max-width:500px;">
+      <button class="modal-close" onclick="closeHistoryModal()">&times;</button>
+      <h3 id="historyModalTitle" style="margin-bottom:16px;"></h3>
+      <div id="historyList"></div>
+    </div>
   </div>
 
   <script src="store.js?v=8"></script>
@@ -346,6 +392,9 @@
         const dev = await getDevProfile();
         document.getElementById("devIdDisplay").textContent = "ID: " + dev.id;
         document.getElementById("usdtAddrInput").value = dev.usdtAddress || "";
+        document.getElementById("devWebsite").value = dev.website || "";
+        document.getElementById("devContact").value = dev.contact || "";
+        document.getElementById("devShowContact").checked = !!dev.showContact;
       } catch(e) { logoutDev(); showAuth(); return; }
       await refreshDashboard();
     }
@@ -385,10 +434,15 @@
       }
     }
 
-    async function saveUsdtAddr() {
+    async function saveSettings() {
       try {
-        await updateDevUsdtAddress(document.getElementById("usdtAddrInput").value.trim());
-        const msg = document.getElementById("usdtMsg");
+        await updateDevSettings({
+          address: document.getElementById("usdtAddrInput").value.trim(),
+          website: document.getElementById("devWebsite").value.trim(),
+          contact: document.getElementById("devContact").value.trim(),
+          showContact: document.getElementById("devShowContact").checked
+        });
+        const msg = document.getElementById("settingsMsg");
         msg.textContent = pt("saved"); msg.style.color = "var(--green)";
         setTimeout(() => msg.textContent = "", 2000);
       } catch(e) { alert(e.message); }
@@ -431,19 +485,83 @@
         list.innerHTML = tpls.map(t => {
           const sc = t.status === "published" ? "status-published" : t.status === "approved" ? "status-approved" : t.status === "rejected" ? "status-rejected" : "status-pending";
           const sl = pt("status_" + t.status);
-          let actions = `<button class="btn-ghost btn-sm btn-danger" onclick="doDeleteTpl('${t.id}')">${pt("btn_delete")}</button>`;
-          if (t.status === "approved") {
-            actions = `<button class="btn-primary btn-sm" onclick="doPublish('${t.id}', true)">${pt("btn_publish")}</button>` + actions;
-          } else if (t.status === "published") {
-            actions = `<button class="btn-ghost btn-sm" onclick="doPublish('${t.id}', false)">${pt("btn_unpublish")}</button>` + actions;
-          }
-          return `<div class="review-card review-card-vertical"><div class="review-info"><h4>${esc(t.name)}</h4><p>${esc(t.description)}</p><div class="review-meta"><span class="badge ${sc}">${sl}</span><span>${t.platforms.join(", ")}</span><span>${t.price > 0 ? "$" + t.price : pt("free")}</span></div></div><div class="review-actions-row">${actions}</div></div>`;
+          const ver = `v${t.version || 1}`;
+          let actions = "";
+          if (t.status === "approved") actions += `<button class="btn-primary btn-sm" onclick="doPublish('${t.id}', true)">${pt("btn_publish")}</button>`;
+          if (t.status === "published") actions += `<button class="btn-ghost btn-sm" onclick="doPublish('${t.id}', false)">${pt("btn_unpublish")}</button>`;
+          actions += `<button class="btn-ghost btn-sm" onclick="openUpdateModal('${t.id}', '${esc(t.name)}')">${pt("btn_update")}</button>`;
+          actions += `<button class="btn-ghost btn-sm" onclick="openHistoryModal('${t.id}', '${esc(t.name)}')">${pt("btn_history")}</button>`;
+          actions += `<button class="btn-ghost btn-sm btn-danger" onclick="doDeleteTpl('${t.id}')">${pt("btn_delete")}</button>`;
+          return `<div class="review-card review-card-vertical"><div class="review-info"><h4>${esc(t.name)} <span class="badge status-pending" style="font-size:10px;">${ver}</span></h4><p>${esc(t.description)}</p><div class="review-meta"><span class="badge ${sc}">${sl}</span><span>${t.platforms.join(", ")}</span><span>${t.price > 0 ? "$" + t.price : pt("free")}</span></div></div><div class="review-actions-row">${actions}</div></div>`;
         }).join("");
       } catch(e) { list.innerHTML = `<p class="empty-msg">${e.message}</p>`; }
     }
 
     async function doDeleteTpl(id) { await deleteTemplate(id); await renderMyTemplates(); }
     async function doPublish(id, pub) { try { await publishTemplate(id, pub); await renderMyTemplates(); } catch(e) { alert(e.message); } }
+
+    // Update modal
+    let updateTplId = "";
+    let updateFileContent = "";
+
+    function openUpdateModal(id, name) {
+      updateTplId = id;
+      updateFileContent = "";
+      document.getElementById("updateModalTitle").textContent = pt("update_title") + " - " + name;
+      document.getElementById("updateNoteLabel").textContent = pt("update_note_label");
+      document.getElementById("updateNoteInput").placeholder = pt("update_note_ph");
+      document.getElementById("updateNoteInput").value = "";
+      document.getElementById("updateSubmitBtn").textContent = pt("btn_submit_update");
+      document.getElementById("updateFile").value = "";
+      document.getElementById("updateFileName").textContent = "";
+      document.getElementById("updateMsg").textContent = "";
+      document.getElementById("updateModal").classList.add("show");
+    }
+    function closeUpdateModal() { document.getElementById("updateModal").classList.remove("show"); }
+
+    function handleUpdateFile(input) {
+      const file = input.files[0];
+      if (!file || !file.name.endsWith(".txt")) { updateFileContent = ""; return; }
+      const reader = new FileReader();
+      reader.onload = e => {
+        updateFileContent = e.target.result;
+        document.getElementById("updateFileName").textContent = file.name;
+        document.getElementById("updateFileName").style.color = "var(--green)";
+      };
+      reader.readAsText(file);
+    }
+
+    async function submitUpdate() {
+      const note = document.getElementById("updateNoteInput").value.trim();
+      const msg = document.getElementById("updateMsg");
+      if (!note) { msg.textContent = pt("update_note_ph"); msg.style.color = "#ef4444"; return; }
+      try {
+        const body = { updateNote: note };
+        if (updateFileContent) body.fileContent = updateFileContent;
+        await updateTemplate(updateTplId, body);
+        msg.textContent = pt("update_ok"); msg.style.color = "var(--green)";
+        setTimeout(() => { closeUpdateModal(); renderMyTemplates(); }, 1000);
+      } catch(e) { msg.textContent = e.message; msg.style.color = "#ef4444"; }
+    }
+
+    // History modal
+    async function openHistoryModal(id, name) {
+      document.getElementById("historyModalTitle").textContent = pt("history_title") + " - " + name;
+      document.getElementById("historyList").innerHTML = "Loading...";
+      document.getElementById("historyModal").classList.add("show");
+      try {
+        const tpl = await getTemplateById(id);
+        const history = tpl.updateHistory || [];
+        if (history.length === 0) {
+          document.getElementById("historyList").innerHTML = `<p class="empty-msg">${pt("no_history")}</p>`;
+          return;
+        }
+        document.getElementById("historyList").innerHTML = history.slice().reverse().map(h =>
+          `<div class="history-item"><div class="history-ver">${pt("version_label")} ${h.version || "?"}</div><div class="history-note">${esc(h.note)}</div><div class="history-time">${new Date(h.timestamp).toLocaleString()}</div></div>`
+        ).join("");
+      } catch(e) { document.getElementById("historyList").innerHTML = e.message; }
+    }
+    function closeHistoryModal() { document.getElementById("historyModal").classList.remove("show"); }
     function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 
     // Sync lang selects

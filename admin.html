@@ -208,11 +208,15 @@
       try {
         const pending = await getAdminTemplates("pending");
         if (pending.length === 0) { list.innerHTML = `<p class="empty-msg">${pt("no_pending")}</p>`; return; }
-        list.innerHTML = pending.map(t => `
-          <div class="review-card review-card-vertical">
+        list.innerHTML = pending.map(t => {
+          const ver = `v${t.version || 1}`;
+          const lastUpdate = t.updateHistory && t.updateHistory.length ? t.updateHistory[t.updateHistory.length - 1] : null;
+          const updateNote = lastUpdate ? `<div class="update-note-box"><strong>${pt("update_note_label")}:</strong> ${esc(lastUpdate.note)}</div>` : "";
+          return `<div class="review-card review-card-vertical">
             <div class="review-info">
-              <h4>${esc(t.name)}</h4>
+              <h4>${esc(t.name)} <span class="badge status-pending" style="font-size:10px;">${ver}</span></h4>
               <p>${esc(t.description)}</p>
+              ${updateNote}
               ${t.images && t.images.length ? `<div class="review-imgs">${t.images.map(s => `<img src="${s}" class="review-thumb">`).join("")}</div>` : ""}
               <div class="review-meta"><span>${t.platforms.join(", ")}</span><span>${t.price > 0 ? "$" + t.price : pt("free")}</span><span>Dev: ${t.devId}</span><span>${new Date(t.createdAt).toLocaleDateString()}</span></div>
             </div>
@@ -220,7 +224,8 @@
               <button class="btn-approve" onclick="doApprove('${t.id}')">${pt("btn_approve")}</button>
               <button class="btn-reject" onclick="doReject('${t.id}')">${pt("btn_reject")}</button>
             </div>
-          </div>`).join("");
+          </div>`;
+        }).join("");
       } catch(e) { list.innerHTML = `<p class="empty-msg">${e.message}</p>`; }
     }
 

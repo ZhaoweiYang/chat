@@ -206,8 +206,23 @@ async function showTemplateDetail(tplId) {
       <div class="app-section app-info-grid">
         <div class="app-info-item"><span class="info-label">${translations[lang]?.tpl_platform_label || "Platform"}</span><span class="info-value">${t.platforms.join(", ")}</span></div>
         <div class="app-info-item"><span class="info-label">${translations[lang]?.tpl_price_label || "Price"}</span><span class="info-value">${priceText}</span></div>
+        <div class="app-info-item"><span class="info-label">${translations[lang]?.tpl_version || "Version"}</span><span class="info-value">v${t.version || 1}</span></div>
       </div>
+      <div class="app-section" id="devContactSection"></div>
     `;
+    // Load developer contact info
+    try {
+      const devInfo = await getDevPublicInfo(t.devId);
+      const sec = document.getElementById("devContactSection");
+      if (devInfo.website || devInfo.contact) {
+        let html = `<h3 class="app-section-title">${translations[lang]?.tpl_developer || "Developer"}</h3><div class="app-info-grid">`;
+        if (devInfo.website) html += `<div class="app-info-item"><span class="info-label">${translations[lang]?.tpl_website || "Website"}</span><span class="info-value"><a href="${escHtml(devInfo.website)}" target="_blank" style="color:var(--cyan);">${escHtml(devInfo.website)}</a></span></div>`;
+        if (devInfo.contact) html += `<div class="app-info-item"><span class="info-label">${translations[lang]?.tpl_contact || "Contact"}</span><span class="info-value">${escHtml(devInfo.contact)}</span></div>`;
+        html += `</div>`;
+        sec.innerHTML = html;
+      }
+    } catch(e) {}
+
   } catch(e) {
     container.innerHTML = `<p style="text-align:center;color:#ef4444;">${e.message}</p>`;
   }
