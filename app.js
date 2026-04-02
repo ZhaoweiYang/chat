@@ -155,11 +155,17 @@ function generateCaptcha() {
   captchaAnswer = String(result);
   const text = `${a} ${op} ${b} = ?`;
 
-  ctx.fillStyle = "#12121a";
+  const style = getComputedStyle(document.documentElement);
+  const captchaBg = style.getPropertyValue("--captcha-bg").trim() || "#12121a";
+  const cR = parseInt(style.getPropertyValue("--captcha-text-r")) || 150;
+  const cG = parseInt(style.getPropertyValue("--captcha-text-g")) || 140;
+  const cB = parseInt(style.getPropertyValue("--captcha-text-b")) || 180;
+
+  ctx.fillStyle = captchaBg;
   ctx.fillRect(0, 0, w, h);
 
   for (let i = 0; i < 80; i++) {
-    ctx.fillStyle = `rgba(${rand(60,180)},${rand(60,180)},${rand(60,180)},0.3)`;
+    ctx.fillStyle = `rgba(${rand(60,180)},${rand(60,180)},${rand(60,180)},0.25)`;
     ctx.beginPath();
     ctx.arc(rand(0, w), rand(0, h), rand(1, 3), 0, Math.PI * 2);
     ctx.fill();
@@ -181,7 +187,7 @@ function generateCaptcha() {
   chars.forEach((ch, i) => {
     ctx.save();
     ctx.font = `bold ${rand(22, 30)}px monospace`;
-    ctx.fillStyle = `rgb(${rand(150,240)},${rand(140,220)},${rand(180,255)})`;
+    ctx.fillStyle = `rgb(${rand(cR,cR+80)},${rand(cG,cG+80)},${rand(cB,cB+80)})`;
     const x = startX + i * charWidth + rand(-2, 4);
     const y = h / 2 + rand(-5, 8);
     ctx.translate(x, y);
@@ -426,5 +432,29 @@ ${getTxt("uniqueFree")}`;
   pendingDownload = null;
 }
 
+// =============================================
+// Theme toggle (dark / light)
+// =============================================
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute("data-theme") || "dark";
+  const next = current === "dark" ? "light" : "dark";
+  html.setAttribute("data-theme", next);
+  localStorage.setItem("dao_theme", next);
+  updateThemeIcon(next);
+}
+
+function updateThemeIcon(theme) {
+  const icon = document.getElementById("themeIcon");
+  icon.innerHTML = theme === "dark" ? "&#9788;" : "&#9790;";
+}
+
+function initTheme() {
+  const saved = localStorage.getItem("dao_theme") || "dark";
+  document.documentElement.setAttribute("data-theme", saved);
+  updateThemeIcon(saved);
+}
+
 // Init
+initTheme();
 initLang();
