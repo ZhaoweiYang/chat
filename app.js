@@ -228,8 +228,124 @@ modal.addEventListener("click", (e) => {
 captchaCanvas.addEventListener("click", generateCaptcha);
 
 // =============================================
-// Download logic
+// Download logic - multilingual txt content
 // =============================================
+const txtStrings = {
+  zh: {
+    docAddrLabel: "文档地址（尚未激活）：",
+    docAddrLabelFree: "文档地址：",
+    payRequired: "需要支付：",
+    payAddr: "USDT 支付地址：",
+    payDeadline: "支付截止时间：",
+    important: "重要提示：",
+    rule1: "请在上述截止时间前完成支付。",
+    rule2: "30分钟后，此支付地址将过期失效。届时需重新下载文件获取新的支付地址。",
+    rule3: "请准确发送 ${price} USDT (TRC-20) 到上述地址。",
+    rule4: "链上确认付款后，您的文档地址将自动激活。",
+    rule5: "此 USDT 地址在30分钟内专属分配给您，每个地址同一时间仅服务一笔交易。",
+    generated: "生成时间：",
+    orderId: "订单号：",
+    uniquePaid: "此文档地址和支付地址对本订单唯一。",
+    freeReady: "此地址已激活，可直接使用。",
+    uniqueFree: "此文档地址唯一且一次性使用。"
+  },
+  en: {
+    docAddrLabel: "Document Address (not yet activated):",
+    docAddrLabelFree: "Document Address:",
+    payRequired: "Payment Required:",
+    payAddr: "USDT Payment Address:",
+    payDeadline: "Payment Deadline:",
+    important: "IMPORTANT:",
+    rule1: "Please complete payment BEFORE the deadline shown above.",
+    rule2: "After 30 minutes, this payment address will expire and become invalid. You will need to download a new file to get a new payment address.",
+    rule3: "Send EXACTLY ${price} USDT (TRC-20) to the address above.",
+    rule4: "Once payment is confirmed on-chain, your document address will be activated automatically.",
+    rule5: "This USDT address is exclusively assigned to you for 30 minutes. Each address serves only one transaction at a time.",
+    generated: "Generated:",
+    orderId: "Order ID:",
+    uniquePaid: "This document URL and payment address are unique to this order.",
+    uniqueFree: "This document URL is unique and single-use.",
+    freeReady: "This address is activated and ready to use."
+  },
+  fr: {
+    docAddrLabel: "Adresse du document (pas encore activée) :",
+    docAddrLabelFree: "Adresse du document :",
+    payRequired: "Paiement requis :",
+    payAddr: "Adresse de paiement USDT :",
+    payDeadline: "Date limite de paiement :",
+    important: "IMPORTANT :",
+    rule1: "Veuillez effectuer le paiement AVANT la date limite indiquée ci-dessus.",
+    rule2: "Après 30 minutes, cette adresse de paiement expirera. Vous devrez télécharger un nouveau fichier pour obtenir une nouvelle adresse.",
+    rule3: "Envoyez exactement ${price} USDT (TRC-20) à l'adresse ci-dessus.",
+    rule4: "Une fois le paiement confirmé sur la blockchain, votre adresse de document sera activée automatiquement.",
+    rule5: "Cette adresse USDT vous est exclusivement attribuée pour 30 minutes.",
+    generated: "Généré :",
+    orderId: "N° de commande :",
+    uniquePaid: "L'adresse du document et l'adresse de paiement sont uniques pour cette commande.",
+    uniqueFree: "Cette adresse de document est unique et à usage unique.",
+    freeReady: "Cette adresse est activée et prête à l'emploi."
+  },
+  ru: {
+    docAddrLabel: "Адрес документа (ещё не активирован):",
+    docAddrLabelFree: "Адрес документа:",
+    payRequired: "Требуется оплата:",
+    payAddr: "Адрес оплаты USDT:",
+    payDeadline: "Крайний срок оплаты:",
+    important: "ВАЖНО:",
+    rule1: "Пожалуйста, завершите оплату ДО указанного срока.",
+    rule2: "Через 30 минут этот платёжный адрес станет недействительным. Вам потребуется загрузить новый файл для получения нового адреса.",
+    rule3: "Отправьте ровно ${price} USDT (TRC-20) на указанный адрес.",
+    rule4: "После подтверждения оплаты в блокчейне ваш адрес документа будет активирован автоматически.",
+    rule5: "Этот USDT-адрес назначен вам на 30 минут. Каждый адрес обслуживает только одну транзакцию.",
+    generated: "Создано:",
+    orderId: "ID заказа:",
+    uniquePaid: "Адрес документа и платёжный адрес уникальны для этого заказа.",
+    uniqueFree: "Этот адрес документа уникален и одноразовый.",
+    freeReady: "Этот адрес активирован и готов к использованию."
+  },
+  pt: {
+    docAddrLabel: "Endereço do documento (ainda não ativado):",
+    docAddrLabelFree: "Endereço do documento:",
+    payRequired: "Pagamento necessário:",
+    payAddr: "Endereço de pagamento USDT:",
+    payDeadline: "Prazo de pagamento:",
+    important: "IMPORTANTE:",
+    rule1: "Complete o pagamento ANTES do prazo indicado acima.",
+    rule2: "Após 30 minutos, este endereço de pagamento expirará. Você precisará baixar um novo arquivo para obter um novo endereço.",
+    rule3: "Envie exatamente ${price} USDT (TRC-20) para o endereço acima.",
+    rule4: "Após a confirmação do pagamento na blockchain, seu endereço de documento será ativado automaticamente.",
+    rule5: "Este endereço USDT é exclusivamente atribuído a você por 30 minutos.",
+    generated: "Gerado:",
+    orderId: "ID do pedido:",
+    uniquePaid: "O endereço do documento e o endereço de pagamento são exclusivos deste pedido.",
+    uniqueFree: "Este endereço de documento é único e de uso único.",
+    freeReady: "Este endereço está ativado e pronto para uso."
+  },
+  es: {
+    docAddrLabel: "Dirección del documento (aún no activada):",
+    docAddrLabelFree: "Dirección del documento:",
+    payRequired: "Pago requerido:",
+    payAddr: "Dirección de pago USDT:",
+    payDeadline: "Fecha límite de pago:",
+    important: "IMPORTANTE:",
+    rule1: "Complete el pago ANTES de la fecha límite indicada arriba.",
+    rule2: "Después de 30 minutos, esta dirección de pago expirará. Deberá descargar un nuevo archivo para obtener una nueva dirección.",
+    rule3: "Envíe exactamente ${price} USDT (TRC-20) a la dirección anterior.",
+    rule4: "Una vez confirmado el pago en la blockchain, su dirección de documento se activará automáticamente.",
+    rule5: "Esta dirección USDT se le asigna exclusivamente durante 30 minutos.",
+    generated: "Generado:",
+    orderId: "ID de pedido:",
+    uniquePaid: "La dirección del documento y la dirección de pago son únicas para este pedido.",
+    uniqueFree: "Esta dirección de documento es única y de un solo uso.",
+    freeReady: "Esta dirección está activada y lista para usar."
+  }
+};
+
+function getTxt(key) {
+  const s = txtStrings[currentLang] || txtStrings.en;
+  return s[key] || (txtStrings.en[key] || "");
+}
+
 function doDownload() {
   if (!pendingDownload) return;
 
@@ -241,11 +357,9 @@ function doDownload() {
   let content;
 
   if (price > 0) {
-    // Allocate a USDT address from the pool
     const allocation = allocateAddress();
 
     if (!allocation) {
-      // All addresses are occupied
       const msgs = {
         zh: "当前支付通道繁忙，请30分钟后再试。",
         en: "Payment channels are busy. Please try again in 30 minutes.",
@@ -264,47 +378,42 @@ function doDownload() {
     content = `DAO MESSAGE - ${tplName} (${platform})
 ================================================================
 
-Document Address (not yet activated):
+${getTxt("docAddrLabel")}
 ${docUrl}
 
 ================================================================
-PAYMENT REQUIRED: $${price} USDT (TRC-20)
+${getTxt("payRequired")} $${price} USDT (TRC-20)
 ================================================================
 
-USDT Payment Address:
+${getTxt("payAddr")}
 ${allocation.address}
 
-Payment Deadline:
+${getTxt("payDeadline")}
 ${deadline}
 
-IMPORTANT:
-- Please complete payment BEFORE the deadline shown above.
-- After 30 minutes, this payment address will expire and
-  become invalid. You will need to download a new file
-  to get a new payment address.
-- Send EXACTLY $${price} USDT (TRC-20) to the address above.
-- Once payment is confirmed on-chain, your document address
-  will be activated automatically.
-- This USDT address is exclusively assigned to you for 30
-  minutes. Each address serves only one transaction at a time.
+${getTxt("important")}
+- ${getTxt("rule1")}
+- ${getTxt("rule2")}
+- ${getTxt("rule3").replace("${price}", price)}
+- ${getTxt("rule4")}
+- ${getTxt("rule5")}
 
 ================================================================
-Generated: ${new Date().toISOString()}
-Order ID: ${uid.toUpperCase()}
-This document URL and payment address are unique to this order.`;
+${getTxt("generated")} ${new Date().toISOString()}
+${getTxt("orderId")} ${uid.toUpperCase()}
+${getTxt("uniquePaid")}`;
   } else {
-    // Free template
     content = `DAO MESSAGE - ${tplName} (${platform})
 ================================================================
 
-Document Address:
+${getTxt("docAddrLabelFree")}
 ${docUrl}
 
-This address is activated and ready to use.
+${getTxt("freeReady")}
 
 ================================================================
-Generated: ${new Date().toISOString()}
-This document URL is unique and single-use.`;
+${getTxt("generated")} ${new Date().toISOString()}
+${getTxt("uniqueFree")}`;
   }
 
   const blob = new Blob([content], { type: "text/plain" });
