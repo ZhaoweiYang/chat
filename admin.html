@@ -234,8 +234,12 @@
         list.innerHTML = tpls.map(t => {
           const sc = t.status === "published" ? "status-published" : t.status === "approved" ? "status-approved" : t.status === "rejected" ? "status-rejected" : "status-pending";
           const canReject = t.status === "approved" || t.status === "published";
-          const rejectBtn = canReject ? `<div class="review-actions-row" style="margin-top:8px;"><button class="btn-reject" onclick="doReject('${t.id}')">${pt("btn_reject")}</button></div>` : "";
-          return `<div class="review-card review-card-vertical"><div class="review-info"><h4>${esc(t.name)}</h4><p>${esc(t.description)}</p><div class="review-meta"><span class="badge ${sc}">${pt("status_" + t.status)}</span><span>${t.platforms.join(", ")}</span><span>${t.price > 0 ? "$" + t.price : pt("free")}</span><span>Dev: ${t.devId}</span></div></div>${rejectBtn}</div>`;
+          const canApprove = t.status === "rejected";
+          let btns = "";
+          if (canApprove) btns += `<button class="btn-approve" onclick="doApprove('${t.id}')">${pt("btn_approve")}</button>`;
+          if (canReject) btns += `<button class="btn-reject" onclick="doReject('${t.id}')">${pt("btn_reject")}</button>`;
+          const actionsHtml = btns ? `<div class="review-actions-row" style="margin-top:8px;">${btns}</div>` : "";
+          return `<div class="review-card review-card-vertical"><div class="review-info"><h4>${esc(t.name)}</h4><p>${esc(t.description)}</p><div class="review-meta"><span class="badge ${sc}">${pt("status_" + t.status)}</span><span>${t.platforms.join(", ")}</span><span>${t.price > 0 ? "$" + t.price : pt("free")}</span><span>Dev: ${t.devId}</span></div></div>${actionsHtml}</div>`;
         }).join("");
       } catch(e) { list.innerHTML = `<p class="empty-msg">${e.message}</p>`; }
     }
