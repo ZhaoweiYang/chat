@@ -11,20 +11,27 @@
 <body>
   <div class="lang-bar">
     <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme"><span id="themeIcon">&#9788;</span></button>
-    <a href="index.html" class="nav-link">Home</a>
-    <a href="developer.html" class="nav-link">Developer</a>
+    <a href="/" class="nav-link" data-pt="nav_home"></a>
+    <select id="portalLangSelect" onchange="switchPortalLang(this.value)">
+      <option value="zh">中文</option>
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+      <option value="ru">Русский</option>
+      <option value="pt">Português</option>
+      <option value="es">Español</option>
+    </select>
   </div>
 
   <!-- Login -->
   <section id="loginScreen" class="page active">
     <div class="page-inner auth-container">
-      <h1 class="portal-title">Admin Portal</h1>
+      <h1 class="portal-title" data-pt="admin_title"></h1>
       <p class="portal-sub">DAO MESSAGE</p>
       <div class="form-group" style="margin-top:32px;">
-        <label>Admin Password</label>
-        <input type="password" id="adminPass" class="input" placeholder="Enter password">
+        <label data-pt="admin_pass_label"></label>
+        <input type="password" id="adminPass" class="input" data-pt-ph="admin_pass_ph">
       </div>
-      <button class="btn-primary" onclick="doAdminLogin()">Login</button>
+      <button class="btn-primary" onclick="doAdminLogin()" data-pt="btn_login"></button>
       <p class="auth-error" id="adminError"></p>
     </div>
   </section>
@@ -33,53 +40,46 @@
   <section id="adminDash" class="page">
     <div class="page-inner">
       <div class="dash-header">
-        <h2 class="portal-title-sm">Admin Dashboard</h2>
-        <button class="btn-ghost btn-sm" onclick="doAdminLogout()">Logout</button>
+        <h2 class="portal-title-sm" data-pt="admin_dash"></h2>
+        <button class="btn-ghost btn-sm" onclick="doAdminLogout()" data-pt="btn_logout"></button>
       </div>
 
-      <!-- Stats -->
       <div class="stats-row">
         <div class="stat-card">
           <span class="stat-num" id="statPending">0</span>
-          <span class="stat-label">Pending</span>
+          <span class="stat-label" data-pt="stat_pending"></span>
         </div>
         <div class="stat-card">
           <span class="stat-num" id="statApproved">0</span>
-          <span class="stat-label">Approved</span>
+          <span class="stat-label" data-pt="stat_approved"></span>
         </div>
         <div class="stat-card">
           <span class="stat-num" id="statRejected">0</span>
-          <span class="stat-label">Rejected</span>
+          <span class="stat-label" data-pt="stat_rejected"></span>
         </div>
         <div class="stat-card">
           <span class="stat-num" id="statDevs">0</span>
-          <span class="stat-label">Developers</span>
+          <span class="stat-label" data-pt="stat_devs"></span>
         </div>
       </div>
 
-      <!-- Pending Reviews -->
       <div class="card">
-        <h3 class="card-title">Pending Reviews</h3>
+        <h3 class="card-title" data-pt="pending_title"></h3>
         <div id="pendingList" class="template-review-list"></div>
       </div>
 
-      <!-- All Templates -->
       <div class="card">
-        <h3 class="card-title">All Templates</h3>
-        <div class="filter-row">
-          <button class="filter-btn active" onclick="filterAll(this, 'all')">All</button>
-          <button class="filter-btn" onclick="filterAll(this, 'approved')">Approved</button>
-          <button class="filter-btn" onclick="filterAll(this, 'rejected')">Rejected</button>
-          <button class="filter-btn" onclick="filterAll(this, 'pending')">Pending</button>
-        </div>
+        <h3 class="card-title" data-pt="all_tpl_title"></h3>
+        <div class="filter-row" id="filterRow"></div>
         <div id="allList" class="template-review-list"></div>
       </div>
     </div>
   </section>
 
   <script src="store.js"></script>
+  <script src="portal-i18n.js"></script>
   <script>
-    // ---- Theme ----
+    // Theme
     function toggleTheme() {
       const html = document.documentElement;
       const cur = html.getAttribute("data-theme") || "dark";
@@ -94,18 +94,17 @@
       document.getElementById("themeIcon").innerHTML = t === "dark" ? "&#9788;" : "&#9790;";
     })();
 
-    // ---- Admin Auth ----
+    // Admin Auth
     let isAdmin = false;
     let currentFilter = "all";
 
     function doAdminLogin() {
-      const pass = document.getElementById("adminPass").value;
-      if (verifyAdmin(pass)) {
+      if (verifyAdmin(document.getElementById("adminPass").value)) {
         isAdmin = true;
         localStorage.setItem("dao_admin_session", "1");
         showAdminDash();
       } else {
-        document.getElementById("adminError").textContent = "Wrong password.";
+        document.getElementById("adminError").textContent = pt("wrong_pass");
       }
     }
 
@@ -119,19 +118,30 @@
     function showAdminDash() {
       document.getElementById("loginScreen").classList.remove("active");
       document.getElementById("adminDash").classList.add("active");
+      renderFilters();
       refreshData();
     }
 
-    // ---- Data ----
+    function renderFilters() {
+      const row = document.getElementById("filterRow");
+      const filters = [
+        { key: "all", label: pt("filter_all") },
+        { key: "approved", label: pt("filter_approved") },
+        { key: "rejected", label: pt("filter_rejected") },
+        { key: "pending", label: pt("filter_pending") }
+      ];
+      row.innerHTML = filters.map(f =>
+        `<button class="filter-btn ${f.key === currentFilter ? 'active' : ''}" onclick="filterAll(this, '${f.key}')">${f.label}</button>`
+      ).join("");
+    }
+
     function refreshData() {
       const tpls = getTemplates();
       const devs = getDevelopers();
-
       document.getElementById("statPending").textContent = tpls.filter(t => t.status === "pending").length;
       document.getElementById("statApproved").textContent = tpls.filter(t => t.status === "approved").length;
       document.getElementById("statRejected").textContent = tpls.filter(t => t.status === "rejected").length;
       document.getElementById("statDevs").textContent = devs.length;
-
       renderPending();
       renderAll(currentFilter);
     }
@@ -139,57 +149,22 @@
     function renderPending() {
       const list = document.getElementById("pendingList");
       const pending = getPendingTemplates();
-
-      if (pending.length === 0) {
-        list.innerHTML = '<p class="empty-msg">No pending templates.</p>';
-        return;
-      }
-
+      if (pending.length === 0) { list.innerHTML = `<p class="empty-msg">${pt("no_pending")}</p>`; return; }
       list.innerHTML = pending.map(t => `
-        <div class="review-card">
-          <div class="review-info">
-            <h4>${esc(t.name)}</h4>
-            <p>${esc(t.description)}</p>
-            ${t.preview ? `<a href="${esc(t.preview)}" target="_blank" class="preview-link">Preview &#8599;</a>` : ""}
-            <div class="review-meta">
-              <span>${t.platforms.join(", ")}</span>
-              <span>${t.price > 0 ? "$" + t.price : "Free"}</span>
-              <span>Dev: ${t.devId}</span>
-              <span>${new Date(t.createdAt).toLocaleDateString()}</span>
-            </div>
-          </div>
-          <div class="review-actions">
-            <button class="btn-approve" onclick="doApprove('${t.id}')">Approve</button>
-            <button class="btn-reject" onclick="doReject('${t.id}')">Reject</button>
-          </div>
-        </div>`).join("");
+        <div class="review-card"><div class="review-info"><h4>${esc(t.name)}</h4><p>${esc(t.description)}</p>
+        ${t.preview ? `<a href="${esc(t.preview)}" target="_blank" class="preview-link">${pt("preview_link")} &#8599;</a>` : ""}
+        <div class="review-meta"><span>${t.platforms.join(", ")}</span><span>${t.price > 0 ? "$" + t.price : pt("free")}</span><span>Dev: ${t.devId}</span><span>${new Date(t.createdAt).toLocaleDateString()}</span></div></div>
+        <div class="review-actions"><button class="btn-approve" onclick="doApprove('${t.id}')">${pt("btn_approve")}</button><button class="btn-reject" onclick="doReject('${t.id}')">${pt("btn_reject")}</button></div></div>`).join("");
     }
 
     function renderAll(filter) {
       const list = document.getElementById("allList");
       let tpls = getTemplates();
       if (filter !== "all") tpls = tpls.filter(t => t.status === filter);
-
-      if (tpls.length === 0) {
-        list.innerHTML = '<p class="empty-msg">No templates found.</p>';
-        return;
-      }
-
+      if (tpls.length === 0) { list.innerHTML = `<p class="empty-msg">${pt("no_tpl_found")}</p>`; return; }
       list.innerHTML = tpls.map(t => {
-        const statusClass = t.status === "approved" ? "status-approved" : t.status === "rejected" ? "status-rejected" : "status-pending";
-        return `
-          <div class="review-card">
-            <div class="review-info">
-              <h4>${esc(t.name)}</h4>
-              <p>${esc(t.description)}</p>
-              <div class="review-meta">
-                <span class="badge ${statusClass}">${t.status}</span>
-                <span>${t.platforms.join(", ")}</span>
-                <span>${t.price > 0 ? "$" + t.price : "Free"}</span>
-                <span>Dev: ${t.devId}</span>
-              </div>
-            </div>
-          </div>`;
+        const sc = t.status === "approved" ? "status-approved" : t.status === "rejected" ? "status-rejected" : "status-pending";
+        return `<div class="review-card"><div class="review-info"><h4>${esc(t.name)}</h4><p>${esc(t.description)}</p><div class="review-meta"><span class="badge ${sc}">${pt("status_" + t.status)}</span><span>${t.platforms.join(", ")}</span><span>${t.price > 0 ? "$" + t.price : pt("free")}</span><span>Dev: ${t.devId}</span></div></div></div>`;
       }).join("");
     }
 
@@ -200,32 +175,15 @@
       renderAll(filter);
     }
 
-    function doApprove(id) {
-      reviewTemplate(id, true);
-      refreshData();
-    }
+    function doApprove(id) { reviewTemplate(id, true); refreshData(); }
+    function doReject(id) { reviewTemplate(id, false); refreshData(); }
+    function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 
-    function doReject(id) {
-      reviewTemplate(id, false);
-      refreshData();
-    }
+    document.getElementById("adminPass").addEventListener("keydown", e => { if (e.key === "Enter") doAdminLogin(); });
 
-    function esc(s) {
-      const d = document.createElement("div");
-      d.textContent = s;
-      return d.innerHTML;
-    }
-
-    // ---- Enter key ----
-    document.getElementById("adminPass").addEventListener("keydown", e => {
-      if (e.key === "Enter") doAdminLogin();
-    });
-
-    // ---- Init ----
-    if (localStorage.getItem("dao_admin_session") === "1") {
-      isAdmin = true;
-      showAdminDash();
-    }
+    // Init
+    initPortalLang();
+    if (localStorage.getItem("dao_admin_session") === "1") { isAdmin = true; showAdminDash(); }
   </script>
 </body>
 </html>
