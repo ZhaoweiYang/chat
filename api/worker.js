@@ -15,6 +15,9 @@
 //   GET  /admin/templates   ?status=pending (header: X-Admin-Token)
 //   GET  /admin/stats       (header: X-Admin-Token)
 //   PUT  /admin/review/:id  { approved: true/false } (header: X-Admin-Token)
+//   GET  /admin/usdt        - list USDT addresses
+//   POST /admin/usdt        { addresses: ["T...","T..."] } - add addresses
+//   DELETE /admin/usdt      { addresses: ["T..."] } - remove addresses
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -363,6 +366,58 @@ export default {
         tpl.reviewedAt = new Date().toISOString();
         await kvSet(DB, `tpl:${tplId}`, tpl);
         return json({ ok: true, status: tpl.status });
+      }
+
+      // ==================== USDT Address Pool ====================
+
+      if (path === "/admin/usdt" && method === "GET") {
+        const pool = await getList(DB, "usdtPool");
+        return json({ addresses: pool });
+      }
+
+      if (path === "/admin/usdt" && method === "POST") {
+        const { addresses } = await request.json();
+        if (!addresses || !Array.isArray(addresses)) return err("Missing addresses array");
+        const pool = await getList(DB, "usdtPool");
+        const existing = new Set(pool);
+        let added = 0;
+        for (const addr of addresses) {
+          const a = addr.trim();
+          if (a && !existing.has(a)) {
+            pool.push(a);
+            existing.add(a);
+            added++;
+          }
+        }
+        await kvSet(DB, "usdtPool", pool);
+        return json({ ok: true, added, total: pool.length });
+      }
+
+      if (path === "/admin/usdt" && method === "DELETE") {
+        const { addresses } = await request.json();
+        if (!addresses || !Array.isArray(addresses)) return err("Missing addresses array");
+        const toRemove = new Set(addresses.map(a => a.trim()));
+        const pool = (await getList(DB, "usdtPool")).filter(a => !toRemove.has(a));
+        await kvSet(DB, "usdtPool", pool);
+        return json({ ok: true, removed: toRemove.size, total: pool.length });
+      }
+
+      // Public endpoint: get available USDT address for payment
+      if (path === "/usdt/allocate" && method === "POST") {
+        const pool = await getList(DB, "usdtPool");
+        if (pool.length === 0) return err("No payment addresses available", 503);
+        const bindings = await getList(DB, "usdtBindings");
+        const now = Date.now();
+        // Clean expired (30 min)
+        const active = bindings.filter(b => b.expiresAt > now);
+        const usedSet = new Set(active.map(b => b.address));
+        const available = pool.filter(a => !usedSet.has(a));
+        if (available.length === 0) return err("All payment addresses busy, try again in 30 minutes", 503);
+        const address = available[Math.floor(Math.random() * available.length)];
+        const expiresAt = now + 30 * 60 * 1000;
+        active.push({ address, expiresAt });
+        await kvSet(DB, "usdtBindings", active);
+        return json({ address, expiresAt, deadline: new Date(expiresAt).toISOString() });
       }
 
       return err("Not found", 404);

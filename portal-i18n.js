@@ -44,7 +44,8 @@ const portalI18n = {
     all_tpl_title: "所有模板", no_tpl_found: "未找到模板。",
     filter_all: "全部", filter_approved: "已通过", filter_rejected: "已拒绝", filter_pending: "待审核",
     btn_approve: "通过", btn_reject: "拒绝",
-    preview_link: "预览"
+    preview_link: "预览",
+    nav_usdt_pool: "USDT 地址池", usdt_pool_title: "USDT 收款地址池", usdt_add_title: "批量添加地址", usdt_add_hint: "每行一个 TRC-20 USDT 地址", usdt_add_ph: "TAddr1...\nTAddr2...\nTAddr3...", btn_add: "添加", usdt_current_title: "当前地址", btn_remove: "移除", usdt_add_ok: "添加成功！", usdt_remove_ok: "移除成功！", no_usdt: "暂无地址"
   },
   en: {
     nav_home: "Home", nav_admin: "Admin", nav_dev: "Developer",
@@ -84,7 +85,8 @@ const portalI18n = {
     all_tpl_title: "All Templates", no_tpl_found: "No templates found.",
     filter_all: "All", filter_approved: "Approved", filter_rejected: "Rejected", filter_pending: "Pending",
     btn_approve: "Approve", btn_reject: "Reject",
-    preview_link: "Preview"
+    preview_link: "Preview",
+    nav_usdt_pool: "USDT Pool", usdt_pool_title: "USDT Address Pool", usdt_add_title: "Batch Add Addresses", usdt_add_hint: "One TRC-20 USDT address per line", usdt_add_ph: "TAddr1...\nTAddr2...\nTAddr3...", btn_add: "Add", usdt_current_title: "Current Addresses", btn_remove: "Remove", usdt_add_ok: "Added successfully!", usdt_remove_ok: "Removed successfully!", no_usdt: "No addresses yet"
   },
   fr: {
     nav_home: "Accueil", nav_admin: "Admin", nav_dev: "Développeur",
@@ -124,7 +126,8 @@ const portalI18n = {
     all_tpl_title: "Tous les modèles", no_tpl_found: "Aucun modèle trouvé.",
     filter_all: "Tous", filter_approved: "Approuvé", filter_rejected: "Rejeté", filter_pending: "En attente",
     btn_approve: "Approuver", btn_reject: "Rejeter",
-    preview_link: "Aperçu"
+    preview_link: "Aperçu",
+    nav_usdt_pool: "Pool USDT", usdt_pool_title: "Pool d'adresses USDT", usdt_add_title: "Ajouter des adresses", usdt_add_hint: "Une adresse USDT TRC-20 par ligne", usdt_add_ph: "TAddr1...\nTAddr2...\nTAddr3...", btn_add: "Ajouter", usdt_current_title: "Adresses actuelles", btn_remove: "Supprimer", usdt_add_ok: "Ajouté avec succès !", usdt_remove_ok: "Supprimé avec succès !", no_usdt: "Aucune adresse"
   },
   ru: {
     nav_home: "Главная", nav_admin: "Админ", nav_dev: "Разработчик",
@@ -164,7 +167,8 @@ const portalI18n = {
     all_tpl_title: "Все шаблоны", no_tpl_found: "Шаблоны не найдены.",
     filter_all: "Все", filter_approved: "Одобрено", filter_rejected: "Отклонено", filter_pending: "На проверке",
     btn_approve: "Одобрить", btn_reject: "Отклонить",
-    preview_link: "Превью"
+    preview_link: "Превью",
+    nav_usdt_pool: "Пул USDT", usdt_pool_title: "Пул адресов USDT", usdt_add_title: "Добавить адреса", usdt_add_hint: "Один адрес USDT TRC-20 на строку", usdt_add_ph: "TAddr1...\nTAddr2...\nTAddr3...", btn_add: "Добавить", usdt_current_title: "Текущие адреса", btn_remove: "Удалить", usdt_add_ok: "Успешно добавлено!", usdt_remove_ok: "Успешно удалено!", no_usdt: "Нет адресов"
   },
   pt: {
     nav_home: "Início", nav_admin: "Admin", nav_dev: "Desenvolvedor",
@@ -204,7 +208,8 @@ const portalI18n = {
     all_tpl_title: "Todos os modelos", no_tpl_found: "Nenhum modelo encontrado.",
     filter_all: "Todos", filter_approved: "Aprovado", filter_rejected: "Rejeitado", filter_pending: "Pendente",
     btn_approve: "Aprovar", btn_reject: "Rejeitar",
-    preview_link: "Prévia"
+    preview_link: "Prévia",
+    nav_usdt_pool: "Pool USDT", usdt_pool_title: "Pool de endereços USDT", usdt_add_title: "Adicionar endereços", usdt_add_hint: "Um endereço USDT TRC-20 por linha", usdt_add_ph: "TAddr1...\nTAddr2...\nTAddr3...", btn_add: "Adicionar", usdt_current_title: "Endereços atuais", btn_remove: "Remover", usdt_add_ok: "Adicionado com sucesso!", usdt_remove_ok: "Removido com sucesso!", no_usdt: "Nenhum endereço"
   },
   es: {
     nav_home: "Inicio", nav_admin: "Admin", nav_dev: "Desarrollador",
@@ -244,7 +249,8 @@ const portalI18n = {
     all_tpl_title: "Todas las plantillas", no_tpl_found: "No se encontraron plantillas.",
     filter_all: "Todas", filter_approved: "Aprobadas", filter_rejected: "Rechazadas", filter_pending: "Pendientes",
     btn_approve: "Aprobar", btn_reject: "Rechazar",
-    preview_link: "Vista previa"
+    preview_link: "Vista previa",
+    nav_usdt_pool: "Pool USDT", usdt_pool_title: "Pool de direcciones USDT", usdt_add_title: "Agregar direcciones", usdt_add_hint: "Una dirección USDT TRC-20 por línea", usdt_add_ph: "TAddr1...\nTAddr2...\nTAddr3...", btn_add: "Agregar", usdt_current_title: "Direcciones actuales", btn_remove: "Eliminar", usdt_add_ok: "¡Agregado con éxito!", usdt_remove_ok: "¡Eliminado con éxito!", no_usdt: "Sin direcciones"
   }
 };
 

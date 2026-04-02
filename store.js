@@ -184,3 +184,19 @@ async function getAdminTemplates(status) {
 async function reviewTemplate(id, approved) {
   return api(`/admin/review/${id}`, { method: "PUT", body: { approved } });
 }
+
+async function getUsdtPool() {
+  return api("/admin/usdt");
+}
+
+async function addUsdtAddresses(addresses) {
+  return api("/admin/usdt", { method: "POST", body: { addresses } });
+}
+
+async function removeUsdtAddresses(addresses) {
+  return api("/admin/usdt", { method: "DELETE", body: { addresses } });
+}
+
+async function allocateUsdtAddress() {
+  return api("/usdt/allocate", { method: "POST" });
+}

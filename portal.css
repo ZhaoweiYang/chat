@@ -1014,3 +1014,25 @@ textarea.input {
     grid-template-columns: 1fr;
   }
 }
+
+/* USDT Pool */
+.usdt-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+}
+
+.usdt-item:last-child {
+  border-bottom: none;
+}
+
+.usdt-addr {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--text-primary);
+  word-break: break-all;
+  flex: 1;
+}
