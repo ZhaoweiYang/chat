@@ -68,20 +68,18 @@
             <option value="ru">Русский</option><option value="pt">Português</option><option value="es">Español</option>
           </select>
         </div>
-        <button class="sidebar-item" onclick="doAdminLogout()">
-          <span class="sb-icon">&#10140;</span>
-          <span data-pt="btn_logout">Logout</span>
-        </button>
       </div>
     </aside>
 
     <!-- Main Content -->
     <main class="main-content">
+      <div class="topbar">
+        <h2 class="topbar-title" data-pt="admin_dash"></h2>
+        <button class="btn-ghost btn-sm" onclick="doAdminLogout()" data-pt="btn_logout"></button>
+      </div>
+
       <!-- Dashboard Panel -->
       <div id="panelDashboard" class="panel-view active">
-        <div class="content-header">
-          <h2 data-pt="admin_dash"></h2>
-        </div>
         <div class="stats-row">
           <div class="stat-card"><span class="stat-num" id="statPending">0</span><span class="stat-label" data-pt="stat_pending"></span></div>
           <div class="stat-card"><span class="stat-num" id="statApproved">0</span><span class="stat-label" data-pt="stat_approved"></span></div>

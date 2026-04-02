@@ -95,21 +95,21 @@
             <option value="es">Español</option>
           </select>
         </div>
-        <button class="sidebar-item" onclick="doLogout()">
-          <span class="sb-icon">&#10140;</span>
-          <span data-pt="btn_logout">Logout</span>
-        </button>
       </div>
     </aside>
 
     <!-- Main Content -->
     <main class="main-content">
+      <div class="topbar">
+        <div>
+          <h2 class="topbar-title" data-pt="dash_title"></h2>
+          <p class="topbar-sub" id="devIdDisplay"></p>
+        </div>
+        <button class="btn-ghost btn-sm" onclick="doLogout()" data-pt="btn_logout"></button>
+      </div>
+
       <!-- Dashboard Panel -->
       <div id="panelDashboard" class="panel-view active">
-        <div class="content-header">
-          <h2 data-pt="dash_title"></h2>
-          <p id="devIdDisplay"></p>
-        </div>
         <div class="dash-summary" id="dashSummary"></div>
       </div>
 
