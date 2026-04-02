@@ -116,6 +116,23 @@
     </div>
   </section>
 
+  <!-- Captcha Modal -->
+  <div id="captchaModal" class="modal-overlay">
+    <div class="modal">
+      <button class="modal-close" onclick="closeCaptcha()">&times;</button>
+      <p class="modal-title" data-i18n="captcha_title"></p>
+      <div class="captcha-body">
+        <canvas id="captchaCanvas" width="200" height="70"></canvas>
+        <button class="captcha-refresh" onclick="generateCaptcha()" title="Refresh">&#8635;</button>
+      </div>
+      <div class="captcha-input-row">
+        <input type="text" id="captchaInput" maxlength="4" autocomplete="off" data-i18n-placeholder="captcha_placeholder">
+        <button class="btn-captcha-submit" onclick="verifyCaptcha()" data-i18n="captcha_submit"></button>
+      </div>
+      <p class="captcha-hint" id="captchaHint"></p>
+    </div>
+  </div>
+
   <script src="i18n.js"></script>
   <script src="app.js"></script>
 </body>

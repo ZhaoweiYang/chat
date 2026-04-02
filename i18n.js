@@ -22,7 +22,11 @@ const translations = {
     pay_doc_title: "唯一文档收件地址",
     pay_hint: "支付 $1，上方地址即激活",
     pay_usdt: "USDT",
-    pay_card: "Visa / Mastercard"
+    pay_card: "Visa / Mastercard",
+    captcha_title: "请完成人机验证",
+    captcha_slide: "拖动滑块完成验证",
+    captcha_placeholder: "输入计算结果",
+    captcha_submit: "确认"
   },
   en: {
     subtitle: "Decentralized Terminal Communication Network",
@@ -47,7 +51,11 @@ const translations = {
     pay_doc_title: "Unique Document Receiving Address",
     pay_hint: "Pay $1 to activate the address above",
     pay_usdt: "USDT",
-    pay_card: "Visa / Mastercard"
+    pay_card: "Visa / Mastercard",
+    captcha_title: "Please complete verification",
+    captcha_slide: "Drag slider to verify",
+    captcha_placeholder: "Enter result",
+    captcha_submit: "Submit"
   },
   fr: {
     subtitle: "Réseau de communication terminal décentralisé",
@@ -72,7 +80,11 @@ const translations = {
     pay_doc_title: "Adresse unique de réception du document",
     pay_hint: "Payez 1 $ pour activer l'adresse ci-dessus",
     pay_usdt: "USDT",
-    pay_card: "Visa / Mastercard"
+    pay_card: "Visa / Mastercard",
+    captcha_title: "Veuillez compléter la vérification",
+    captcha_slide: "Glissez pour vérifier",
+    captcha_placeholder: "Entrez le résultat",
+    captcha_submit: "Valider"
   },
   ru: {
     subtitle: "Децентрализованная терминальная сеть связи",
@@ -97,7 +109,11 @@ const translations = {
     pay_doc_title: "Уникальный адрес получения документа",
     pay_hint: "Оплатите $1 для активации адреса выше",
     pay_usdt: "USDT",
-    pay_card: "Visa / Mastercard"
+    pay_card: "Visa / Mastercard",
+    captcha_title: "Пожалуйста, пройдите проверку",
+    captcha_slide: "Перетащите ползунок",
+    captcha_placeholder: "Введите результат",
+    captcha_submit: "Подтвердить"
   },
   pt: {
     subtitle: "Rede de comunicação terminal descentralizada",
@@ -122,7 +138,11 @@ const translations = {
     pay_doc_title: "Endereço único de recebimento do documento",
     pay_hint: "Pague $1 para ativar o endereço acima",
     pay_usdt: "USDT",
-    pay_card: "Visa / Mastercard"
+    pay_card: "Visa / Mastercard",
+    captcha_title: "Por favor, complete a verificação",
+    captcha_slide: "Arraste o controle deslizante",
+    captcha_placeholder: "Digite o resultado",
+    captcha_submit: "Confirmar"
   },
   es: {
     subtitle: "Red de comunicación terminal descentralizada",
@@ -147,7 +167,11 @@ const translations = {
     pay_doc_title: "Dirección única de recepción del documento",
     pay_hint: "Paga $1 para activar la dirección de arriba",
     pay_usdt: "USDT",
-    pay_card: "Visa / Mastercard"
+    pay_card: "Visa / Mastercard",
+    captcha_title: "Por favor, complete la verificación",
+    captcha_slide: "Arrastra el control deslizante",
+    captcha_placeholder: "Ingrese el resultado",
+    captcha_submit: "Confirmar"
   }
 };
 
@@ -160,6 +184,12 @@ function switchLang(lang) {
     const key = el.getAttribute("data-i18n");
     if (translations[lang] && translations[lang][key]) {
       el.textContent = translations[lang][key];
+    }
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+    const key = el.getAttribute("data-i18n-placeholder");
+    if (translations[lang] && translations[lang][key]) {
+      el.placeholder = translations[lang][key];
     }
   });
   localStorage.setItem("chat_lang", lang);
