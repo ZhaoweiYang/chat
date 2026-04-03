@@ -1,8 +1,8 @@
 const translations = {
   zh: {
     subtitle: "去中心化终端通信网络",
-    feature1_title: "用户自主开发客户端",
-    feature1_desc: "无权限采集——不触碰你的位置、IP、设备信息与通讯录",
+    feature1_title: "借助 AI，自主开发你的客户端",
+    feature1_desc: "无需编程经验，通过 AI 即可构建专属客户端。无权限采集，不触碰你的位置、IP、设备信息与通讯录",
     feature2_title: "端到端离线密钥协商",
     feature2_desc: "DAO MESSAGE 仅转运密文，加解密完全在你的客户端本地完成，从机制上杜绝中心化信任风险",
     feature3_title: "钱包创建身份，无需手机或邮箱",
@@ -33,8 +33,8 @@ const translations = {
   },
   en: {
     subtitle: "Decentralized Terminal Communication Network",
-    feature1_title: "User-Built Clients",
-    feature1_desc: "Zero permission harvesting — no access to your location, IP, device info, or contacts",
+    feature1_title: "Build Your Own Client with AI",
+    feature1_desc: "No coding experience needed — use AI to create your own client. Zero permission harvesting, no access to your location, IP, device info, or contacts",
     feature2_title: "Offline Key Agreement",
     feature2_desc: "DAO MESSAGE only relays ciphertext. Encryption and decryption happen locally on your client — eliminating centralized trust by design",
     feature3_title: "Wallet-Based Identity",
@@ -65,8 +65,8 @@ const translations = {
   },
   fr: {
     subtitle: "Réseau de communication terminal décentralisé",
-    feature1_title: "Client développé par l'utilisateur",
-    feature1_desc: "Aucune collecte — ni localisation, ni IP, ni infos appareil, ni contacts",
+    feature1_title: "Créez votre client avec l'IA",
+    feature1_desc: "Aucune expérience en programmation requise — utilisez l'IA pour créer votre client. Aucune collecte de données personnelles",
     feature2_title: "Accord de clés hors ligne",
     feature2_desc: "DAO MESSAGE ne transporte que du texte chiffré. Le chiffrement se fait localement sur votre client — éliminant tout risque de confiance centralisée",
     feature3_title: "Identité par portefeuille crypto",
@@ -97,8 +97,8 @@ const translations = {
   },
   ru: {
     subtitle: "Децентрализованная терминальная сеть связи",
-    feature1_title: "Клиент создаёт пользователь",
-    feature1_desc: "Никакого сбора данных — ни геолокации, ни IP, ни информации об устройстве, ни контактов",
+    feature1_title: "Создайте свой клиент с помощью ИИ",
+    feature1_desc: "Опыт программирования не нужен — используйте ИИ для создания своего клиента. Никакого сбора персональных данных",
     feature2_title: "Офлайн-согласование ключей",
     feature2_desc: "DAO MESSAGE передаёт только шифротекст. Шифрование происходит локально на вашем клиенте — централизованное доверие исключено конструктивно",
     feature3_title: "Идентификация через кошелёк",
@@ -129,8 +129,8 @@ const translations = {
   },
   pt: {
     subtitle: "Rede de comunicação terminal descentralizada",
-    feature1_title: "Cliente criado pelo usuário",
-    feature1_desc: "Zero coleta de dados — sem acesso a localização, IP, info do dispositivo ou contatos",
+    feature1_title: "Crie seu cliente com IA",
+    feature1_desc: "Sem experiência em programação necessária — use IA para criar seu próprio cliente. Sem coleta de dados pessoais",
     feature2_title: "Acordo de chaves offline",
     feature2_desc: "DAO MESSAGE apenas retransmite texto cifrado. A criptografia ocorre localmente no seu cliente — eliminando a confiança centralizada por design",
     feature3_title: "Identidade via carteira cripto",
@@ -161,8 +161,8 @@ const translations = {
   },
   es: {
     subtitle: "Red de comunicación terminal descentralizada",
-    feature1_title: "Cliente creado por el usuario",
-    feature1_desc: "Sin recolección de datos — ni ubicación, ni IP, ni info del dispositivo, ni contactos",
+    feature1_title: "Crea tu cliente con IA",
+    feature1_desc: "Sin experiencia en programación — usa IA para crear tu propio cliente. Sin recolección de datos personales",
     feature2_title: "Acuerdo de claves offline",
     feature2_desc: "DAO MESSAGE solo retransmite texto cifrado. El cifrado ocurre localmente en tu cliente — eliminando la confianza centralizada por diseño",
     feature3_title: "Identidad vía billetera cripto",
