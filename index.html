@@ -8,14 +8,6 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <script>
-    // Subdomain routing
-    (function() {
-      var h = location.hostname;
-      if (h.indexOf("admin.") === 0 && location.pathname === "/") location.replace("/admin.html");
-      if (h.indexOf("developer.") === 0 && location.pathname === "/") location.replace("/developer.html");
-    })();
-  </script>
   <!-- Language Selector -->
   <div class="lang-bar">
     <button id="themeToggle" onclick="toggleTheme()" class="theme-btn" title="Toggle theme">
@@ -53,7 +45,6 @@
       </div>
 
       <button class="btn-primary" onclick="goTo('page2')" data-i18n="join_btn"></button>
-      <a href="https://developer.daomessage.com" class="dev-link" data-i18n="dev_portal_link"></a>
     </div>
   </section>
 
@@ -68,55 +59,16 @@
         <a href="https://doc.daomessage.com" target="_blank" rel="noopener">doc.daomessage.com &#8599;</a>
       </div>
 
-      <div class="method" style="margin-bottom: 16px;">
+      <div class="method">
         <h3 data-i18n="method2_title"></h3>
+        <a href="https://viberstreet.com" target="_blank" rel="noopener" data-i18n="method2_link"></a>
       </div>
 
       <p class="tip" data-i18n="tip_ai"></p>
-
-      <div class="platform-tabs">
-        <span class="tab active">Android</span>
-        <span class="tab">iOS</span>
-        <span class="tab">PWA</span>
-        <span class="tab">macOS</span>
-        <span class="tab">Windows</span>
-        <span class="tab">Linux</span>
-      </div>
-
-      <div class="template-list" id="templateList">
-        <!-- Dynamically loaded from store -->
-      </div>
-      <p class="empty-market" id="emptyMarket" style="display:none; text-align:center; color:var(--text-muted); padding:32px 0; font-size:14px;" data-i18n="no_templates"></p>
     </div>
   </section>
 
-  <!-- Page 3: Template Detail -->
-  <section id="page3" class="page">
-    <div class="page-inner">
-      <button class="btn-back" onclick="goTo('page2')">&larr;</button>
-      <div id="tplDetail"></div>
-    </div>
-  </section>
-
-  <!-- Captcha Modal -->
-  <div id="captchaModal" class="modal-overlay">
-    <div class="modal">
-      <button class="modal-close" onclick="closeCaptcha()">&times;</button>
-      <p class="modal-title" data-i18n="captcha_title"></p>
-      <div class="captcha-body">
-        <canvas id="captchaCanvas" width="200" height="70"></canvas>
-        <button class="captcha-refresh" onclick="generateCaptcha()" title="Refresh">&#8635;</button>
-      </div>
-      <div class="captcha-input-row">
-        <input type="text" id="captchaInput" maxlength="4" autocomplete="off" data-i18n-placeholder="captcha_placeholder">
-        <button class="btn-captcha-submit" onclick="verifyCaptcha()" data-i18n="captcha_submit"></button>
-      </div>
-      <p class="captcha-hint" id="captchaHint"></p>
-    </div>
-  </div>
-
-  <script src="store.js?v=12"></script>
-  <script src="i18n.js?v=12"></script>
-  <script src="app.js?v=12"></script>
+  <script src="i18n.js?v=13"></script>
+  <script src="app.js?v=13"></script>
 </body>
 </html>
