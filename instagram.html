@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#ffffff">
+  <title>aria.codes (@aria.codes) • Instagram photos and videos</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3CradialGradient id='g' r='150%25' cx='30%25' cy='107%25'%3E%3Cstop offset='0' stop-color='%23fdf497'/%3E%3Cstop offset='.05' stop-color='%23fdf497'/%3E%3Cstop offset='.45' stop-color='%23fd5949'/%3E%3Cstop offset='.6' stop-color='%23d6249f'/%3E%3Cstop offset='.9' stop-color='%23285AEB'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='24' height='24' rx='6' fill='url(%23g)'/%3E%3Ccircle cx='12' cy='12' r='4.5' fill='none' stroke='%23fff' stroke-width='1.6'/%3E%3Ccircle cx='17' cy='7' r='1.2' fill='%23fff'/%3E%3Crect x='4.5' y='4.5' width='15' height='15' rx='4.5' fill='none' stroke='%23fff' stroke-width='1.6'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ig-bg: #ffffff;
+      --ig-text: #000000;
+      --ig-secondary: #737373;
+      --ig-border: #dbdbdb;
+      --ig-blue: #0095f6;
+      --ig-blue-hover: #1877f2;
+      --ig-grey-btn: #efefef;
+      --ig-grey-btn-hover: #dbdbdb;
+      --ig-red: #ed4956;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ig-bg: #000000;
+        --ig-text: #ffffff;
+        --ig-secondary: #a8a8a8;
+        --ig-border: #262626;
+        --ig-grey-btn: #363636;
+        --ig-grey-btn-hover: #262626;
+      }
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      background: var(--ig-bg);
+      color: var(--ig-text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      font-size: 14px;
+      line-height: 18px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app {
+      max-width: 470px;
+      margin: 0 auto;
+      min-height: 100vh;
+      min-height: 100dvh;
+      border-left: 1px solid var(--ig-border);
+      border-right: 1px solid var(--ig-border);
+      padding-bottom: 56px;
+      background: var(--ig-bg);
+    }
+
+    svg { display: block; }
+
+    /* ===== Top bar ===== */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 44px;
+      padding: 0 8px 0 16px;
+      background: var(--ig-bg);
+      border-bottom: 0.5px solid var(--ig-border);
+    }
+    .topbar .username {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .topbar .username .lock { margin-right: 1px; }
+    .topbar .username .verified { margin-left: 1px; }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      color: var(--ig-text);
+      cursor: pointer;
+      position: relative;
+    }
+    .icon-btn .badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      background: var(--ig-red);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 16px;
+      border-radius: 9px;
+      text-align: center;
+    }
+
+    /* ===== Profile header ===== */
+    .profile-header {
+      padding: 16px 16px 0;
+    }
+    .ph-top {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .avatar-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .avatar-ring {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    }
+    .avatar-ring .avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--ig-bg);
+      background: #efefef;
+      display: block;
+    }
+    .note-bubble {
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--ig-grey-btn);
+      color: var(--ig-text);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 6px 10px;
+      border-radius: 14px;
+      white-space: nowrap;
+      box-shadow: 0 1px 2px rgba(0,0,0,.08);
+    }
+    .note-bubble::after,
+    .note-bubble::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: var(--ig-grey-btn);
+    }
+    .note-bubble::before { width: 8px; height: 8px; bottom: -8px; }
+    .note-bubble::after { width: 4px; height: 4px; bottom: -14px; }
+
+    .stats {
+      flex: 1;
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+    }
+    .stat { cursor: pointer; }
+    .stat .num {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 20px;
+    }
+    .stat .label {
+      font-size: 13px;
+      color: var(--ig-text);
+    }
+
+    .ph-bio {
+      padding-top: 12px;
+      font-size: 14px;
+      line-height: 19px;
+    }
+    .display-name {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .category { color: var(--ig-secondary); }
+    .bio { white-space: pre-line; margin-top: 1px; }
+    .bio .mention, .bio .tag { color: #00376b; }
+    @media (prefers-color-scheme: dark) {
+      .bio .mention, .bio .tag { color: #e0f1ff; }
+    }
+    .bio-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--ig-text);
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: 1px;
+    }
+    .bio-link svg { transform: rotate(0deg); }
+    .followed-by {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      color: var(--ig-secondary);
+      font-size: 12px;
+    }
+    .followed-by .faces {
+      display: flex;
+    }
+    .followed-by .faces img {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid var(--ig-bg);
+      object-fit: cover;
+      margin-left: -6px;
+    }
+    .followed-by .faces img:first-child { margin-left: 0; }
+
+    /* ===== Action buttons ===== */
+    .actions {
+      display: flex;
+      gap: 6px;
+      padding: 14px 16px 0;
+    }
+    .btn {
+      height: 32px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ig-text);
+      background: var(--ig-grey-btn);
+    }
+    .btn:active { opacity: .7; }
+    .btn.flex { flex: 1; }
+    .btn.follow {
+      background: var(--ig-blue);
+      color: #fff;
+    }
+    .btn.follow.following { background: var(--ig-grey-btn); color: var(--ig-text); }
+    .btn.icon { width: 32px; flex: none; }
+
+    /* ===== Highlights ===== */
+    .highlights {
+      display: flex;
+      gap: 16px;
+      padding: 18px 16px 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .highlights::-webkit-scrollbar { display: none; }
+    .highlight {
+      flex-shrink: 0;
+      width: 64px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .highlight .h-ring {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 1px solid var(--ig-border);
+      padding: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .highlight .h-ring img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .highlight.new .h-ring {
+      font-size: 26px;
+      color: var(--ig-text);
+      font-weight: 300;
+    }
+    .highlight .h-label {
+      font-size: 12px;
+      margin-top: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ===== Tabs ===== */
+    .tabs {
+      position: sticky;
+      top: 44px;
+      z-index: 10;
+      display: flex;
+      border-top: 0.5px solid var(--ig-border);
+      background: var(--ig-bg);
+      margin-top: 4px;
+    }
+    .tab {
+      flex: 1;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ig-secondary);
+      border-bottom: 1px solid transparent;
+      cursor: pointer;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+    }
+    .tab.active {
+      color: var(--ig-text);
+      border-bottom: 1px solid var(--ig-text);
+    }
+
+    /* ===== Grid ===== */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .cell {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: #efefef;
+    }
+    @media (prefers-color-scheme: dark) { .cell { background: #1a1a1a; } }
+    .cell img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .cell .corner {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      color: #fff;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,.4));
+    }
+    .cell .views {
+      position: absolute;
+      bottom: 7px;
+      left: 7px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,.5));
+    }
+
+    /* ===== Bottom nav ===== */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 470px;
+      height: 50px;
+      padding-bottom: env(safe-area-inset-bottom);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      background: var(--ig-bg);
+      border-top: 0.5px solid var(--ig-border);
+      z-index: 30;
+    }
+    .nav-btn {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      color: var(--ig-text);
+      cursor: pointer;
+    }
+    .nav-btn .nav-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--ig-text);
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- ===== Top bar ===== -->
+    <header class="topbar">
+      <div class="username">
+        <svg class="lock" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 1a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5zm3 8H9V6a3 3 0 0 1 6 0v3z"/>
+        </svg>
+        aria.codes
+        <svg class="verified" width="15" height="15" viewBox="0 0 40 40" aria-label="Verified">
+          <path fill="#3897f0" d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Z"/>
+          <path fill="#fff" d="m18 25.367-4.969-4.969 1.414-1.414L18 22.539l8.555-8.555 1.414 1.414L18 25.367Z"/>
+        </svg>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="margin-left:2px" aria-hidden="true">
+          <path d="M12 15.5 5.5 9l1.4-1.4 5.1 5.1 5.1-5.1L18.5 9 12 15.5z"/>
+        </svg>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" aria-label="New post">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <rect x="3" y="3" width="18" height="18" rx="5"/>
+            <line x1="12" y1="8" x2="12" y2="16"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+          </svg>
+        </button>
+        <button class="icon-btn" aria-label="Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="4" y1="7" x2="20" y2="7"/>
+            <line x1="4" y1="12" x2="20" y2="12"/>
+            <line x1="4" y1="17" x2="20" y2="17"/>
+          </svg>
+          <span class="badge">3</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ===== Profile ===== -->
+    <section class="profile-header">
+      <div class="ph-top">
+        <div class="avatar-wrap">
+          <div class="note-bubble">shipping ✨</div>
+          <div class="avatar-ring">
+            <img class="avatar" alt="aria.codes"
+              src="https://picsum.photos/seed/ariacodes/200"
+              onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23dbdbdb%22/%3E%3Ccircle cx=%2250%22 cy=%2240%22 r=%2218%22 fill=%22%23fff%22/%3E%3Cpath d=%22M20 90c0-18 13-28 30-28s30 10 30 28z%22 fill=%22%23fff%22/%3E%3C/svg%3E'">
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="num">214</div><div class="label">posts</div></div>
+          <div class="stat"><div class="num">48.3k</div><div class="label">followers</div></div>
+          <div class="stat"><div class="num">312</div><div class="label">following</div></div>
+        </div>
+      </div>
+
+      <div class="ph-bio">
+        <div class="display-name">
+          Aria · UI Engineer
+          <svg width="14" height="14" viewBox="0 0 40 40" aria-label="Verified">
+            <path fill="#3897f0" d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Z"/>
+            <path fill="#fff" d="m18 25.367-4.969-4.969 1.414-1.414L18 22.539l8.555-8.555 1.414 1.414L18 25.367Z"/>
+          </svg>
+        </div>
+        <div class="category">Digital creator</div>
+        <div class="bio">Designing &amp; shipping delightful interfaces 🎨
+Coffee ☕ · CSS · pixel-perfect things
+<span class="mention">@design.daily</span> <span class="tag">#frontend</span></div>
+        <a class="bio-link" href="#" onclick="return false;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/>
+            <path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>
+          </svg>
+          aria.codes
+        </a>
+        <div class="followed-by">
+          <div class="faces">
+            <img src="https://picsum.photos/seed/f1/40" alt="" onerror="this.style.display='none'">
+            <img src="https://picsum.photos/seed/f2/40" alt="" onerror="this.style.display='none'">
+            <img src="https://picsum.photos/seed/f3/40" alt="" onerror="this.style.display='none'">
+          </div>
+          <span>Followed by <b style="color:var(--ig-text)">design.daily</b>, <b style="color:var(--ig-text)">css.wizard</b> + 18 more</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn follow flex" id="followBtn" onclick="toggleFollow()">Follow</button>
+        <button class="btn flex">Message</button>
+        <button class="btn icon" aria-label="Suggested">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <circle cx="18" cy="18" r="0"/>
+          </svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="margin-left:-1px">
+            <path d="M12 15.5 5.5 9l1.4-1.4 5.1 5.1 5.1-5.1L18.5 9 12 15.5z"/>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== Highlights ===== -->
+    <div class="highlights">
+      <div class="highlight new">
+        <div class="h-ring">+</div>
+        <div class="h-label">New</div>
+      </div>
+      <div class="highlight">
+        <div class="h-ring"><img src="https://picsum.photos/seed/hl1/120" alt="" onerror="this.parentNode.style.background='#c7c7c7'"></div>
+        <div class="h-label">Work</div>
+      </div>
+      <div class="highlight">
+        <div class="h-ring"><img src="https://picsum.photos/seed/hl2/120" alt="" onerror="this.parentNode.style.background='#c7c7c7'"></div>
+        <div class="h-label">Travel</div>
+      </div>
+      <div class="highlight">
+        <div class="h-ring"><img src="https://picsum.photos/seed/hl3/120" alt="" onerror="this.parentNode.style.background='#c7c7c7'"></div>
+        <div class="h-label">Recipes</div>
+      </div>
+      <div class="highlight">
+        <div class="h-ring"><img src="https://picsum.photos/seed/hl4/120" alt="" onerror="this.parentNode.style.background='#c7c7c7'"></div>
+        <div class="h-label">Setup</div>
+      </div>
+      <div class="highlight">
+        <div class="h-ring"><img src="https://picsum.photos/seed/hl5/120" alt="" onerror="this.parentNode.style.background='#c7c7c7'"></div>
+        <div class="h-label">2024</div>
+      </div>
+    </div>
+
+    <!-- ===== Tabs ===== -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="grid" onclick="switchTab(this)" aria-label="Posts">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="3" width="18" height="18" rx="1.5"/>
+          <line x1="9" y1="3" x2="9" y2="21"/>
+          <line x1="15" y1="3" x2="15" y2="21"/>
+          <line x1="3" y1="9" x2="21" y2="9"/>
+          <line x1="3" y1="15" x2="21" y2="15"/>
+        </svg>
+      </button>
+      <button class="tab" data-tab="reels" onclick="switchTab(this)" aria-label="Reels">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="3"/>
+          <line x1="3" y1="8" x2="21" y2="8"/>
+          <path d="M8 3 11 8M14 3 17 8"/>
+          <path d="M10 11.5v5l4.5-2.5z" fill="currentColor" stroke="none"/>
+        </svg>
+      </button>
+      <button class="tab" data-tab="tagged" onclick="switchTab(this)" aria-label="Tagged">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+          <path d="M3 8a2 2 0 0 1 2-2h3l2-2h4l2 2h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" style="display:none"/>
+          <path d="M21 7v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+          <circle cx="12" cy="10" r="2.4"/>
+          <path d="M7.5 18a4.6 4.6 0 0 1 9 0"/>
+        </svg>
+      </button>
+    </nav>
+
+    <!-- ===== Grid ===== -->
+    <main class="grid" id="grid"></main>
+  </div>
+
+  <!-- ===== Bottom nav ===== -->
+  <nav class="bottom-nav">
+    <button class="nav-btn" aria-label="Home">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 3 3 10v10a1 1 0 0 0 1 1h5v-7h6v7h5a1 1 0 0 0 1-1V10z"/>
+      </svg>
+    </button>
+    <button class="nav-btn" aria-label="Search">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="16.5" y1="16.5" x2="21" y2="21" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button class="nav-btn" aria-label="Reels">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="3"/>
+        <line x1="3" y1="8" x2="21" y2="8"/>
+        <path d="M8 3 11 8M14 3 17 8"/>
+        <path d="M10 11.5v5l4.5-2.5z" fill="currentColor" stroke="none"/>
+      </svg>
+    </button>
+    <button class="nav-btn" aria-label="Shop">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+        <path d="M4 8h16l-1.2 11a2 2 0 0 1-2 1.8H7.2a2 2 0 0 1-2-1.8z"/>
+        <path d="M8.5 8V6.5a3.5 3.5 0 0 1 7 0V8"/>
+      </svg>
+    </button>
+    <button class="nav-btn" aria-label="Profile">
+      <img class="nav-avatar" src="https://picsum.photos/seed/ariacodes/60" alt="Profile"
+        onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23dbdbdb%22/%3E%3C/svg%3E'">
+    </button>
+  </nav>
+
+  <script>
+    // ---- Build a 3-column post grid (Instagram style) ----
+    var multiIcon = '<svg class="corner" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16 2H6a2 2 0 0 0-2 2v10h2V4h10zm3 4H10a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2z"/></svg>';
+    var reelIcon  = '<svg class="corner" width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3 19 12 5 21z"/></svg>';
+
+    function fmtViews(n){ return n >= 1000 ? (n/1000).toFixed(1).replace('.0','') + 'k' : n; }
+
+    var posts = [];
+    for (var i = 1; i <= 18; i++) {
+      var type = (i % 4 === 0) ? 'reel' : (i % 3 === 0 ? 'multi' : 'photo');
+      posts.push({ seed: 'p' + i, type: type, views: Math.floor(2000 + Math.random() * 90000) });
+    }
+
+    var grid = document.getElementById('grid');
+    grid.innerHTML = posts.map(function (p) {
+      var corner = p.type === 'reel' ? reelIcon : (p.type === 'multi' ? multiIcon : '');
+      var views = p.type === 'reel'
+        ? '<div class="views"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3 19 12 5 21z"/></svg>' + fmtViews(p.views) + '</div>'
+        : '';
+      var fallback = "this.onerror=null;this.parentNode.style.background='linear-gradient(135deg,#e8e8e8,#cfcfcf)';this.style.display='none';";
+      return '<div class="cell">' +
+        '<img loading="lazy" src="https://picsum.photos/seed/' + p.seed + '/300" alt="" onerror="' + fallback + '">' +
+        corner + views +
+        '</div>';
+    }).join('');
+
+    // ---- Follow toggle ----
+    function toggleFollow() {
+      var b = document.getElementById('followBtn');
+      if (b.classList.contains('following')) {
+        b.classList.remove('following');
+        b.textContent = 'Follow';
+      } else {
+        b.classList.add('following');
+        b.textContent = 'Following';
+      }
+    }
+
+    // ---- Tab switch (visual) ----
+    function switchTab(el) {
+      document.querySelectorAll('.tab').forEach(function (t) { t.classList.remove('active'); });
+      el.classList.add('active');
+    }
+  </script>
+</body>
+</html>
