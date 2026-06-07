@@ -411,6 +411,95 @@
       object-fit: cover;
       border: 1px solid var(--ig-text);
     }
+
+    /* ===== Post detail modal ===== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: var(--ig-bg);
+      display: none;
+      flex-direction: column;
+      max-width: 470px;
+      margin: 0 auto;
+      animation: slideUp 0.22s ease;
+    }
+    .modal.open { display: flex; }
+    @keyframes slideUp {
+      from { transform: translateY(14px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-bar {
+      display: flex;
+      align-items: center;
+      height: 44px;
+      flex-shrink: 0;
+      padding: 0 8px;
+      border-bottom: 0.5px solid var(--ig-border);
+      gap: 6px;
+    }
+    .modal-bar .back {
+      background: none;
+      border: none;
+      color: var(--ig-text);
+      cursor: pointer;
+      display: flex;
+      padding: 6px;
+    }
+    .modal-bar .mb-title {
+      font-size: 12px;
+      color: var(--ig-secondary);
+      font-weight: 600;
+    }
+    .modal-bar .mb-title b { color: var(--ig-text); font-size: 15px; display: block; }
+    .modal-scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1; }
+
+    .post-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+    }
+    .post-head .pa {
+      width: 32px; height: 32px; border-radius: 50%;
+      object-fit: cover; flex-shrink: 0;
+      padding: 1.5px;
+      background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
+    }
+    .post-head .pa-inner {
+      width: 100%; height: 100%; border-radius: 50%;
+      border: 2px solid var(--ig-bg); object-fit: cover; display: block;
+    }
+    .post-head .ph-name { font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 3px; }
+    .post-head .ph-loc { font-size: 11px; color: var(--ig-text); }
+    .post-head .more { margin-left: auto; background: none; border: none; color: var(--ig-text); cursor: pointer; font-size: 18px; padding: 4px 8px; }
+
+    .post-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #efefef; display: block; }
+
+    .post-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 8px 12px 4px;
+    }
+    .post-actions .pa-btn { background: none; border: none; color: var(--ig-text); cursor: pointer; display: flex; padding: 0; }
+    .post-actions .pa-btn.liked { color: var(--ig-red); }
+    .post-actions .spacer { margin-left: auto; }
+
+    .post-likes { padding: 2px 12px; font-weight: 600; font-size: 13px; }
+    .post-caption { padding: 4px 12px; font-size: 13px; line-height: 18px; }
+    .post-caption b { font-weight: 600; }
+    .post-caption .more-link { color: var(--ig-secondary); cursor: pointer; }
+    .post-time { padding: 4px 12px 2px; color: var(--ig-secondary); font-size: 10px; text-transform: uppercase; letter-spacing: .2px; }
+
+    .comments { padding: 6px 12px 16px; }
+    .comments .view-all { color: var(--ig-secondary); font-size: 13px; margin-bottom: 10px; cursor: pointer; }
+    .comment { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+    .comment .c-av { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #dbdbdb; }
+    .comment .c-body { flex: 1; font-size: 13px; line-height: 17px; }
+    .comment .c-body b { font-weight: 600; }
+    .comment .c-meta { margin-top: 3px; font-size: 11px; color: var(--ig-secondary); display: flex; gap: 14px; }
+    .comment .c-like { margin-left: auto; background: none; border: none; color: var(--ig-secondary); cursor: pointer; display: flex; padding-top: 4px; }
   </style>
 </head>
 <body>
@@ -598,6 +687,19 @@
     </button>
   </nav>
 
+  <!-- ===== Post detail modal ===== -->
+  <div class="modal" id="postModal">
+    <div class="modal-bar">
+      <button class="back" onclick="closePost()" aria-label="Back">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="mb-title">iamsezero<b>게시물</b></div>
+    </div>
+    <div class="modal-scroll" id="modalScroll"></div>
+  </div>
+
   <script>
     // ---- Build a 3-column post grid (Instagram style) ----
     var multiIcon = '<svg class="corner" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16 2H6a2 2 0 0 0-2 2v10h2V4h10zm3 4H10a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2z"/></svg>';
@@ -605,21 +707,68 @@
 
     function fmtViews(n){ return n >= 1000 ? (n/1000).toFixed(1).replace('.0','') + 'k' : n; }
 
+    // Deterministic pseudo-random so content is stable per post
+    function rnd(n) { var x = Math.sin(n * 99.13) * 10000; return x - Math.floor(x); }
+    function commafy(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+    // ---- Generated content pools (Korean Instagram style) ----
+    var CAPTIONS = [
+      '오늘의 데일리룩 🤍\n#투아울라 #ootd #데일리룩',
+      '코 끝이 시리지만 행복해😝',
+      '주말 나들이 다녀왔어요 🍂 다들 어디 가셨어요?',
+      '이 색감 너무 좋지 않나요? 📸✨',
+      '협찬) 투아울라 신상 자켓 🧥\n프로필 링크에서 만나요 (코드 SEZERO 10%)',
+      '가을 감성 가득 담아왔어요 🍁',
+      '오랜만에 카페 투어 ☕️ 여기 분위기 미쳤다',
+      '다들 좋은 하루 보내세요 🙋‍♀️',
+      '새 옷 입고 신나서 한 컷 👗',
+      '노을이 너무 예뻐서 한참 봤네요 📷'
+    ];
+    var TIMES = ['3시간', '5시간', '9시간', '1일', '2일', '4일', '6일', '1주', '2주', '3주'];
+    var C_USERS = ['j.sy_jeong','min__99','hyunwoo.k','_seoyeon_','coco.daily','yuna_look','dani.kim_','soo._.young','haeun2','jiwon.ootd','mina_grm','tuaula_official','kkular_','daily.gram2','seoul_walker','rin.__.0'];
+    var C_TEXTS = [
+      '너무 예뻐요 😍','와 핏 미쳤다🔥','언니 오늘도 예뻐요🥹','이 색감 진짜 최고예요 📸','여기 어디예요?? 가보고싶다',
+      '옷 정보 좀 알 수 있을까요?','분위기 깡패시네요😎','협찬 문의 디엠 드렸습니다!','투아울라 신상 너무 예뻐요🤍','매일 잘 보고 가요~',
+      '세영님 미모 실화인가요💕','자켓 어디꺼예요?','오늘도 눈호강👍','사진 너무 잘 나왔다✨','진짜 인생샷이네요',
+      '보정 어플 뭐 쓰세요?','첫 줄 사수 성공🙌','스토리 보고 달려왔어요🏃‍♀️','대박… 저장하고 갑니다📌','목도리 색깔 예뻐요🧣'
+    ];
+
     var posts = [];
     for (var i = 1; i <= 18; i++) {
       var type = (i % 4 === 0) ? 'reel' : (i % 3 === 0 ? 'multi' : 'photo');
-      posts.push({ seed: 'p' + i, type: type, views: Math.floor(2000 + Math.random() * 90000) });
+      var nComments = 3 + Math.floor(rnd(i * 7) * 4);       // 3-6 shown
+      var comments = [];
+      for (var c = 0; c < nComments; c++) {
+        var r = rnd(i * 31 + c * 17);
+        comments.push({
+          user: C_USERS[Math.floor(rnd(i * 5 + c * 3) * C_USERS.length)],
+          text: C_TEXTS[Math.floor(r * C_TEXTS.length)],
+          time: TIMES[Math.floor(rnd(i + c * 2) * TIMES.length)],
+          likes: Math.floor(rnd(i * 13 + c) * 40)
+        });
+      }
+      posts.push({
+        seed: 'p' + i,
+        type: type,
+        views: Math.floor(2000 + rnd(i * 3) * 90000),
+        likes: 600 + Math.floor(rnd(i) * 4200),
+        caption: CAPTIONS[(i - 1) % CAPTIONS.length],
+        time: TIMES[(i - 1) % TIMES.length],
+        totalComments: 14 + Math.floor(rnd(i * 9) * 180),
+        comments: comments
+      });
     }
 
+    var IMG_FALLBACK = "this.onerror=null;this.parentNode.style.background='linear-gradient(135deg,#e8e8e8,#cfcfcf)';this.style.display='none';";
+
     var grid = document.getElementById('grid');
-    grid.innerHTML = posts.map(function (p) {
+    grid.innerHTML = posts.map(function (p, idx) {
       var corner = p.type === 'reel' ? reelIcon : (p.type === 'multi' ? multiIcon : '');
       var views = p.type === 'reel'
         ? '<div class="views"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3 19 12 5 21z"/></svg>' + fmtViews(p.views) + '</div>'
         : '';
-      var fallback = "this.onerror=null;this.parentNode.style.background='linear-gradient(135deg,#e8e8e8,#cfcfcf)';this.style.display='none';";
-      return '<div class="cell">' +
-        '<img loading="lazy" src="https://picsum.photos/seed/' + p.seed + '/300" alt="" onerror="' + fallback + '">' +
+      return '<div class="cell" onclick="openPost(' + idx + ')">' +
+        '<img loading="lazy" src="https://picsum.photos/seed/' + p.seed + '/300" alt="" onerror="' + IMG_FALLBACK + '">' +
         corner + views +
         '</div>';
     }).join('');
@@ -641,6 +790,87 @@
       document.querySelectorAll('.tab').forEach(function (t) { t.classList.remove('active'); });
       el.classList.add('active');
     }
+
+    // ---- Post detail modal ----
+    var heartOutline = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-10-9.2C.6 9 1.5 5.6 4.5 4.8 6.7 4.2 8.8 5.3 12 8c3.2-2.7 5.3-3.8 7.5-3.2 3 .8 3.9 4.2 2.5 7-2.5 4.6-10 9.2-10 9.2z"/></svg>';
+    var heartFilled  = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-10-9.2C.6 9 1.5 5.6 4.5 4.8 6.7 4.2 8.8 5.3 12 8c3.2-2.7 5.3-3.8 7.5-3.2 3 .8 3.9 4.2 2.5 7-2.5 4.6-10 9.2-10 9.2z"/></svg>';
+    var iconComment = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.4 9 9 0 0 1-3.9-.9L3 20l1.1-4.1A8.38 8.38 0 0 1 3 11.5a8.5 8.5 0 0 1 9-8.4 8.48 8.48 0 0 1 9 8.4z"/></svg>';
+    var iconShare = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+    var iconSave = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>';
+    var smallHeart = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-10-9.2C.6 9 1.5 5.6 4.5 4.8 6.7 4.2 8.8 5.3 12 8c3.2-2.7 5.3-3.8 7.5-3.2 3 .8 3.9 4.2 2.5 7-2.5 4.6-10 9.2-10 9.2z"/></svg>';
+    var verifiedMini = '<svg width="11" height="11" viewBox="0 0 40 40"><path fill="#3897f0" d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0z"/><path fill="#fff" d="m18 25.367-4.969-4.969 1.414-1.414L18 22.539l8.555-8.555 1.414 1.414z"/></svg>';
+
+    function commentHTML(c) {
+      var likeStr = c.likes > 0 ? '<span>좋아요 ' + c.likes + '개</span>' : '';
+      return '<div class="comment">' +
+        '<img class="c-av" src="https://picsum.photos/seed/' + c.user + '/56" onerror="this.style.visibility=\'hidden\'">' +
+        '<div class="c-body"><b>' + c.user + '</b> ' + c.text +
+          '<div class="c-meta"><span>' + c.time + '</span>' + likeStr + '<span>답글 달기</span></div>' +
+        '</div>' +
+        '<button class="c-like" aria-label="Like">' + smallHeart + '</button>' +
+      '</div>';
+    }
+
+    function openPost(idx) {
+      var p = posts[idx];
+      var capText = p.caption.replace(/\n/g, '<br>');
+      var html =
+        '<div class="post-head">' +
+          '<img class="pa" src="https://picsum.photos/seed/iamsezero/64" onerror="this.style.background=\'#dbdbdb\'">' +
+          '<div>' +
+            '<div class="ph-name">iamsezero ' + verifiedMini + '</div>' +
+            '<div class="ph-loc">Seoul, Korea</div>' +
+          '</div>' +
+          '<button class="more">⋯</button>' +
+        '</div>' +
+        '<img class="post-img" src="https://picsum.photos/seed/' + p.seed + '/600" onerror="' + IMG_FALLBACK.replace(/parentNode/g, 'parentElement') + '">' +
+        '<div class="post-actions">' +
+          '<button class="pa-btn" id="modalLike" onclick="toggleModalLike(' + idx + ')" aria-label="Like">' + heartOutline + '</button>' +
+          '<button class="pa-btn" aria-label="Comment">' + iconComment + '</button>' +
+          '<button class="pa-btn" aria-label="Share">' + iconShare + '</button>' +
+          '<button class="pa-btn spacer" aria-label="Save">' + iconSave + '</button>' +
+        '</div>' +
+        '<div class="post-likes" id="modalLikes">좋아요 ' + commafy(p.likes) + '개</div>' +
+        '<div class="post-caption"><b>iamsezero</b> ' + capText + '</div>' +
+        '<div class="post-time">' + p.time + ' 전</div>' +
+        '<div class="comments">' +
+          '<div class="view-all">댓글 ' + commafy(p.totalComments) + '개 모두 보기</div>' +
+          p.comments.map(commentHTML).join('') +
+        '</div>';
+      document.getElementById('modalScroll').innerHTML = html;
+      document.getElementById('modalScroll').scrollTop = 0;
+      var m = document.getElementById('postModal');
+      m.classList.add('open');
+      m.dataset.likes = p.likes;
+      m.dataset.liked = '0';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePost() {
+      document.getElementById('postModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function toggleModalLike(idx) {
+      var m = document.getElementById('postModal');
+      var btn = document.getElementById('modalLike');
+      var label = document.getElementById('modalLikes');
+      var base = posts[idx].likes;
+      if (m.dataset.liked === '1') {
+        m.dataset.liked = '0';
+        btn.classList.remove('liked');
+        btn.innerHTML = heartOutline;
+        label.textContent = '좋아요 ' + commafy(base) + '개';
+      } else {
+        m.dataset.liked = '1';
+        btn.classList.add('liked');
+        btn.innerHTML = heartFilled;
+        label.textContent = '좋아요 ' + commafy(base + 1) + '개';
+      }
+    }
+
+    // Close modal with browser back / Esc
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePost(); });
   </script>
 </body>
 </html>
