@@ -274,13 +274,59 @@
     }
     .ad-float .ad-text { color: #fff; font-size: 15px; font-weight: 700; flex: 1; line-height: 1.15; letter-spacing: .2px; }
     .ad-float .ad-arrow { color: #fff; display: flex; flex-shrink: 0; opacity: .95; }
+
+    /* ===== Feed (home) page ===== */
+    .feed {
+      position: fixed; inset: 0; z-index: 45; background: var(--ig-bg);
+      max-width: 470px; margin: 0 auto; display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform .28s ease; visibility: hidden;
+      border-left: 1px solid var(--ig-border); border-right: 1px solid var(--ig-border);
+    }
+    .feed.open { transform: translateX(0); visibility: visible; }
+    .feed-top {
+      display: flex; align-items: center; height: 48px; flex-shrink: 0; padding: 0 14px;
+      border-bottom: 0.5px solid var(--ig-border);
+    }
+    .ig-logo { font-family: 'Snell Roundhand', 'Segoe Script', 'Brush Script MT', cursive; font-size: 28px; font-weight: 600; }
+    .feed-top-actions { margin-left: auto; display: flex; gap: 20px; }
+    .feed-top-actions button { background: none; border: none; color: var(--ig-text); cursor: pointer; display: flex; padding: 0; position: relative; }
+    .feed-top-actions .dot { position: absolute; top: -1px; right: -2px; width: 8px; height: 8px; background: var(--ig-red); border-radius: 50%; border: 1.5px solid var(--ig-bg); }
+    .feed-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+
+    .stories { display: flex; gap: 15px; padding: 12px 14px; overflow-x: auto; scrollbar-width: none; border-bottom: 0.5px solid var(--ig-border); }
+    .stories::-webkit-scrollbar { display: none; }
+    .story { width: 64px; flex-shrink: 0; text-align: center; cursor: pointer; }
+    .story .s-ring { width: 62px; height: 62px; border-radius: 50%; padding: 2.5px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+    .story.mine .s-ring { background: var(--ig-border); }
+    .story .s-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--ig-bg); background: #dbdbdb; display: block; }
+    .story .s-name { font-size: 12px; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .fpost { margin-bottom: 6px; }
+    .fpost-head { display: flex; align-items: center; gap: 9px; padding: 9px 12px; }
+    .fpost-head .fa { width: 32px; height: 32px; border-radius: 50%; padding: 1.5px; background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); flex-shrink: 0; }
+    .fpost-head .fa img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--ig-bg); display: block; background: #dbdbdb; }
+    .fpost-head .fn { font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 3px; }
+    .fpost-head .floc { font-size: 11px; }
+    .fpost-head .fmore { margin-left: auto; background: none; border: none; color: var(--ig-text); cursor: pointer; padding: 4px; }
+    .fpost-img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; background: #efefef; }
+    .fpost-actions { display: flex; align-items: center; gap: 15px; padding: 9px 12px 4px; }
+    .fpost-actions button { background: none; border: none; color: var(--ig-text); cursor: pointer; display: flex; padding: 0; }
+    .fpost-actions button.liked { color: var(--ig-red); }
+    .fpost-actions .sp { margin-left: auto; }
+    .fpost-likes { padding: 2px 12px; font-weight: 600; font-size: 13px; }
+    .fpost-cap { padding: 3px 12px; font-size: 13px; line-height: 18px; }
+    .fpost-cap b { font-weight: 600; }
+    .fpost-cmt { padding: 3px 12px; color: var(--ig-secondary); font-size: 13px; }
+    .fpost-time { padding: 4px 12px 8px; color: var(--ig-secondary); font-size: 11px; }
+
+    .feed .bottom-nav { position: static; transform: none; left: auto; width: auto; max-width: none; flex-shrink: 0; }
   </style>
 </head>
 <body>
   <div class="app">
     <!-- ===== Top bar ===== -->
     <header class="topbar">
-      <button class="back" aria-label="返回">
+      <button class="back" aria-label="返回" onclick="openFeed()">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
       <div class="username">07_r1na
@@ -395,6 +441,44 @@
     <div class="modal-scroll" id="modalScroll"></div>
   </div>
 
+  <!-- ===== Feed (home) page ===== -->
+  <div class="feed" id="feedPage">
+    <header class="feed-top">
+      <div class="ig-logo">Instagram</div>
+      <div class="feed-top-actions">
+        <button aria-label="通知">
+          <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-10-9.2C.6 9 1.5 5.6 4.5 4.8 6.7 4.2 8.8 5.3 12 8c3.2-2.7 5.3-3.8 7.5-3.2 3 .8 3.9 4.2 2.5 7-2.5 4.6-10 9.2-10 9.2z"/></svg>
+          <span class="dot"></span>
+        </button>
+        <button aria-label="私信">
+          <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          <span class="dot"></span>
+        </button>
+      </div>
+    </header>
+    <div class="feed-scroll" id="feedScroll">
+      <div class="stories" id="stories"></div>
+      <div id="feedPosts"></div>
+    </div>
+    <nav class="bottom-nav">
+      <button class="nav-btn" aria-label="主页">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 3 10v10a1 1 0 0 0 1 1h5v-7h6v7h5a1 1 0 0 0 1-1V10z"/></svg>
+      </button>
+      <button class="nav-btn" aria-label="搜索">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21" stroke-linecap="round"/></svg>
+      </button>
+      <button class="nav-btn" aria-label="Reels">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="3" y1="8" x2="21" y2="8"/><path d="M8 3 11 8M14 3 17 8"/><path d="M10 11.5v5l4.5-2.5z" fill="currentColor" stroke="none"/></svg>
+      </button>
+      <button class="nav-btn" aria-label="商店">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 8h16l-1.2 11a2 2 0 0 1-2 1.8H7.2a2 2 0 0 1-2-1.8z"/><path d="M8.5 8V6.5a3.5 3.5 0 0 1 7 0V8"/></svg>
+      </button>
+      <button class="nav-btn" aria-label="个人主页" onclick="closeFeed()">
+        <img class="nav-avatar" id="feedNavAvatar" src="https://picsum.photos/seed/07r1na/60" alt="我" onerror="this.onerror=null;this.style.background='#dbdbdb'">
+      </button>
+    </nav>
+  </div>
+
   <!-- ===== Floating sponsored CTA ===== -->
   <a class="ad-float" href="https://zhaoweiyang.github.io/1handplayer.com/creator.html?id=rina" aria-label="Sponsored">
     <img class="ad-thumb" id="adThumb" src="https://picsum.photos/seed/07r1na/96" alt=""
@@ -413,7 +497,7 @@
       "https://github.com/user-attachments/assets/7ca20c39-fce1-480c-9e0c-0f1e6e4d3f64",
       "https://github.com/user-attachments/assets/b1f84764-dd17-449e-9df6-fa8700dbe948"
     ];
-    ['mainAvatar', 'navAvatar', 'adThumb'].forEach(function (id) {
+    ['mainAvatar', 'navAvatar', 'adThumb', 'feedNavAvatar'].forEach(function (id) {
       var el = document.getElementById(id);
       if (el) el.src = AVATAR_URL;
     });
@@ -763,6 +847,95 @@
       window.addEventListener('mousemove', function (e) { if (mouseDown) onMove(e.clientX, e.clientY, e); });
       window.addEventListener('mouseup', function () { if (mouseDown) { mouseDown = false; onEnd(); } });
     })();
+
+    // ===== Instagram feed (home) page =====
+    var vbadge = '<svg width="12" height="12" viewBox="0 0 40 40"><path fill="#3897f0" d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0z"/><path fill="#fff" d="m18 25.367-4.969-4.969 1.414-1.414L18 22.539l8.555-8.555 1.414 1.414z"/></svg>';
+    var fmoreIcon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>';
+
+    var FEED = [
+      { user: '07_r1na', v: true, av: AVATAR_URL, img: REAL_IMAGES[0], loc: 'Seoul, Korea', cap: '韓国生活、毎日が幸せ🤍 #07', likes: 23148, time: '2時間前', cmt: 563 },
+      { user: 'yuna_look', v: false, av: 'https://picsum.photos/seed/yuna_look/80', img: 'https://picsum.photos/seed/fp2/640/800', loc: '', cap: '오늘의 룩 ☁️ 다들 좋은 하루', likes: 1820, time: '4時間前', cmt: 88 },
+      { user: '07_r1na', v: true, av: AVATAR_URL, img: REAL_IMAGES[1], loc: '', cap: 'みんな見てくれてありがとう💕 また投稿するね', likes: 31980, time: '6時間前', cmt: 402 },
+      { user: 'tomo.gram', v: false, av: 'https://picsum.photos/seed/tomo.gram/80', img: 'https://picsum.photos/seed/fp4/640/800', loc: 'Tokyo, Japan', cap: '週末さんぽ🌿', likes: 940, time: '8時間前', cmt: 23 },
+      { user: 'minji_v', v: false, av: 'https://picsum.photos/seed/minji_v/80', img: 'https://picsum.photos/seed/fp5/640/800', loc: '', cap: '좋은 하루 보내세요☺️', likes: 2610, time: '10時間前', cmt: 51 }
+    ];
+
+    function fpostHTML(p) {
+      var loc = p.loc ? '<div class="floc">' + p.loc + '</div>' : '';
+      return '<div class="fpost">' +
+        '<div class="fpost-head">' +
+          '<div class="fa"><img src="' + p.av + '" onerror="' + IMG_FB + '"></div>' +
+          '<div><div class="fn">' + p.user + (p.v ? ' ' + vbadge : '') + '</div>' + loc + '</div>' +
+          '<button class="fmore">' + fmoreIcon + '</button>' +
+        '</div>' +
+        '<img class="fpost-img" src="' + p.img + '" onerror="' + IMG_FB + '">' +
+        '<div class="fpost-actions">' +
+          '<button onclick="toggleFeedLike(this,' + p.likes + ')" aria-label="赞">' + heartOutline + '</button>' +
+          '<button aria-label="评论">' + iconComment + '</button>' +
+          '<button aria-label="分享">' + iconShare + '</button>' +
+          '<button class="sp" aria-label="收藏">' + iconSave + '</button>' +
+        '</div>' +
+        '<div class="fpost-likes">' + commafy(p.likes) + '次赞</div>' +
+        '<div class="fpost-cap"><b>' + p.user + '</b> ' + p.cap + '</div>' +
+        '<div class="fpost-cmt">查看全部 ' + commafy(p.cmt) + ' 条评论</div>' +
+        '<div class="fpost-time">' + p.time + '</div>' +
+      '</div>';
+    }
+
+    function toggleFeedLike(btn, base) {
+      var label = btn.closest('.fpost').querySelector('.fpost-likes');
+      if (btn.classList.contains('liked')) {
+        btn.classList.remove('liked'); btn.innerHTML = heartOutline; label.textContent = commafy(base) + '次赞';
+      } else {
+        btn.classList.add('liked'); btn.innerHTML = heartFilled; label.textContent = commafy(base + 1) + '次赞';
+      }
+    }
+
+    (function buildFeed() {
+      var storyUsers = [['yuna_look', 'st1'], ['minji_v', 'st2'], ['haru.31', 'st3'], ['kenta__', 'st4'], ['sara.0305', 'st5'], ['tomo.gram', 'st6']];
+      var s = '<div class="story mine"><div class="s-ring"><img src="' + AVATAR_URL + '" onerror="' + IMG_FB + '"></div><div class="s-name">我的快拍</div></div>';
+      s += storyUsers.map(function (u) {
+        return '<div class="story"><div class="s-ring"><img src="https://picsum.photos/seed/' + u[1] + '/120" onerror="' + IMG_FB + '"></div><div class="s-name">' + u[0] + '</div></div>';
+      }).join('');
+      document.getElementById('stories').innerHTML = s;
+      document.getElementById('feedPosts').innerHTML = FEED.map(fpostHTML).join('');
+    })();
+
+    function openFeed() {
+      document.getElementById('feedScroll').scrollTop = 0;
+      document.getElementById('feedPage').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeFeed() {
+      document.getElementById('feedPage').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // swipe-left on profile → open feed ; swipe-right on feed → back to profile
+    function attachSwipe(el, dirToTrigger, action) {
+      var sx = 0, sy = 0, decided = false, horiz = false, ig = false;
+      el.addEventListener('touchstart', function (e) {
+        if (e.touches.length !== 1) { ig = true; return; }
+        ig = !!(e.target.closest && e.target.closest('.highlights, .stories, #carousel'));
+        sx = e.touches[0].clientX; sy = e.touches[0].clientY; decided = false; horiz = false;
+      }, { passive: true });
+      el.addEventListener('touchmove', function (e) {
+        if (ig || e.touches.length !== 1 || decided) return;
+        var dx = e.touches[0].clientX - sx, dy = e.touches[0].clientY - sy;
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        decided = true; horiz = Math.abs(dx) > Math.abs(dy);
+      }, { passive: true });
+      el.addEventListener('touchend', function (e) {
+        if (ig) { ig = false; return; }
+        if (!decided || !horiz) return;
+        var t = e.changedTouches && e.changedTouches[0]; if (!t) return;
+        var dx = t.clientX - sx;
+        if (dirToTrigger === 'left' && dx < -60) action();
+        if (dirToTrigger === 'right' && dx > 60) action();
+      });
+    }
+    attachSwipe(document.querySelector('.app'), 'left', openFeed);
+    attachSwipe(document.getElementById('feedPage'), 'right', closeFeed);
   </script>
 </body>
 </html>
