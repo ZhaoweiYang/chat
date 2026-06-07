@@ -298,7 +298,7 @@
     <section class="profile-header">
       <div class="ph-top">
         <div class="avatar-ring">
-          <img class="avatar" alt="07_r1na"
+          <img class="avatar" id="mainAvatar" alt="07_r1na"
             src="https://picsum.photos/seed/07r1na/200"
             onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23dbdbdb%22/%3E%3Ccircle cx=%2250%22 cy=%2240%22 r=%2218%22 fill=%22%23fff%22/%3E%3Cpath d=%22M20 90c0-18 13-28 30-28s30 10 30 28z%22 fill=%22%23fff%22/%3E%3C/svg%3E'">
         </div>
@@ -377,7 +377,7 @@
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 8h16l-1.2 11a2 2 0 0 1-2 1.8H7.2a2 2 0 0 1-2-1.8z"/><path d="M8.5 8V6.5a3.5 3.5 0 0 1 7 0V8"/></svg>
     </button>
     <button class="nav-btn" aria-label="主页">
-      <img class="nav-avatar" src="https://picsum.photos/seed/07r1na/60" alt="我"
+      <img class="nav-avatar" id="navAvatar" src="https://picsum.photos/seed/07r1na/60" alt="我"
         onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23dbdbdb%22/%3E%3C/svg%3E'">
     </button>
   </nav>
@@ -395,7 +395,7 @@
 
   <!-- ===== Floating sponsored CTA ===== -->
   <a class="ad-float" href="https://zhaoweiyang.github.io/1handplayer.com/creator.html?id=rina" aria-label="Sponsored">
-    <img class="ad-thumb" src="https://picsum.photos/seed/07r1na/96" alt=""
+    <img class="ad-thumb" id="adThumb" src="https://picsum.photos/seed/07r1na/96" alt=""
       onerror="this.onerror=null;this.style.background='rgba(255,255,255,.3)'">
     <span class="ad-text">View My Private Content</span>
     <span class="ad-arrow">
@@ -404,6 +404,13 @@
   </a>
 
   <script>
+    // Real profile avatar (Instagram CDN — signed URL, may expire over time)
+    var AVATAR_URL = "https://scontent-sjc3-1.cdninstagram.com/v/t51.82787-19/683008028_18120975559572342_8910915196578531166_n.jpg?efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby43NjguYzIifQ&_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_cat=106&_nc_oc=Q6cZ2gGQNl_ux8MiozeQ8vavqqh4IN8LAwLaSPPO3GTu0mZRc-bfcK73X1S3dAN669LY5MdR4x8GIJBt2uJotR2_RU1E&_nc_ohc=-9BKuHIjClAQ7kNvwEBlhqA&_nc_gid=_8aKpHo8be_bgeXVmpgMZQ&edm=APoiHPcBAAAA&ccb=7-5&oh=00_Af-dZ0a7XfZnKExIPkXGK3arqm1Q4xC7QmYyF6heOHohHw&oe=6A2B0B63&_nc_sid=22de04";
+    ['mainAvatar', 'navAvatar', 'adThumb'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.src = AVATAR_URL;
+    });
+
     function rnd(n) { var x = Math.sin(n * 99.13) * 10000; return x - Math.floor(x); }
     function commafy(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
     function fmtCn(n) { return n >= 10000 ? (n / 10000).toFixed(1).replace('.0', '') + '万' : commafy(n); }
@@ -547,7 +554,7 @@
         ? '<div class="reel-audio">' + noteIcon + '<span>原声 · 07_r1na</span></div>' : '';
       var html =
         '<div class="post-head">' +
-          '<div class="pa"><img class="pa-inner" src="https://picsum.photos/seed/07r1na/68" onerror="' + IMG_FB + '"></div>' +
+          '<div class="pa"><img class="pa-inner" src="' + AVATAR_URL + '" onerror="' + IMG_FB + '"></div>' +
           '<div>' +
             '<div class="ph-name">07_r1na</div>' +
             '<div class="ph-loc">Seoul, Korea</div>' +
