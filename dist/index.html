@@ -241,6 +241,25 @@
       72%  { opacity: 1; }
       100% { opacity: 0; }
     }
+
+    /* floating sponsored CTA (shown on profile + post detail) */
+    .ad-float {
+      position: fixed; left: 50%; transform: translateX(-50%);
+      bottom: calc(60px + env(safe-area-inset-bottom));
+      width: calc(100% - 24px); max-width: 446px; z-index: 60;
+      display: flex; align-items: center; gap: 11px;
+      padding: 8px 14px 8px 8px; border-radius: 14px; cursor: pointer;
+      background: linear-gradient(90deg, #7b2ff7 0%, #a93ce0 60%, #c13fd6 100%);
+      box-shadow: 0 6px 22px rgba(124, 47, 247, .38);
+      text-decoration: none; animation: adIn .35s ease;
+    }
+    @keyframes adIn { from { opacity: 0; transform: translateX(-50%) translateY(10px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+    .ad-float .ad-thumb {
+      width: 42px; height: 42px; border-radius: 10px; object-fit: cover;
+      flex-shrink: 0; background: rgba(255,255,255,.25);
+    }
+    .ad-float .ad-text { color: #fff; font-size: 15px; font-weight: 700; flex: 1; line-height: 1.15; letter-spacing: .2px; }
+    .ad-float .ad-arrow { color: #fff; display: flex; flex-shrink: 0; opacity: .95; }
   </style>
 </head>
 <body>
@@ -346,6 +365,16 @@
     </div>
     <div class="modal-scroll" id="modalScroll"></div>
   </div>
+
+  <!-- ===== Floating sponsored CTA ===== -->
+  <a class="ad-float" href="#" onclick="return false;" aria-label="Sponsored">
+    <img class="ad-thumb" src="https://picsum.photos/seed/iambe11a/96" alt=""
+      onerror="this.onerror=null;this.style.background='rgba(255,255,255,.3)'">
+    <span class="ad-text">View My Private Content</span>
+    <span class="ad-arrow">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+    </span>
+  </a>
 
   <script>
     function rnd(n) { var x = Math.sin(n * 99.13) * 10000; return x - Math.floor(x); }
