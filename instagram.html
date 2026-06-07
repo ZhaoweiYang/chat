@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#ffffff">
-  <title>세제로 (@iamsezero) • Instagram photos and videos</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3CradialGradient id='g' r='150%25' cx='30%25' cy='107%25'%3E%3Cstop offset='0' stop-color='%23fdf497'/%3E%3Cstop offset='.05' stop-color='%23fdf497'/%3E%3Cstop offset='.45' stop-color='%23fd5949'/%3E%3Cstop offset='.6' stop-color='%23d6249f'/%3E%3Cstop offset='.9' stop-color='%23285AEB'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='24' height='24' rx='6' fill='url(%23g)'/%3E%3Ccircle cx='12' cy='12' r='4.5' fill='none' stroke='%23fff' stroke-width='1.6'/%3E%3Ccircle cx='17' cy='7' r='1.2' fill='%23fff'/%3E%3Crect x='4.5' y='4.5' width='15' height='15' rx='4.5' fill='none' stroke='%23fff' stroke-width='1.6'/%3E%3C/svg%3E">
+  <title>__iambe11a • Instagram</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3CradialGradient id='g' r='150%25' cx='30%25' cy='107%25'%3E%3Cstop offset='0' stop-color='%23fdf497'/%3E%3Cstop offset='.45' stop-color='%23fd5949'/%3E%3Cstop offset='.6' stop-color='%23d6249f'/%3E%3Cstop offset='.9' stop-color='%23285AEB'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='24' height='24' rx='6' fill='url(%23g)'/%3E%3Ccircle cx='12' cy='12' r='4.5' fill='none' stroke='%23fff' stroke-width='1.6'/%3E%3Ccircle cx='17' cy='7' r='1.2' fill='%23fff'/%3E%3Crect x='4.5' y='4.5' width='15' height='15' rx='4.5' fill='none' stroke='%23fff' stroke-width='1.6'/%3E%3C/svg%3E">
   <style>
     :root {
       --ig-bg: #ffffff;
@@ -13,12 +13,9 @@
       --ig-secondary: #737373;
       --ig-border: #dbdbdb;
       --ig-blue: #0095f6;
-      --ig-blue-hover: #1877f2;
       --ig-grey-btn: #efefef;
-      --ig-grey-btn-hover: #dbdbdb;
       --ig-red: #ed4956;
     }
-
     @media (prefers-color-scheme: dark) {
       :root {
         --ig-bg: #000000;
@@ -26,27 +23,18 @@
         --ig-secondary: #a8a8a8;
         --ig-border: #262626;
         --ig-grey-btn: #363636;
-        --ig-grey-btn-hover: #262626;
       }
     }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html, body {
       background: var(--ig-bg);
       color: var(--ig-text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", Helvetica, Arial, sans-serif, "Apple Color Emoji";
       font-size: 14px;
       line-height: 18px;
       -webkit-font-smoothing: antialiased;
     }
-
     .app {
       max-width: 470px;
       margin: 0 auto;
@@ -54,482 +42,190 @@
       min-height: 100dvh;
       border-left: 1px solid var(--ig-border);
       border-right: 1px solid var(--ig-border);
-      padding-bottom: 56px;
+      padding-bottom: 52px;
       background: var(--ig-bg);
     }
-
     svg { display: block; }
 
     /* ===== Top bar ===== */
     .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 44px;
-      padding: 0 8px 0 16px;
+      position: sticky; top: 0; z-index: 20;
+      display: flex; align-items: center;
+      height: 48px; padding: 0 10px;
       background: var(--ig-bg);
-      border-bottom: 0.5px solid var(--ig-border);
     }
+    .topbar .back { background: none; border: none; color: var(--ig-text); cursor: pointer; padding: 6px; display: flex; }
     .topbar .username {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 20px;
-      font-weight: 700;
+      display: flex; align-items: center; gap: 5px;
+      font-size: 22px; font-weight: 700; margin-left: 4px;
     }
-    .topbar .username .lock { margin-right: 1px; }
-    .topbar .username .verified { margin-left: 1px; }
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
+    .topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 6px; }
     .icon-btn {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: none;
-      border: none;
-      color: var(--ig-text);
-      cursor: pointer;
-      position: relative;
-    }
-    .icon-btn .badge {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      min-width: 16px;
-      height: 16px;
-      padding: 0 4px;
-      background: var(--ig-red);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 600;
-      line-height: 16px;
-      border-radius: 9px;
-      text-align: center;
+      width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+      background: none; border: none; color: var(--ig-text); cursor: pointer; position: relative;
     }
 
     /* ===== Profile header ===== */
-    .profile-header {
-      padding: 16px 16px 0;
-    }
-    .ph-top {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-    }
-    .avatar-wrap {
-      position: relative;
-      flex-shrink: 0;
-    }
+    .profile-header { padding: 8px 16px 0; }
+    .ph-top { display: flex; align-items: center; gap: 24px; }
     .avatar-ring {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      padding: 3px;
+      width: 92px; height: 92px; border-radius: 50%; padding: 3px; flex-shrink: 0;
       background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
     }
     .avatar-ring .avatar {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid var(--ig-bg);
-      background: #efefef;
-      display: block;
+      width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+      border: 3px solid var(--ig-bg); background: #efefef; display: block;
     }
-    .note-bubble {
-      position: absolute;
-      top: -22px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--ig-grey-btn);
-      color: var(--ig-text);
-      font-size: 11px;
-      font-weight: 500;
-      padding: 6px 10px;
-      border-radius: 14px;
-      white-space: nowrap;
-      box-shadow: 0 1px 2px rgba(0,0,0,.08);
-    }
-    .note-bubble::after,
-    .note-bubble::before {
-      content: "";
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      border-radius: 50%;
-      background: var(--ig-grey-btn);
-    }
-    .note-bubble::before { width: 8px; height: 8px; bottom: -8px; }
-    .note-bubble::after { width: 4px; height: 4px; bottom: -14px; }
-
-    .stats {
-      flex: 1;
-      display: flex;
-      justify-content: space-around;
-      text-align: center;
-    }
+    .stats { flex: 1; display: flex; justify-content: space-around; text-align: center; }
     .stat { cursor: pointer; }
-    .stat .num {
-      font-size: 17px;
-      font-weight: 700;
-      line-height: 20px;
-    }
-    .stat .label {
-      font-size: 13px;
-      color: var(--ig-text);
-    }
+    .stat .num { font-size: 18px; font-weight: 700; line-height: 22px; }
+    .stat .label { font-size: 13px; color: var(--ig-text); }
 
-    .ph-bio {
-      padding-top: 12px;
-      font-size: 14px;
-      line-height: 19px;
-    }
-    .display-name {
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .category { color: var(--ig-secondary); }
-    .bio { white-space: pre-line; margin-top: 1px; }
-    .bio .mention, .bio .tag { color: #00376b; }
-    @media (prefers-color-scheme: dark) {
-      .bio .mention, .bio .tag { color: #e0f1ff; }
-    }
-    .bio-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      color: var(--ig-text);
-      font-weight: 600;
-      text-decoration: none;
-      margin-top: 1px;
-    }
-    .bio-link svg { transform: rotate(0deg); }
     .followed-by {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 10px;
-      color: var(--ig-secondary);
-      font-size: 12px;
+      display: flex; align-items: center; gap: 9px;
+      margin-top: 14px; color: var(--ig-text); font-size: 13px; line-height: 16px;
     }
-    .followed-by .faces {
-      display: flex;
-    }
+    .followed-by .faces { display: flex; flex-shrink: 0; }
     .followed-by .faces img {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: 1.5px solid var(--ig-bg);
-      object-fit: cover;
-      margin-left: -6px;
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 1.5px solid var(--ig-bg); object-fit: cover; margin-left: -7px; background: #dbdbdb;
     }
     .followed-by .faces img:first-child { margin-left: 0; }
+    .followed-by .fb-text { color: var(--ig-secondary); }
+    .followed-by .fb-text b { color: var(--ig-text); font-weight: 600; }
 
     /* ===== Action buttons ===== */
-    .actions {
-      display: flex;
-      gap: 6px;
-      padding: 14px 16px 0;
-    }
+    .actions { display: flex; gap: 6px; padding: 14px 16px 0; }
     .btn {
-      height: 32px;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--ig-text);
-      background: var(--ig-grey-btn);
+      height: 32px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;
+      color: var(--ig-text); background: var(--ig-grey-btn); font-family: inherit;
     }
     .btn:active { opacity: .7; }
     .btn.flex { flex: 1; }
-    .btn.follow {
-      background: var(--ig-blue);
-      color: #fff;
-    }
-    .btn.follow.following { background: var(--ig-grey-btn); color: var(--ig-text); }
-    .btn.icon { width: 32px; flex: none; }
-
-    /* ===== Highlights ===== */
-    .highlights {
-      display: flex;
-      gap: 16px;
-      padding: 18px 16px 8px;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .highlights::-webkit-scrollbar { display: none; }
-    .highlight {
-      flex-shrink: 0;
-      width: 64px;
-      text-align: center;
-      cursor: pointer;
-    }
-    .highlight .h-ring {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      border: 1px solid var(--ig-border);
-      padding: 3px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    .highlight .h-ring img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    .highlight.new .h-ring {
-      font-size: 26px;
-      color: var(--ig-text);
-      font-weight: 300;
-    }
-    .highlight .h-label {
-      font-size: 12px;
-      margin-top: 6px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    .btn.icon { width: 40px; flex: none; }
+    .btn.following-blue { background: var(--ig-blue); color: #fff; }
 
     /* ===== Tabs ===== */
     .tabs {
-      position: sticky;
-      top: 44px;
-      z-index: 10;
-      display: flex;
-      border-top: 0.5px solid var(--ig-border);
-      background: var(--ig-bg);
-      margin-top: 4px;
+      position: sticky; top: 48px; z-index: 10;
+      display: flex; border-top: 0.5px solid var(--ig-border);
+      background: var(--ig-bg); margin-top: 16px;
     }
     .tab {
-      flex: 1;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--ig-secondary);
-      border-bottom: 1px solid transparent;
-      cursor: pointer;
-      background: none;
-      border-top: none;
-      border-left: none;
-      border-right: none;
+      flex: 1; height: 44px; display: flex; align-items: center; justify-content: center;
+      color: var(--ig-secondary); border-bottom: 1px solid transparent; cursor: pointer;
+      background: none; border-top: none; border-left: none; border-right: none;
     }
-    .tab.active {
-      color: var(--ig-text);
-      border-bottom: 1px solid var(--ig-text);
-    }
+    .tab.active { color: var(--ig-text); border-bottom: 1px solid var(--ig-text); }
 
     /* ===== Grid ===== */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-    }
-    .cell {
-      position: relative;
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
-      background: #efefef;
-    }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; }
+    .cell { position: relative; aspect-ratio: 3 / 4; overflow: hidden; background: #efefef; cursor: pointer; }
     @media (prefers-color-scheme: dark) { .cell { background: #1a1a1a; } }
-    .cell img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+    .cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .cell .corner { position: absolute; top: 7px; right: 7px; color: #fff; filter: drop-shadow(0 1px 2px rgba(0,0,0,.45)); }
+    .cell .seen {
+      position: absolute; left: 8px; color: #fff; font-size: 13px; font-weight: 600;
+      filter: drop-shadow(0 1px 3px rgba(0,0,0,.6));
     }
-    .cell .corner {
-      position: absolute;
-      top: 7px;
-      right: 7px;
-      color: #fff;
-      filter: drop-shadow(0 1px 2px rgba(0,0,0,.4));
-    }
-    .cell .views {
-      position: absolute;
-      bottom: 7px;
-      left: 7px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 600;
-      filter: drop-shadow(0 1px 2px rgba(0,0,0,.5));
-    }
+    .cell .seen.mid { top: 50%; transform: translateY(-50%); }
+    .cell .seen.bottom { bottom: 8px; }
 
     /* ===== Bottom nav ===== */
     .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 470px;
-      height: 50px;
-      padding-bottom: env(safe-area-inset-bottom);
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      background: var(--ig-bg);
-      border-top: 0.5px solid var(--ig-border);
-      z-index: 30;
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 470px; height: 50px; padding-bottom: env(safe-area-inset-bottom);
+      display: flex; align-items: center; justify-content: space-around;
+      background: var(--ig-bg); border-top: 0.5px solid var(--ig-border); z-index: 30;
     }
-    .nav-btn {
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: none;
-      border: none;
-      color: var(--ig-text);
-      cursor: pointer;
-    }
-    .nav-btn .nav-avatar {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1px solid var(--ig-text);
-    }
+    .nav-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: none; border: none; color: var(--ig-text); cursor: pointer; }
+    .nav-btn .nav-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid var(--ig-text); }
 
     /* ===== Post detail modal ===== */
     .modal {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      background: var(--ig-bg);
-      display: none;
-      flex-direction: column;
-      max-width: 470px;
-      margin: 0 auto;
+      position: fixed; inset: 0; z-index: 50; background: var(--ig-bg);
+      display: none; flex-direction: column; max-width: 470px; margin: 0 auto;
       animation: slideUp 0.22s ease;
     }
     .modal.open { display: flex; }
-    @keyframes slideUp {
-      from { transform: translateY(14px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
+    @keyframes slideUp { from { transform: translateY(14px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .modal-bar {
-      display: flex;
-      align-items: center;
-      height: 44px;
-      flex-shrink: 0;
-      padding: 0 8px;
+      display: flex; align-items: center; height: 48px; flex-shrink: 0; padding: 0 6px;
       border-bottom: 0.5px solid var(--ig-border);
-      gap: 6px;
     }
-    .modal-bar .back {
-      background: none;
-      border: none;
-      color: var(--ig-text);
-      cursor: pointer;
-      display: flex;
-      padding: 6px;
-    }
-    .modal-bar .mb-title {
-      font-size: 12px;
-      color: var(--ig-secondary);
-      font-weight: 600;
-    }
-    .modal-bar .mb-title b { color: var(--ig-text); font-size: 15px; display: block; }
+    .modal-bar .back { background: none; border: none; color: var(--ig-text); cursor: pointer; display: flex; padding: 6px; }
+    .modal-bar .mb-title { font-size: 16px; font-weight: 700; margin-left: 4px; }
     .modal-scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1; }
 
-    .post-head {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-    }
-    .post-head .pa {
-      width: 32px; height: 32px; border-radius: 50%;
-      object-fit: cover; flex-shrink: 0;
-      padding: 1.5px;
-      background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
-    }
-    .post-head .pa-inner {
-      width: 100%; height: 100%; border-radius: 50%;
-      border: 2px solid var(--ig-bg); object-fit: cover; display: block;
-    }
-    .post-head .ph-name { font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 3px; }
-    .post-head .ph-loc { font-size: 11px; color: var(--ig-text); }
-    .post-head .more { margin-left: auto; background: none; border: none; color: var(--ig-text); cursor: pointer; font-size: 18px; padding: 4px 8px; }
+    .post-head { display: flex; align-items: center; gap: 10px; padding: 10px 12px; }
+    .post-head .pa { width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; padding: 1.6px;
+      background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); }
+    .post-head .pa-inner { width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--ig-bg); object-fit: cover; display: block; background: #dbdbdb; }
+    .post-head .ph-name { font-weight: 600; font-size: 13px; }
+    .post-head .ph-loc { font-size: 11px; }
+    .post-head .more { margin-left: auto; background: none; border: none; color: var(--ig-text); cursor: pointer; padding: 4px 8px; }
 
-    .post-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #efefef; display: block; }
-
-    .post-actions {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 8px 12px 4px;
+    /* media (single / carousel / reel) */
+    .post-media { position: relative; width: 100%; background: #000; }
+    .post-img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: #efefef; display: block; }
+    .carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+    .carousel::-webkit-scrollbar { display: none; }
+    .carousel .slide { flex: 0 0 100%; scroll-snap-align: center; }
+    .counter {
+      position: absolute; top: 10px; right: 12px; background: rgba(0,0,0,.6); color: #fff;
+      font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 11px;
     }
+    .dots { position: absolute; bottom: 10px; left: 0; right: 0; display: flex; justify-content: center; gap: 4px; }
+    .dots .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.55); transition: background .2s, transform .2s; }
+    .dots .dot.on { background: #0095f6; }
+    .reel-play {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none;
+    }
+    .reel-play svg { filter: drop-shadow(0 1px 4px rgba(0,0,0,.5)); opacity: .92; }
+    .reel-views {
+      position: absolute; bottom: 10px; left: 12px; display: flex; align-items: center; gap: 5px;
+      color: #fff; font-size: 13px; font-weight: 600; filter: drop-shadow(0 1px 3px rgba(0,0,0,.6));
+    }
+    .reel-audio {
+      display: flex; align-items: center; gap: 6px; padding: 9px 12px 2px;
+      font-size: 12px; color: var(--ig-text);
+    }
+
+    .post-actions { display: flex; align-items: center; gap: 15px; padding: 9px 12px 4px; }
     .post-actions .pa-btn { background: none; border: none; color: var(--ig-text); cursor: pointer; display: flex; padding: 0; }
     .post-actions .pa-btn.liked { color: var(--ig-red); }
     .post-actions .spacer { margin-left: auto; }
 
     .post-likes { padding: 2px 12px; font-weight: 600; font-size: 13px; }
-    .post-caption { padding: 4px 12px; font-size: 13px; line-height: 18px; }
+    .post-caption { padding: 4px 12px; font-size: 13px; line-height: 18px; white-space: pre-line; }
     .post-caption b { font-weight: 600; }
-    .post-caption .more-link { color: var(--ig-secondary); cursor: pointer; }
-    .post-time { padding: 4px 12px 2px; color: var(--ig-secondary); font-size: 10px; text-transform: uppercase; letter-spacing: .2px; }
+    .post-time { padding: 5px 12px 2px; color: var(--ig-secondary); font-size: 11px; }
 
-    .comments { padding: 6px 12px 16px; }
-    .comments .view-all { color: var(--ig-secondary); font-size: 13px; margin-bottom: 10px; cursor: pointer; }
-    .comment { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
-    .comment .c-av { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #dbdbdb; }
+    .comments { padding: 8px 12px 20px; }
+    .comments .view-all { color: var(--ig-secondary); font-size: 13px; margin-bottom: 12px; cursor: pointer; }
+    .comment { display: flex; gap: 10px; margin-bottom: 13px; align-items: flex-start; }
+    .comment .c-av { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #dbdbdb; }
     .comment .c-body { flex: 1; font-size: 13px; line-height: 17px; }
     .comment .c-body b { font-weight: 600; }
-    .comment .c-meta { margin-top: 3px; font-size: 11px; color: var(--ig-secondary); display: flex; gap: 14px; }
-    .comment .c-like { margin-left: auto; background: none; border: none; color: var(--ig-secondary); cursor: pointer; display: flex; padding-top: 4px; }
+    .comment .c-meta { margin-top: 4px; font-size: 12px; color: var(--ig-secondary); display: flex; gap: 16px; }
+    .comment .c-like { margin-left: auto; background: none; border: none; color: var(--ig-secondary); cursor: pointer; display: flex; padding-top: 5px; }
   </style>
 </head>
 <body>
   <div class="app">
     <!-- ===== Top bar ===== -->
     <header class="topbar">
-      <div class="username">
-        <svg class="lock" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M12 1a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5zm3 8H9V6a3 3 0 0 1 6 0v3z"/>
-        </svg>
-        iamsezero
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="margin-left:2px" aria-hidden="true">
-          <path d="M12 15.5 5.5 9l1.4-1.4 5.1 5.1 5.1-5.1L18.5 9 12 15.5z"/>
-        </svg>
-      </div>
+      <button class="back" aria-label="返回">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="username">__iambe11a</div>
       <div class="topbar-actions">
-        <button class="icon-btn" aria-label="New post">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-            <rect x="3" y="3" width="18" height="18" rx="5"/>
-            <line x1="12" y1="8" x2="12" y2="16"/>
-            <line x1="8" y1="12" x2="16" y2="12"/>
-          </svg>
+        <button class="icon-btn" aria-label="通知">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
         </button>
-        <button class="icon-btn" aria-label="Menu">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="4" y1="7" x2="20" y2="7"/>
-            <line x1="4" y1="12" x2="20" y2="12"/>
-            <line x1="4" y1="17" x2="20" y2="17"/>
-          </svg>
-          <span class="badge">3</span>
+        <button class="icon-btn" aria-label="更多">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
         </button>
       </div>
     </header>
@@ -537,116 +233,51 @@
     <!-- ===== Profile ===== -->
     <section class="profile-header">
       <div class="ph-top">
-        <div class="avatar-wrap">
-          <div class="note-bubble">촬영중 📸</div>
-          <div class="avatar-ring">
-            <img class="avatar" alt="iamsezero"
-              src="https://picsum.photos/seed/iamsezero/200"
-              onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23dbdbdb%22/%3E%3Ccircle cx=%2250%22 cy=%2240%22 r=%2218%22 fill=%22%23fff%22/%3E%3Cpath d=%22M20 90c0-18 13-28 30-28s30 10 30 28z%22 fill=%22%23fff%22/%3E%3C/svg%3E'">
-          </div>
+        <div class="avatar-ring">
+          <img class="avatar" alt="__iambe11a"
+            src="https://picsum.photos/seed/iambe11a/200"
+            onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23dbdbdb%22/%3E%3Ccircle cx=%2250%22 cy=%2240%22 r=%2218%22 fill=%22%23fff%22/%3E%3Cpath d=%22M20 90c0-18 13-28 30-28s30 10 30 28z%22 fill=%22%23fff%22/%3E%3C/svg%3E'">
         </div>
         <div class="stats">
-          <div class="stat"><div class="num">825</div><div class="label">posts</div></div>
-          <div class="stat"><div class="num">331k</div><div class="label">followers</div></div>
-          <div class="stat"><div class="num">354</div><div class="label">following</div></div>
+          <div class="stat"><div class="num">631</div><div class="label">帖子</div></div>
+          <div class="stat"><div class="num">19.1万</div><div class="label">粉丝</div></div>
+          <div class="stat"><div class="num">395</div><div class="label">关注</div></div>
         </div>
       </div>
 
-      <div class="ph-bio">
-        <div class="display-name">
-          세제로
+      <div class="followed-by">
+        <div class="faces">
+          <img src="https://picsum.photos/seed/_sicong/40" alt="" onerror="this.style.visibility='hidden'">
+          <img src="https://picsum.photos/seed/sarara/40" alt="" onerror="this.style.visibility='hidden'">
+          <img src="https://picsum.photos/seed/fb3/40" alt="" onerror="this.style.visibility='hidden'">
         </div>
-        <div class="category">Digital creator</div>
-        <div class="bio">안녕하세영🙋🏻
-📸🎥
-💌 154987jsy@gmail.com</div>
-        <a class="bio-link" href="#" onclick="return false;">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/>
-            <path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>
-          </svg>
-          투아울라 (Tu Aula)
-        </a>
-        <div class="followed-by">
-          <div class="faces">
-            <img src="https://picsum.photos/seed/f1/40" alt="" onerror="this.style.display='none'">
-            <img src="https://picsum.photos/seed/f2/40" alt="" onerror="this.style.display='none'">
-            <img src="https://picsum.photos/seed/f3/40" alt="" onerror="this.style.display='none'">
-          </div>
-          <span>Followed by <b style="color:var(--ig-text)">tuaula_official</b>, <b style="color:var(--ig-text)">_jsy._</b> + 12 more</span>
-        </div>
+        <span class="fb-text"><b>_sicong</b>、<b>sarara.cui</b> 和其他 5 位用户关注了</span>
       </div>
 
       <div class="actions">
-        <button class="btn follow flex" id="followBtn" onclick="toggleFollow()">Follow</button>
-        <button class="btn flex">Message</button>
-        <button class="btn icon" aria-label="Suggested">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="12" y1="5" x2="12" y2="19"/>
-            <line x1="5" y1="12" x2="19" y2="12"/>
-            <circle cx="18" cy="18" r="0"/>
-          </svg>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="margin-left:-1px">
-            <path d="M12 15.5 5.5 9l1.4-1.4 5.1 5.1 5.1-5.1L18.5 9 12 15.5z"/>
-          </svg>
+        <button class="btn flex" id="followBtn" onclick="toggleFollow()">已关注
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 15.5 5.5 9l1.4-1.4 5.1 5.1 5.1-5.1L18.5 9 12 15.5z"/></svg>
+        </button>
+        <button class="btn flex">发消息</button>
+        <button class="btn icon" aria-label="推荐">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20a6 6 0 0 1 11 0"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>
         </button>
       </div>
     </section>
 
-    <!-- ===== Highlights ===== -->
-    <div class="highlights">
-      <div class="highlight new">
-        <div class="h-ring">+</div>
-        <div class="h-label">New</div>
-      </div>
-      <div class="highlight">
-        <div class="h-ring"><img src="https://picsum.photos/seed/hl1/120" alt="" onerror="this.parentNode.style.background='#c7c7c7'"></div>
-        <div class="h-label">일상</div>
-      </div>
-      <div class="highlight">
-        <div class="h-ring"><img src="https://picsum.photos/seed/hl2/120" alt="" onerror="this.parentNode.style.background='#c7c7c7'"></div>
-        <div class="h-label">투아울라</div>
-      </div>
-      <div class="highlight">
-        <div class="h-ring"><img src="https://picsum.photos/seed/hl3/120" alt="" onerror="this.parentNode.style.background='#c7c7c7'"></div>
-        <div class="h-label">OOTD</div>
-      </div>
-      <div class="highlight">
-        <div class="h-ring"><img src="https://picsum.photos/seed/hl4/120" alt="" onerror="this.parentNode.style.background='#c7c7c7'"></div>
-        <div class="h-label">여행</div>
-      </div>
-      <div class="highlight">
-        <div class="h-ring"><img src="https://picsum.photos/seed/hl5/120" alt="" onerror="this.parentNode.style.background='#c7c7c7'"></div>
-        <div class="h-label">📷</div>
-      </div>
-    </div>
-
     <!-- ===== Tabs ===== -->
     <nav class="tabs">
-      <button class="tab active" data-tab="grid" onclick="switchTab(this)" aria-label="Posts">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <rect x="3" y="3" width="18" height="18" rx="1.5"/>
-          <line x1="9" y1="3" x2="9" y2="21"/>
-          <line x1="15" y1="3" x2="15" y2="21"/>
-          <line x1="3" y1="9" x2="21" y2="9"/>
-          <line x1="3" y1="15" x2="21" y2="15"/>
-        </svg>
+      <button class="tab active" onclick="switchTab(this)" aria-label="帖子">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="1.5"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
       </button>
-      <button class="tab" data-tab="reels" onclick="switchTab(this)" aria-label="Reels">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
-          <rect x="3" y="3" width="18" height="18" rx="3"/>
-          <line x1="3" y1="8" x2="21" y2="8"/>
-          <path d="M8 3 11 8M14 3 17 8"/>
-          <path d="M10 11.5v5l4.5-2.5z" fill="currentColor" stroke="none"/>
-        </svg>
+      <button class="tab" onclick="switchTab(this)" aria-label="Reels">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="3" y1="8" x2="21" y2="8"/><path d="M8 3 11 8M14 3 17 8"/><path d="M10 11.5v5l4.5-2.5z" fill="currentColor" stroke="none"/></svg>
       </button>
-      <button class="tab" data-tab="tagged" onclick="switchTab(this)" aria-label="Tagged">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
-          <path d="M3 8a2 2 0 0 1 2-2h3l2-2h4l2 2h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" style="display:none"/>
-          <path d="M21 7v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
-          <circle cx="12" cy="10" r="2.4"/>
-          <path d="M7.5 18a4.6 4.6 0 0 1 9 0"/>
-        </svg>
+      <button class="tab" onclick="switchTab(this)" aria-label="转发">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+      </button>
+      <button class="tab" onclick="switchTab(this)" aria-label="标记">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M21 7v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><circle cx="12" cy="10" r="2.4"/><path d="M7.5 18a4.6 4.6 0 0 1 9 0"/></svg>
       </button>
     </nav>
 
@@ -656,33 +287,20 @@
 
   <!-- ===== Bottom nav ===== -->
   <nav class="bottom-nav">
-    <button class="nav-btn" aria-label="Home">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 3 3 10v10a1 1 0 0 0 1 1h5v-7h6v7h5a1 1 0 0 0 1-1V10z"/>
-      </svg>
+    <button class="nav-btn" aria-label="主页">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3 3 10v10a1 1 0 0 0 1 1h5v-7h6v7h5a1 1 0 0 0 1-1V10z"/></svg>
     </button>
-    <button class="nav-btn" aria-label="Search">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="7"/>
-        <line x1="16.5" y1="16.5" x2="21" y2="21" stroke-linecap="round"/>
-      </svg>
+    <button class="nav-btn" aria-label="搜索">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21" stroke-linecap="round"/></svg>
     </button>
     <button class="nav-btn" aria-label="Reels">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="3"/>
-        <line x1="3" y1="8" x2="21" y2="8"/>
-        <path d="M8 3 11 8M14 3 17 8"/>
-        <path d="M10 11.5v5l4.5-2.5z" fill="currentColor" stroke="none"/>
-      </svg>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="3" y1="8" x2="21" y2="8"/><path d="M8 3 11 8M14 3 17 8"/><path d="M10 11.5v5l4.5-2.5z" fill="currentColor" stroke="none"/></svg>
     </button>
-    <button class="nav-btn" aria-label="Shop">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
-        <path d="M4 8h16l-1.2 11a2 2 0 0 1-2 1.8H7.2a2 2 0 0 1-2-1.8z"/>
-        <path d="M8.5 8V6.5a3.5 3.5 0 0 1 7 0V8"/>
-      </svg>
+    <button class="nav-btn" aria-label="商店">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 8h16l-1.2 11a2 2 0 0 1-2 1.8H7.2a2 2 0 0 1-2-1.8z"/><path d="M8.5 8V6.5a3.5 3.5 0 0 1 7 0V8"/></svg>
     </button>
-    <button class="nav-btn" aria-label="Profile">
-      <img class="nav-avatar" src="https://picsum.photos/seed/iamsezero/60" alt="Profile"
+    <button class="nav-btn" aria-label="主页">
+      <img class="nav-avatar" src="https://picsum.photos/seed/iambe11a/60" alt="我"
         onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23dbdbdb%22/%3E%3C/svg%3E'">
     </button>
   </nav>
@@ -690,53 +308,63 @@
   <!-- ===== Post detail modal ===== -->
   <div class="modal" id="postModal">
     <div class="modal-bar">
-      <button class="back" onclick="closePost()" aria-label="Back">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="15 18 9 12 15 6"/>
-        </svg>
+      <button class="back" onclick="closePost()" aria-label="返回">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
-      <div class="mb-title">iamsezero<b>게시물</b></div>
+      <div class="mb-title">帖子</div>
     </div>
     <div class="modal-scroll" id="modalScroll"></div>
   </div>
 
   <script>
-    // ---- Build a 3-column post grid (Instagram style) ----
-    var multiIcon = '<svg class="corner" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16 2H6a2 2 0 0 0-2 2v10h2V4h10zm3 4H10a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2z"/></svg>';
-    var reelIcon  = '<svg class="corner" width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3 19 12 5 21z"/></svg>';
-
-    function fmtViews(n){ return n >= 1000 ? (n/1000).toFixed(1).replace('.0','') + 'k' : n; }
-
-    // Deterministic pseudo-random so content is stable per post
     function rnd(n) { var x = Math.sin(n * 99.13) * 10000; return x - Math.floor(x); }
     function commafy(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+    function fmtCn(n) { return n >= 10000 ? (n / 10000).toFixed(1).replace('.0', '') + '万' : commafy(n); }
 
-    // ---- Generated content pools (Korean Instagram style) ----
+    // ---- icons ----
+    var multiIcon = '<svg class="corner" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16 2H6a2 2 0 0 0-2 2v10h2V4h10zm3 4H10a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2z"/></svg>';
+    var reelIcon  = '<svg class="corner" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" stroke-width="0"/><path d="M9 7.5v9l7-4.5z"/></svg>';
+    var bigPlay = '<svg width="56" height="56" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>';
+    var heartOutline = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-10-9.2C.6 9 1.5 5.6 4.5 4.8 6.7 4.2 8.8 5.3 12 8c3.2-2.7 5.3-3.8 7.5-3.2 3 .8 3.9 4.2 2.5 7-2.5 4.6-10 9.2-10 9.2z"/></svg>';
+    var heartFilled  = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-10-9.2C.6 9 1.5 5.6 4.5 4.8 6.7 4.2 8.8 5.3 12 8c3.2-2.7 5.3-3.8 7.5-3.2 3 .8 3.9 4.2 2.5 7-2.5 4.6-10 9.2-10 9.2z"/></svg>';
+    var iconComment = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.4 9 9 0 0 1-3.9-.9L3 20l1.1-4.1A8.38 8.38 0 0 1 3 11.5a8.5 8.5 0 0 1 9-8.4 8.48 8.48 0 0 1 9 8.4z"/></svg>';
+    var iconShare = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+    var iconSave = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>';
+    var smallHeart = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-10-9.2C.6 9 1.5 5.6 4.5 4.8 6.7 4.2 8.8 5.3 12 8c3.2-2.7 5.3-3.8 7.5-3.2 3 .8 3.9 4.2 2.5 7-2.5 4.6-10 9.2-10 9.2z"/></svg>';
+    var noteIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>';
+
+    // ---- generated content (Chinese style) ----
     var CAPTIONS = [
-      '오늘의 데일리룩 🤍\n#투아울라 #ootd #데일리룩',
-      '코 끝이 시리지만 행복해😝',
-      '주말 나들이 다녀왔어요 🍂 다들 어디 가셨어요?',
-      '이 색감 너무 좋지 않나요? 📸✨',
-      '협찬) 투아울라 신상 자켓 🧥\n프로필 링크에서 만나요 (코드 SEZERO 10%)',
-      '가을 감성 가득 담아왔어요 🍁',
-      '오랜만에 카페 투어 ☕️ 여기 분위기 미쳤다',
-      '다들 좋은 하루 보내세요 🙋‍♀️',
-      '새 옷 입고 신나서 한 컷 👗',
-      '노을이 너무 예뻐서 한참 봤네요 📷'
+      'London diaries 🤍\n#ootd #伦敦 #穿搭分享',
+      '伦敦的天气太好了☀️ 出来走走',
+      '今天的穿搭 你们喜欢吗~ 👗',
+      '街拍随手一拍都好出片📷',
+      '和姐妹的伦敦 citywalk 🇬🇧',
+      '新发色满意度100%💇‍♀️',
+      '咖啡店探店 ☕️ 氛围感拉满',
+      '愿你们今天也元气满满🙋‍♀️',
+      '这条裙子也太显气质了吧✨',
+      '夕阳下的随拍🌇 晚安'
     ];
-    var TIMES = ['3시간', '5시간', '9시간', '1일', '2일', '4일', '6일', '1주', '2주', '3주'];
-    var C_USERS = ['j.sy_jeong','min__99','hyunwoo.k','_seoyeon_','coco.daily','yuna_look','dani.kim_','soo._.young','haeun2','jiwon.ootd','mina_grm','tuaula_official','kkular_','daily.gram2','seoul_walker','rin.__.0'];
+    var TIMES = ['3小时', '6小时', '9小时', '1天', '2天', '4天', '6天', '1周', '2周', '3周'];
+    var C_USERS = ['_sicong','sarara.cui','jiayi.0','mmmm_yu','lina.zhng','daily_kk','yuna_look','soo._.young','coco.daily','bella.j','wwww_an','minz.gram','seoul_walker','rin.__.0','tina_ootd','xiaolu.u'];
     var C_TEXTS = [
-      '너무 예뻐요 😍','와 핏 미쳤다🔥','언니 오늘도 예뻐요🥹','이 색감 진짜 최고예요 📸','여기 어디예요?? 가보고싶다',
-      '옷 정보 좀 알 수 있을까요?','분위기 깡패시네요😎','협찬 문의 디엠 드렸습니다!','투아울라 신상 너무 예뻐요🤍','매일 잘 보고 가요~',
-      '세영님 미모 실화인가요💕','자켓 어디꺼예요?','오늘도 눈호강👍','사진 너무 잘 나왔다✨','진짜 인생샷이네요',
-      '보정 어플 뭐 쓰세요?','첫 줄 사수 성공🙌','스토리 보고 달려왔어요🏃‍♀️','대박… 저장하고 갑니다📌','목도리 색깔 예뻐요🧣'
+      '好美啊姐姐😍','这身绝了🔥','求链接！！','姐姐皮肤也太好了吧🥹','在伦敦哪里拍的呀',
+      '氛围感真的绝','发色好好看💇‍♀️','颜值天花板💕','已关注，期待更新～','这是哪家的衣服呀',
+      '好想要这件🥺','救命也太好看了','每天都在等你更新🏃‍♀️','姐姐好温柔','拍照技术教教我📷',
+      '滤镜是什么呀','第一个赞！🙌','美得不像话','收藏了📌','언니 너무 예뻐요🤍','You look amazing 😍'
     ];
 
     var posts = [];
     for (var i = 1; i <= 18; i++) {
-      var type = (i % 4 === 0) ? 'reel' : (i % 3 === 0 ? 'multi' : 'photo');
-      var nComments = 3 + Math.floor(rnd(i * 7) * 4);       // 3-6 shown
+      // mostly reels, occasional multi, few photos — matches the reference
+      var type = (i % 5 === 0) ? 'multi' : (i % 7 === 0 ? 'photo' : 'reel');
+      var slides = [];
+      if (type === 'multi') {
+        var ns = 3 + Math.floor(rnd(i * 11) * 3); // 3-5
+        for (var s = 0; s < ns; s++) slides.push('p' + i + '_' + s);
+      }
+      var nComments = 3 + Math.floor(rnd(i * 7) * 4);
       var comments = [];
       for (var c = 0; c < nComments; c++) {
         var r = rnd(i * 31 + c * 17);
@@ -744,106 +372,114 @@
           user: C_USERS[Math.floor(rnd(i * 5 + c * 3) * C_USERS.length)],
           text: C_TEXTS[Math.floor(r * C_TEXTS.length)],
           time: TIMES[Math.floor(rnd(i + c * 2) * TIMES.length)],
-          likes: Math.floor(rnd(i * 13 + c) * 40)
+          likes: Math.floor(rnd(i * 13 + c) * 60)
         });
       }
       posts.push({
-        seed: 'p' + i,
-        type: type,
-        views: Math.floor(2000 + rnd(i * 3) * 90000),
-        likes: 600 + Math.floor(rnd(i) * 4200),
+        seed: 'p' + i, type: type, slides: slides,
+        views: Math.floor(8000 + rnd(i * 3) * 900000),
+        likes: 1200 + Math.floor(rnd(i) * 28000),
         caption: CAPTIONS[(i - 1) % CAPTIONS.length],
         time: TIMES[(i - 1) % TIMES.length],
-        totalComments: 14 + Math.floor(rnd(i * 9) * 180),
+        totalComments: 18 + Math.floor(rnd(i * 9) * 420),
         comments: comments
       });
     }
 
-    var IMG_FALLBACK = "this.onerror=null;this.parentNode.style.background='linear-gradient(135deg,#e8e8e8,#cfcfcf)';this.style.display='none';";
+    var IMG_FB = "this.onerror=null;this.style.background='linear-gradient(135deg,#e8e8e8,#cfcfcf)';";
 
+    // ---- grid ----
     var grid = document.getElementById('grid');
     grid.innerHTML = posts.map(function (p, idx) {
       var corner = p.type === 'reel' ? reelIcon : (p.type === 'multi' ? multiIcon : '');
-      var views = p.type === 'reel'
-        ? '<div class="views"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3 19 12 5 21z"/></svg>' + fmtViews(p.views) + '</div>'
-        : '';
+      var seen = '';
+      if (idx === 0) seen = '<div class="seen mid">刚刚看过</div>';
+      else if (idx === 1) seen = '<div class="seen bottom">新</div>';
       return '<div class="cell" onclick="openPost(' + idx + ')">' +
-        '<img loading="lazy" src="https://picsum.photos/seed/' + p.seed + '/300" alt="" onerror="' + IMG_FALLBACK + '">' +
-        corner + views +
-        '</div>';
+        '<img loading="lazy" src="https://picsum.photos/seed/' + p.seed + '/400/520" alt="" onerror="' + IMG_FB + '">' +
+        corner + seen +
+      '</div>';
     }).join('');
 
-    // ---- Follow toggle ----
-    function toggleFollow() {
-      var b = document.getElementById('followBtn');
-      if (b.classList.contains('following')) {
-        b.classList.remove('following');
-        b.textContent = 'Follow';
-      } else {
-        b.classList.add('following');
-        b.textContent = 'Following';
-      }
-    }
-
-    // ---- Tab switch (visual) ----
-    function switchTab(el) {
-      document.querySelectorAll('.tab').forEach(function (t) { t.classList.remove('active'); });
-      el.classList.add('active');
-    }
-
-    // ---- Post detail modal ----
-    var heartOutline = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-10-9.2C.6 9 1.5 5.6 4.5 4.8 6.7 4.2 8.8 5.3 12 8c3.2-2.7 5.3-3.8 7.5-3.2 3 .8 3.9 4.2 2.5 7-2.5 4.6-10 9.2-10 9.2z"/></svg>';
-    var heartFilled  = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-10-9.2C.6 9 1.5 5.6 4.5 4.8 6.7 4.2 8.8 5.3 12 8c3.2-2.7 5.3-3.8 7.5-3.2 3 .8 3.9 4.2 2.5 7-2.5 4.6-10 9.2-10 9.2z"/></svg>';
-    var iconComment = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.4 9 9 0 0 1-3.9-.9L3 20l1.1-4.1A8.38 8.38 0 0 1 3 11.5a8.5 8.5 0 0 1 9-8.4 8.48 8.48 0 0 1 9 8.4z"/></svg>';
-    var iconShare = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
-    var iconSave = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>';
-    var smallHeart = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-10-9.2C.6 9 1.5 5.6 4.5 4.8 6.7 4.2 8.8 5.3 12 8c3.2-2.7 5.3-3.8 7.5-3.2 3 .8 3.9 4.2 2.5 7-2.5 4.6-10 9.2-10 9.2z"/></svg>';
-    var verifiedMini = '<svg width="11" height="11" viewBox="0 0 40 40"><path fill="#3897f0" d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0z"/><path fill="#fff" d="m18 25.367-4.969-4.969 1.414-1.414L18 22.539l8.555-8.555 1.414 1.414z"/></svg>';
-
+    // ---- detail render ----
     function commentHTML(c) {
-      var likeStr = c.likes > 0 ? '<span>좋아요 ' + c.likes + '개</span>' : '';
+      var likeStr = c.likes > 0 ? '<span>' + c.likes + '次赞</span>' : '';
       return '<div class="comment">' +
-        '<img class="c-av" src="https://picsum.photos/seed/' + c.user + '/56" onerror="this.style.visibility=\'hidden\'">' +
+        '<img class="c-av" src="https://picsum.photos/seed/' + c.user + '/60" onerror="this.style.visibility=\'hidden\'">' +
         '<div class="c-body"><b>' + c.user + '</b> ' + c.text +
-          '<div class="c-meta"><span>' + c.time + '</span>' + likeStr + '<span>답글 달기</span></div>' +
+          '<div class="c-meta"><span>' + c.time + '前</span>' + likeStr + '<span>回复</span></div>' +
         '</div>' +
-        '<button class="c-like" aria-label="Like">' + smallHeart + '</button>' +
+        '<button class="c-like" aria-label="赞">' + smallHeart + '</button>' +
       '</div>';
+    }
+
+    function mediaHTML(p) {
+      if (p.type === 'multi') {
+        var slides = p.slides.map(function (sd) {
+          return '<div class="slide"><img class="post-img" src="https://picsum.photos/seed/' + sd + '/600/750" onerror="' + IMG_FB + '"></div>';
+        }).join('');
+        var dots = p.slides.map(function (_, k) { return '<span class="dot' + (k === 0 ? ' on' : '') + '"></span>'; }).join('');
+        return '<div class="post-media">' +
+          '<div class="carousel" id="carousel" onscroll="onCarousel()">' + slides + '</div>' +
+          '<div class="counter" id="counter">1/' + p.slides.length + '</div>' +
+          '<div class="dots" id="dots">' + dots + '</div>' +
+        '</div>';
+      }
+      if (p.type === 'reel') {
+        return '<div class="post-media">' +
+          '<img class="post-img" src="https://picsum.photos/seed/' + p.seed + '/600/750" onerror="' + IMG_FB + '">' +
+          '<div class="reel-play">' + bigPlay + '</div>' +
+          '<div class="reel-views"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>' + fmtCn(p.views) + '</div>' +
+        '</div>';
+      }
+      return '<div class="post-media"><img class="post-img" src="https://picsum.photos/seed/' + p.seed + '/600/750" onerror="' + IMG_FB + '"></div>';
     }
 
     function openPost(idx) {
       var p = posts[idx];
-      var capText = p.caption.replace(/\n/g, '<br>');
+      var audio = p.type === 'reel'
+        ? '<div class="reel-audio">' + noteIcon + '<span>原声 · __iambe11a</span></div>' : '';
       var html =
         '<div class="post-head">' +
-          '<img class="pa" src="https://picsum.photos/seed/iamsezero/64" onerror="this.style.background=\'#dbdbdb\'">' +
+          '<div class="pa"><img class="pa-inner" src="https://picsum.photos/seed/iambe11a/68" onerror="' + IMG_FB + '"></div>' +
           '<div>' +
-            '<div class="ph-name">iamsezero ' + verifiedMini + '</div>' +
-            '<div class="ph-loc">Seoul, Korea</div>' +
+            '<div class="ph-name">__iambe11a</div>' +
+            '<div class="ph-loc">London, United Kingdom</div>' +
           '</div>' +
-          '<button class="more">⋯</button>' +
+          '<button class="more"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></button>' +
         '</div>' +
-        '<img class="post-img" src="https://picsum.photos/seed/' + p.seed + '/600" onerror="' + IMG_FALLBACK.replace(/parentNode/g, 'parentElement') + '">' +
+        mediaHTML(p) + audio +
         '<div class="post-actions">' +
-          '<button class="pa-btn" id="modalLike" onclick="toggleModalLike(' + idx + ')" aria-label="Like">' + heartOutline + '</button>' +
-          '<button class="pa-btn" aria-label="Comment">' + iconComment + '</button>' +
-          '<button class="pa-btn" aria-label="Share">' + iconShare + '</button>' +
-          '<button class="pa-btn spacer" aria-label="Save">' + iconSave + '</button>' +
+          '<button class="pa-btn" id="modalLike" onclick="toggleModalLike(' + idx + ')" aria-label="赞">' + heartOutline + '</button>' +
+          '<button class="pa-btn" aria-label="评论">' + iconComment + '</button>' +
+          '<button class="pa-btn" aria-label="分享">' + iconShare + '</button>' +
+          '<button class="pa-btn spacer" aria-label="收藏">' + iconSave + '</button>' +
         '</div>' +
-        '<div class="post-likes" id="modalLikes">좋아요 ' + commafy(p.likes) + '개</div>' +
-        '<div class="post-caption"><b>iamsezero</b> ' + capText + '</div>' +
-        '<div class="post-time">' + p.time + ' 전</div>' +
+        '<div class="post-likes" id="modalLikes">' + commafy(p.likes) + '次赞</div>' +
+        '<div class="post-caption"><b>__iambe11a</b> ' + p.caption + '</div>' +
+        '<div class="post-time">' + p.time + '前</div>' +
         '<div class="comments">' +
-          '<div class="view-all">댓글 ' + commafy(p.totalComments) + '개 모두 보기</div>' +
+          '<div class="view-all">查看全部 ' + commafy(p.totalComments) + ' 条评论</div>' +
           p.comments.map(commentHTML).join('') +
         '</div>';
-      document.getElementById('modalScroll').innerHTML = html;
-      document.getElementById('modalScroll').scrollTop = 0;
+      var sc = document.getElementById('modalScroll');
+      sc.innerHTML = html;
+      sc.scrollTop = 0;
       var m = document.getElementById('postModal');
       m.classList.add('open');
-      m.dataset.likes = p.likes;
       m.dataset.liked = '0';
+      m.dataset.likes = p.likes;
       document.body.style.overflow = 'hidden';
+    }
+
+    function onCarousel() {
+      var car = document.getElementById('carousel');
+      if (!car) return;
+      var idx = Math.round(car.scrollLeft / car.clientWidth);
+      var total = car.children.length;
+      document.getElementById('counter').textContent = (idx + 1) + '/' + total;
+      var dots = document.getElementById('dots').children;
+      for (var k = 0; k < dots.length; k++) dots[k].className = 'dot' + (k === idx ? ' on' : '');
     }
 
     function closePost() {
@@ -857,19 +493,32 @@
       var label = document.getElementById('modalLikes');
       var base = posts[idx].likes;
       if (m.dataset.liked === '1') {
-        m.dataset.liked = '0';
-        btn.classList.remove('liked');
-        btn.innerHTML = heartOutline;
-        label.textContent = '좋아요 ' + commafy(base) + '개';
+        m.dataset.liked = '0'; btn.classList.remove('liked'); btn.innerHTML = heartOutline;
+        label.textContent = commafy(base) + '次赞';
       } else {
-        m.dataset.liked = '1';
-        btn.classList.add('liked');
-        btn.innerHTML = heartFilled;
-        label.textContent = '좋아요 ' + commafy(base + 1) + '개';
+        m.dataset.liked = '1'; btn.classList.add('liked'); btn.innerHTML = heartFilled;
+        label.textContent = commafy(base + 1) + '次赞';
       }
     }
 
-    // Close modal with browser back / Esc
+    // ---- follow toggle ----
+    function toggleFollow() {
+      var b = document.getElementById('followBtn');
+      if (b.classList.contains('following-blue')) {
+        b.classList.remove('following-blue');
+        b.innerHTML = '已关注 <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 15.5 5.5 9l1.4-1.4 5.1 5.1 5.1-5.1L18.5 9 12 15.5z"/></svg>';
+      } else {
+        b.classList.add('following-blue');
+        b.textContent = '关注';
+      }
+    }
+
+    // ---- tab switch (visual) ----
+    function switchTab(el) {
+      document.querySelectorAll('.tab').forEach(function (t) { t.classList.remove('active'); });
+      el.classList.add('active');
+    }
+
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePost(); });
   </script>
 </body>
