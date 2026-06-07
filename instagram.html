@@ -15,6 +15,12 @@
       --ig-blue: #0095f6;
       --ig-grey-btn: #efefef;
       --ig-red: #ed4956;
+      /* Instagram's production font stack (system fonts, same as the IG app),
+         with CJK system fonts so 中文/日本語/한국어 also match the OS UI font */
+      --ig-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "PingFang SC", "Hiragino Kaku Gothic ProN", "Hiragino Sans GB",
+        "Apple SD Gothic Neo", "Noto Sans CJK SC", "Microsoft YaHei",
+        Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -29,12 +35,12 @@
     html, body {
       background: var(--ig-bg);
       color: var(--ig-text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
-        "Hiragino Sans GB", "Microsoft YaHei", Helvetica, Arial, sans-serif, "Apple Color Emoji";
+      font-family: var(--ig-font);
       font-size: 14px;
       line-height: 18px;
       -webkit-font-smoothing: antialiased;
     }
+    button, input, textarea, select { font-family: var(--ig-font); }
     .app {
       max-width: 470px;
       margin: 0 auto;
