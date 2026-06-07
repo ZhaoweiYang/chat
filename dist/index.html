@@ -281,6 +281,7 @@
       max-width: 470px; margin: 0 auto; display: flex; flex-direction: column;
       transform: translateX(100%); transition: transform .28s ease; visibility: hidden;
       border-left: 1px solid var(--ig-border); border-right: 1px solid var(--ig-border);
+      padding-top: env(safe-area-inset-top);
     }
     .feed.open { transform: translateX(0); visibility: visible; }
     .feed-top {
@@ -443,19 +444,6 @@
 
   <!-- ===== Feed (home) page ===== -->
   <div class="feed" id="feedPage">
-    <header class="feed-top">
-      <div class="ig-logo">Instagram</div>
-      <div class="feed-top-actions">
-        <button aria-label="通知">
-          <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7.5-4.6-10-9.2C.6 9 1.5 5.6 4.5 4.8 6.7 4.2 8.8 5.3 12 8c3.2-2.7 5.3-3.8 7.5-3.2 3 .8 3.9 4.2 2.5 7-2.5 4.6-10 9.2-10 9.2z"/></svg>
-          <span class="dot"></span>
-        </button>
-        <button aria-label="私信">
-          <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          <span class="dot"></span>
-        </button>
-      </div>
-    </header>
     <div class="feed-scroll" id="feedScroll">
       <div class="stories" id="stories"></div>
       <div id="feedPosts"></div>
@@ -905,10 +893,12 @@
       document.getElementById('feedScroll').scrollTop = 0;
       document.getElementById('feedPage').classList.add('open');
       document.body.style.overflow = 'hidden';
+      document.querySelector('.ad-float').style.display = 'none';   // hide ad on home feed
     }
     function closeFeed() {
       document.getElementById('feedPage').classList.remove('open');
       document.body.style.overflow = '';
+      document.querySelector('.ad-float').style.display = '';
     }
 
     // swipe-left on profile → open feed ; swipe-right on feed → back to profile
