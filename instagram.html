@@ -511,7 +511,8 @@
     var grid = document.getElementById('grid');
     grid.innerHTML = posts.map(function (p, idx) {
       var corner = p.type === 'reel' ? reelIcon : (p.type === 'multi' ? multiIcon : '');
-      var src = p.img || ('https://picsum.photos/seed/' + p.seed + '/400/520');
+      var coverSeed = (p.type === 'multi' && p.slides.length) ? p.slides[0] : p.seed;
+      var src = p.img || ('https://picsum.photos/seed/' + coverSeed + '/400/520');
       return '<div class="cell" onclick="openPost(' + idx + ')">' +
         '<img loading="lazy" src="' + src + '" alt="" onerror="' + IMG_FB + '">' +
         corner +
@@ -552,7 +553,8 @@
           '<div class="reel-views"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>' + fmtCn(p.views) + '</div>' +
         '</div>';
       }
-      return '<div class="post-media"><img class="post-img" src="https://picsum.photos/seed/' + p.seed + '/600/750" onerror="' + IMG_FB + '"></div>';
+      var photoSrc = p.img || ('https://picsum.photos/seed/' + p.seed + '/600/750');
+      return '<div class="post-media"><img class="post-img" src="' + photoSrc + '" onerror="' + IMG_FB + '"></div>';
     }
 
     function openPost(idx) {
