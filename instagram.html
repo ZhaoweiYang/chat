@@ -591,6 +591,7 @@
       sc.scrollTop = 0;
       var m = document.getElementById('postModal');
       m.classList.add('open');
+      m.style.transition = ''; m.style.transform = ''; m.style.opacity = '';
       m.dataset.liked = '0';
       m.dataset.likes = p.likes;
       document.body.style.overflow = 'hidden';
@@ -698,6 +699,70 @@
     }
 
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePost(); });
+
+    // ---- swipe-to-dismiss post detail (drag horizontally to exit, like Instagram) ----
+    (function () {
+      var modal = document.getElementById('postModal');
+      var startX = 0, startY = 0, dx = 0, dy = 0, w = 0;
+      var decided = false, dragging = false, ignore = false;
+
+      function onStart(x, y, target) {
+        // let the carousel handle its own horizontal scroll
+        ignore = !!(target && target.closest && target.closest('#carousel'));
+        startX = x; startY = y; dx = 0; dy = 0; decided = false; dragging = false;
+        w = modal.clientWidth || window.innerWidth;
+        modal.style.transition = 'none';
+      }
+      function onMove(x, y, e) {
+        if (ignore) return;
+        dx = x - startX; dy = y - startY;
+        if (!decided) {
+          if (Math.abs(dx) < 7 && Math.abs(dy) < 7) return;
+          decided = true;
+          dragging = Math.abs(dx) > Math.abs(dy);   // horizontal intent → drag to dismiss
+        }
+        if (dragging) {
+          if (e && e.cancelable) e.preventDefault();  // block vertical scroll while dragging
+          var damp = 1 - Math.min(Math.abs(dx) / w, 1) * 0.12;
+          modal.style.transform = 'translateX(' + dx + 'px) scale(' + damp.toFixed(3) + ')';
+        }
+      }
+      function onEnd() {
+        if (ignore) { ignore = false; return; }
+        if (dragging) {
+          if (Math.abs(dx) > w * 0.28) {            // far enough → fling out & close
+            var dir = dx < 0 ? -1 : 1;
+            modal.style.transition = 'transform .2s ease';
+            modal.style.transform = 'translateX(' + (dir * w) + 'px) scale(.9)';
+            setTimeout(function () {
+              closePost();
+              modal.style.transition = ''; modal.style.transform = '';
+            }, 195);
+          } else {                                  // not enough → spring back
+            modal.style.transition = 'transform .24s cubic-bezier(.2,.8,.3,1)';
+            modal.style.transform = 'translateX(0)';
+            setTimeout(function () { modal.style.transition = ''; }, 250);
+          }
+        }
+        dragging = false; decided = false;
+      }
+
+      modal.addEventListener('touchstart', function (e) {
+        if (e.touches.length !== 1) { ignore = true; return; }
+        onStart(e.touches[0].clientX, e.touches[0].clientY, e.target);
+      }, { passive: true });
+      modal.addEventListener('touchmove', function (e) {
+        if (e.touches.length !== 1) return;
+        onMove(e.touches[0].clientX, e.touches[0].clientY, e);
+      }, { passive: false });
+      modal.addEventListener('touchend', onEnd);
+
+      // mouse drag (desktop)
+      var mouseDown = false;
+      modal.addEventListener('mousedown', function (e) { mouseDown = true; onStart(e.clientX, e.clientY, e.target); });
+      window.addEventListener('mousemove', function (e) { if (mouseDown) onMove(e.clientX, e.clientY, e); });
+      window.addEventListener('mouseup', function () { if (mouseDown) { mouseDown = false; onEnd(); } });
+    })();
   </script>
 </body>
 </html>
