@@ -405,7 +405,12 @@
 
   <script>
     // Real profile avatar (Instagram CDN — signed URL, may expire over time)
-    var AVATAR_URL = "https://scontent-sjc3-1.cdninstagram.com/v/t51.82787-19/683008028_18120975559572342_8910915196578531166_n.jpg?efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby43NjguYzIifQ&_nc_ht=scontent-sjc3-1.cdninstagram.com&_nc_cat=106&_nc_oc=Q6cZ2gGQNl_ux8MiozeQ8vavqqh4IN8LAwLaSPPO3GTu0mZRc-bfcK73X1S3dAN669LY5MdR4x8GIJBt2uJotR2_RU1E&_nc_ohc=-9BKuHIjClAQ7kNvwEBlhqA&_nc_gid=_8aKpHo8be_bgeXVmpgMZQ&edm=APoiHPcBAAAA&ccb=7-5&oh=00_Af-dZ0a7XfZnKExIPkXGK3arqm1Q4xC7QmYyF6heOHohHw&oe=6A2B0B63&_nc_sid=22de04";
+    var AVATAR_URL = "https://github.com/user-attachments/assets/148edc6d-1a7f-4851-9a0e-ff11245c6ca2";
+    // Real post photos (permanent GitHub attachment URLs)
+    var REAL_IMAGES = [
+      "https://github.com/user-attachments/assets/7ca20c39-fce1-480c-9e0c-0f1e6e4d3f64",
+      "https://github.com/user-attachments/assets/b1f84764-dd17-449e-9df6-fa8700dbe948"
+    ];
     ['mainAvatar', 'navAvatar', 'adThumb'].forEach(function (id) {
       var el = document.getElementById(id);
       if (el) el.src = AVATAR_URL;
@@ -468,6 +473,8 @@
     for (var i = 1; i <= 18; i++) {
       // mostly reels, occasional multi, few photos — matches the reference
       var type = (i % 5 === 0) ? 'multi' : (i % 7 === 0 ? 'photo' : 'reel');
+      var img = '';
+      if (i <= REAL_IMAGES.length) { type = 'photo'; img = REAL_IMAGES[i - 1]; } // real photos first
       var slides = [];
       if (type === 'multi') {
         var ns = 3 + Math.floor(rnd(i * 11) * 3); // 3-5
@@ -485,7 +492,7 @@
         });
       }
       posts.push({
-        seed: 'p' + i, type: type, slides: slides,
+        seed: 'p' + i, type: type, slides: slides, img: img,
         video: REEL_VIDEOS[(i - 1) % REEL_VIDEOS.length],
         views: Math.floor(8000 + rnd(i * 3) * 900000),
         likes: 1200 + Math.floor(rnd(i) * 28000),
@@ -502,12 +509,10 @@
     var grid = document.getElementById('grid');
     grid.innerHTML = posts.map(function (p, idx) {
       var corner = p.type === 'reel' ? reelIcon : (p.type === 'multi' ? multiIcon : '');
-      var seen = '';
-      if (idx === 0) seen = '<div class="seen mid">刚刚看过</div>';
-      else if (idx === 1) seen = '<div class="seen bottom">新</div>';
+      var src = p.img || ('https://picsum.photos/seed/' + p.seed + '/400/520');
       return '<div class="cell" onclick="openPost(' + idx + ')">' +
-        '<img loading="lazy" src="https://picsum.photos/seed/' + p.seed + '/400/520" alt="" onerror="' + IMG_FB + '">' +
-        corner + seen +
+        '<img loading="lazy" src="' + src + '" alt="" onerror="' + IMG_FB + '">' +
+        corner +
       '</div>';
     }).join('');
 
